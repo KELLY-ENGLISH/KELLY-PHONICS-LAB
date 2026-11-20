@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Kelly English 파닉스 놀이터</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Kelly English 파닉스 놀이터
+   - 책 번호(예: 2214)를 입력하면 그 세트(2권)의 단어 학습 시작
+   - 새 책 추가: 아래 <script> 의 BOOK_SETS 에 같은 모양으로 추가하면 됩니다.
+   ========================================================= */
+:root{
+  --bg:#FFF7E8; --ink:#2B2B3A; --muted:#7a7a8c;
+  --pink:#FF6B9A; --orange:#FF9F43; --yellow:#FFD43B; --green:#38C47E;
+  --blue:#4DA3FF; --purple:#9B6BFF; --red:#FF5A5A; --card:#ffffff;
+  --shadow:0 6px 0 rgba(0,0,0,.12);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  font-family:'Jua','Baloo 2',system-ui,sans-serif;color:var(--ink);
+  background:var(--bg) radial-gradient(circle at 10% 10%,#FFE3EE 0 8%,transparent 9%),
+             radial-gradient(circle at 90% 20%,#DDF3FF 0 7%,transparent 8%),
+             radial-gradient(circle at 80% 90%,#E6FFE9 0 9%,transparent 10%);
+  background-attachment:fixed; user-select:none; overflow-x:hidden;
+}
+.en{font-family:'Baloo 2','Jua',sans-serif;font-weight:800;letter-spacing:.02em}
+button{font-family:inherit;cursor:pointer;border:none}
+.hidden{display:none!important}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;
+  padding:10px 18px;background:rgba(255,247,232,.92);backdrop-filter:blur(6px)}
+.topbar .brand{font-size:22px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{background:#fff;border-radius:999px;padding:8px 16px;font-size:20px;box-shadow:var(--shadow)}
+.iconbtn{background:#fff;border-radius:16px;font-size:22px;padding:8px 14px;box-shadow:var(--shadow)}
+.iconbtn:active,.big:active,.key:active,.opt:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+
+main{max-width:1000px;margin:0 auto;padding:10px 18px 60px}
+h1{font-size:44px;margin:14px 0 4px;text-align:center}
+h2{font-size:30px;margin:10px 0}
+.sub{color:var(--muted);text-align:center;font-size:20px;margin:0 0 18px}
+
+/* ---------- home ---------- */
+.search-box{max-width:460px;margin:0 auto;background:#fff;border-radius:32px;padding:22px;box-shadow:0 10px 0 rgba(0,0,0,.08)}
+.display{font-size:56px;text-align:center;background:#FFF3C4;border-radius:20px;padding:6px;margin-bottom:14px;min-height:84px;letter-spacing:.15em}
+.display .ph{color:#d9c38a;font-size:28px;letter-spacing:0}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.key{font-size:34px;padding:14px 0;border-radius:18px;background:#EAF4FF;box-shadow:var(--shadow);color:var(--ink)}
+.key.go{background:var(--green);color:#fff}
+.key.del{background:#FFE1E1}
+.msg{text-align:center;font-size:20px;min-height:30px;margin-top:10px;color:var(--red)}
+.shelf{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:26px}
+.shelf button{background:#fff;border-radius:18px;padding:12px 18px;font-size:20px;box-shadow:var(--shadow)}
+.shelf small{display:block;color:var(--muted);font-size:15px}
+
+/* ---------- set hub ---------- */
+.booktabs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 18px}
+.booktab{border-radius:26px;padding:16px;background:#fff;box-shadow:var(--shadow);text-align:center;font-size:26px;border:5px solid transparent}
+.booktab.on{border-color:var(--orange);background:#FFF1DE}
+.booktab .em{font-size:52px;display:block}
+.booktab .snd{font-size:17px;color:var(--muted)}
+.missions{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.mission{position:relative;border-radius:24px;padding:18px 12px;color:#fff;font-size:22px;text-align:center;box-shadow:var(--shadow);min-height:132px}
+.mission .ic{font-size:44px;display:block;margin-bottom:4px}
+.mission .num{position:absolute;top:8px;left:12px;background:rgba(255,255,255,.35);border-radius:999px;width:30px;height:30px;line-height:30px;font-size:18px}
+.mission .done{position:absolute;top:6px;right:10px;font-size:28px}
+.mission small{display:block;font-size:15px;opacity:.9}
+.together{margin-top:22px;padding:18px;border-radius:26px;background:#fff;box-shadow:var(--shadow)}
+.together .row{display:flex;gap:14px;flex-wrap:wrap}
+.together .mission{flex:1;min-width:220px}
+.plan{font-size:16px;color:var(--muted);margin-top:16px;line-height:1.6;background:#fff;border-radius:18px;padding:12px 16px}
+
+/* ---------- activity common ---------- */
+.act-head{display:flex;align-items:center;gap:10px;margin:6px 0 12px}
+.act-head h2{flex:1;margin:0}
+.progress{height:16px;background:#fff;border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 0 rgba(0,0,0,.08);margin-bottom:16px}
+.progress>div{height:100%;background:linear-gradient(90deg,var(--yellow),var(--orange));width:0;transition:width .4s}
+.big{font-size:24px;padding:14px 22px;border-radius:20px;background:var(--blue);color:#fff;box-shadow:var(--shadow)}
+.big.alt{background:#fff;color:var(--ink)}
+.big.green{background:var(--green)}
+.big.pink{background:var(--pink)}
+.btnrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.vowel{color:var(--red)}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.pop{animation:pop .35s}
+@keyframes pop{50%{transform:scale(1.15)}}
+
+/* flashcard */
+.flash{perspective:1200px;max-width:520px;margin:0 auto}
+.flash-inner{position:relative;height:360px;transition:transform .5s;transform-style:preserve-3d}
+.flash.flipped .flash-inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:34px;background:#fff;box-shadow:0 10px 0 rgba(0,0,0,.1);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.face.back{transform:rotateY(180deg);background:#FFF3C4}
+.face .em{font-size:110px;line-height:1.1}
+.face .word{font-size:78px}
+.face .word span{display:inline-block;transition:transform .2s}
+.face .word span.lit{transform:translateY(-14px) scale(1.25);color:var(--blue)}
+.face .ko{font-size:56px}
+.face .hint{font-size:16px;color:var(--muted);margin-top:6px}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.dots i{width:16px;height:16px;border-radius:50%;background:#e5dccb}
+.dots i.seen{background:var(--orange)}
+.dots i.cur{outline:4px solid var(--blue)}
+
+/* options grid */
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:640px;margin:0 auto}
+.opt{background:#fff;border-radius:26px;padding:16px;font-size:40px;box-shadow:var(--shadow);border:5px solid transparent;color:var(--ink)}
+.opt .em{font-size:64px;display:block}
+.opt.right{border-color:var(--green);background:#E3FFF0}
+.opt.wrong{opacity:.35}
+.speaker{display:block;margin:0 auto 18px;font-size:64px;background:var(--yellow);border-radius:50%;width:120px;height:120px;box-shadow:var(--shadow)}
+
+/* spell */
+.spell-top{text-align:center}
+.spell-top .em{font-size:100px}
+.spell-top .ko{font-size:30px;color:var(--muted)}
+.slots{display:flex;gap:10px;justify-content:center;margin:18px 0;flex-wrap:wrap}
+.slot{width:70px;height:84px;border-radius:16px;background:#fff;border:4px dashed #d8cdb5;font-size:52px;display:flex;align-items:center;justify-content:center}
+.slot.fill{border-style:solid;border-color:var(--green)}
+.slot.space{border:none;background:none;width:24px}
+.tiles{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:620px;margin:0 auto}
+.tile{width:76px;height:76px;border-radius:18px;background:var(--orange);color:#fff;font-size:46px;box-shadow:var(--shadow)}
+.tile.used{visibility:hidden}
+
+/* balloons */
+.sky{position:relative;height:520px;border-radius:30px;overflow:hidden;background:linear-gradient(#BDE6FF,#E8F7FF);box-shadow:inset 0 0 0 4px #fff}
+.balloon{position:absolute;bottom:-190px;width:140px;height:170px;border-radius:50% 50% 48% 48%;color:#fff;font-size:34px;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;box-shadow:inset -12px -14px 0 rgba(0,0,0,.12);animation:rise linear forwards}
+.balloon::after{content:"";position:absolute;bottom:-60px;left:50%;width:2px;height:60px;background:#888}
+.balloon .em{font-size:30px}
+.balloon.boom{animation:boom .3s forwards!important}
+@keyframes rise{to{transform:translateY(-760px)}}
+@keyframes boom{to{transform:scale(1.8);opacity:0}}
+
+/* word search */
+.ws{display:grid;gap:6px;max-width:560px;margin:0 auto;touch-action:none}
+.ws button{aspect-ratio:1;border-radius:12px;background:#fff;font-size:30px;box-shadow:0 3px 0 rgba(0,0,0,.1);color:var(--ink)}
+.ws button.sel{background:var(--yellow)}
+.ws button.found{background:#C9F5DC;color:#1d7a4b}
+.ws button.hint1{background:#FFB3CC;animation:blink .7s 4}
+.ws button.hint2{background:#FFE08A}
+@keyframes blink{50%{transform:scale(1.18);background:#FF6B9A;color:#fff}}
+.wslist span{cursor:pointer}
+.wslist span.target{outline:4px solid var(--pink)}
+.hintbar{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:6px}
+.hintbar .left{font-size:18px;color:var(--muted)}
+.wslist{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:14px 0}
+.wslist span{background:#fff;border-radius:999px;padding:6px 14px;font-size:20px}
+.wslist span.ok{background:var(--green);color:#fff;text-decoration:line-through}
+
+/* reader */
+.page{background:#fff;border-radius:30px;padding:26px;box-shadow:0 10px 0 rgba(0,0,0,.08);min-height:260px;text-align:center}
+.page .em{font-size:90px}
+.sent{font-size:44px;line-height:1.6;margin:10px 0}
+.sent .w{display:inline-block;padding:0 6px;border-radius:12px;cursor:pointer}
+.sent .w.vocab{border-bottom:5px dotted var(--orange)}
+.sent .w.hl{background:var(--yellow)}
+.trans{font-size:28px;color:#6b5a2e;background:#FFF3C4;border-radius:18px;padding:10px;margin-top:10px}
+.tip{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:20px;padding:12px 22px;font-size:26px;z-index:60}
+.notice{background:#EAF4FF;border-radius:20px;padding:14px 18px;font-size:19px;line-height:1.5;margin-bottom:16px}
+
+/* quiz */
+.qsent{font-size:44px;text-align:center;margin:10px 0}
+.blank{display:inline-block;min-width:140px;border-bottom:5px solid var(--ink);color:var(--green)}
+
+/* sort */
+.sortcard{max-width:340px;margin:0 auto 20px;background:#fff;border-radius:30px;padding:20px;text-align:center;box-shadow:0 10px 0 rgba(0,0,0,.08)}
+.sortcard .em{font-size:80px}
+.sortcard .word{font-size:60px}
+.baskets{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:640px;margin:0 auto}
+.basket{border-radius:30px;padding:18px;font-size:30px;color:#fff;box-shadow:var(--shadow);min-height:150px}
+.basket .em{font-size:60px;display:block}
+.basket .got{font-size:18px;opacity:.95;min-height:24px}
+
+/* celebrate */
+.overlay{position:fixed;inset:0;background:rgba(43,43,58,.55);z-index:50;display:flex;align-items:center;justify-content:center}
+.cheer{background:#fff;border-radius:36px;padding:30px 36px;text-align:center;max-width:90vw;animation:pop .5s}
+.cheer .em{font-size:100px}
+.cheer h2{font-size:40px}
+.stars{font-size:46px;letter-spacing:6px}
+/* login & teacher */
+.who{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;max-width:760px;margin:0 auto}
+.who button{background:#fff;border-radius:22px;padding:18px 26px;font-size:28px;box-shadow:var(--shadow);min-width:150px;color:var(--ink)}
+.who button .em{display:block;font-size:40px}
+.who.sur button{min-width:96px;font-size:40px;padding:16px 10px}
+.pindots{display:flex;gap:16px;justify-content:center;margin:6px 0 16px}
+.pindots i{width:28px;height:28px;border-radius:50%;background:#eadfc6}
+.pindots i.on{background:var(--orange)}
+.linkrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.linkbtn{background:#fff;border-radius:16px;padding:10px 18px;font-size:18px;box-shadow:var(--shadow);color:var(--muted)}
+.tinput{font-family:inherit;font-size:22px;padding:12px 14px;border-radius:14px;border:3px solid #eadfc6;width:100%;max-width:320px}
+.panel{background:#fff;border-radius:24px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,.06);margin-bottom:18px}
+.panel h3{margin:0 0 10px;font-size:24px}
+.tbl{width:100%;border-collapse:collapse;font-size:17px}
+.tbl th{background:#FFF1DE;text-align:left;padding:8px;position:sticky;top:0}
+.tbl td{padding:8px;border-bottom:1px solid #f0e8d8;vertical-align:top}
+.tbl tr.click{cursor:pointer}
+.tbl tr.click:hover td{background:#FFFBF2}
+.tblwrap{overflow:auto;max-height:520px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{background:#FFE1E1;border-radius:999px;padding:4px 12px;font-size:17px}
+.grid-prog{border-collapse:collapse;font-size:16px}
+.grid-prog td,.grid-prog th{border:1px solid #f0e8d8;padding:6px 8px;text-align:center}
+.score-hi{color:#1d7a4b} .score-lo{color:#d63c3c}
+.trow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.trow select,.trow input{font-family:inherit;font-size:18px;padding:8px 10px;border-radius:12px;border:2px solid #eadfc6}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:55}
+
+@media (max-width:640px){
+  h1{font-size:32px}
+  .face .word{font-size:58px}
+  .mgrid{grid-template-columns:repeat(3,1fr)}
+  .sent{font-size:32px}
+  .balloon{width:110px;height:140px;font-size:26px}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="iconbtn" id="homeBtn" title="처음으로">🏠</button>
+  <div class="brand" id="brand">Kelly English 파닉스 놀이터</div>
+  <div class="pill hidden" id="userChip"></div>
+  <div class="pill">⭐ <span id="starCount">0</span></div>
+  <button class="iconbtn hidden" id="logoutBtn" title="로그아웃">🚪</button>
+  <button class="iconbtn" id="soundBtn" title="소리 켜기/끄기">🔊</button>
+</div>
+
+<main id="app"></main>
+<div id="tip" class="tip hidden"></div>
+<canvas id="confetti"></canvas>
+
+<script>
+/* =========================================================
+   🔗 기록 저장 연결 (구글 시트 웹 앱 주소)
+   - 설정 안내서대로 만든 "웹 앱 URL" 을 따옴표 안에 붙여넣으세요.
+   - 비워 두면 '연습 모드' : 로그인 없이 쓸 수 있지만 기록은 저장되지 않아요.
+   ========================================================= */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1Uyy8Rwx_tMXajW0UruKHeqFyKI0iwO2LfmBtQJBB2KlTJ0YT0JxtzY5rcGf--gUU/exec";
+
+/* =========================================================
+   📚 책 데이터
+   - 키: 책 번호 (아이들이 입력하는 숫자)
+   - books: 하루에 읽는 2권
+   - sound: 이 책의 파닉스 소리 / vowel: 빨간색으로 강조할 모음 글자
+   - words: { en, ko, em(그림 이모지), p:true 이면 이 책의 파닉스 소리가 들어간 단어 }
+   - blank: 워크시트의 빈칸 문제
+   - story: 책 본문 (페이지별 { en:"영어 문장", ko:"해석", em:"그림" })
+            → 책 파일을 받으면 여기에 넣으면 '책 읽기' 메뉴가 바로 동작합니다.
+   ========================================================= */
+const BOOK_SETS = {
+  "2214": {
+    series: "Now I'm Reading 1",
+    books: [
+      {
+        title: "Hot Dog", cover: "🌭🐶", sound: "short-o", vowel: "o", soundName: "짧은 o 소리",
+        words: [
+          {en:"hot",    ko:"뜨거운",        em:"🔥", p:true},
+          {en:"got on", ko:"~에 탔다",       em:"🛶", p:true, note:"get on의 과거형"},
+          {en:"log",    ko:"통나무",        em:"🪵", p:true},
+          {en:"fog",    ko:"안개",          em:"🌫️", p:true},
+          {en:"dog",    ko:"개",            em:"🐶", p:true},
+          {en:"sob",    ko:"흐느끼다",       em:"😭", p:true},
+          {en:"flop",   ko:"털썩 주저앉다",   em:"🫠", p:true},
+          {en:"stop",   ko:"멈추다",        em:"🛑", p:true},
+          {en:"lost",   ko:"길을 잃은",      em:"🧭", p:true},
+          {en:"a",      ko:"한 개의",        em:"☝️", p:false}
+        ],
+        blank: {before:"A hot", after:"got on a log.", answer:"dog", choices:["dog","log","fog"], ko:"한 마리의 더운 개가 통나무에 탔다."},
+        story: [
+          {en:"A dog.",                                  ko:"개 한 마리.",                             em:"🐶"},
+          {en:"A hot dog.",                              ko:"더운 개 한 마리.",                         em:"☀️🐶"},
+          {en:"A hot, hot dog.",                         ko:"아주아주 더운 개 한 마리.",                  em:"☀️🥵🐶"},
+          {en:"A hot dog got on a log.",                 ko:"더운 개가 통나무에 올라탔어요.",               em:"🐶🪵"},
+          {en:"A hot dog got on a log in the fog.",      ko:"더운 개가 안개 속에서 통나무에 올라탔어요.",       em:"🌫️🐶🪵"},
+          {en:"A hot dog got lost on a log.",            ko:"더운 개가 통나무 위에서 길을 잃었어요.",          em:"🐶❓🪵"},
+          {en:"A hot dog got lost on a log in the fog.", ko:"더운 개가 안개 속 통나무 위에서 길을 잃었어요.",     em:"🌫️🌫️🐶🌫️"},
+          {en:"SOB! SOB!",                               ko:"흑흑! 흑흑!",                             em:"😭"},
+          {en:"Stop the log!",                           ko:"통나무야, 멈춰!",                          em:"🛑🪵"},
+          {en:"A hot dog flops off the log.",            ko:"더운 개가 통나무에서 털썩 떨어져요.",            em:"🐶💫🌱"}
+        ],
+        gloss: {got:"(got on) ~에 탔다 / (got lost) 길을 잃었다", on:"~위에", in:"~안에, ~속에", the:"그", off:"~에서 떨어져"}
+      },
+      {
+        title: "Fat Cat", cover: "🐱", sound: "short-a", vowel: "a", soundName: "짧은 a 소리",
+        words: [
+          {en:"tan",  ko:"황갈색의",   em:"🟫", p:true},
+          {en:"ran",  ko:"달렸다",     em:"🏃", p:true, note:"run의 과거형"},
+          {en:"cat",  ko:"고양이",     em:"🐱", p:true},
+          {en:"fat",  ko:"뚱뚱한",     em:"🐷", p:true},
+          {en:"sad",  ko:"슬픈",       em:"😢", p:true},
+          {en:"has",  ko:"가지고 있다", em:"🤲", p:true},
+          {en:"pal",  ko:"친구",       em:"🤝", p:true},
+          {en:"fast", ko:"빠르게",     em:"⚡", p:true},
+          {en:"last", ko:"마지막",     em:"🏁", p:true},
+          {en:"clap", ko:"박수 치다",   em:"👏", p:true}
+        ],
+        blank: {before:"Cats", after:".", answer:"clap", choices:["fast","glad","clap"], ko:"고양이는 박수 친다."},
+        story: [
+          {en:"A cat.",                    ko:"고양이 한 마리.",                     em:"🐱"},
+          {en:"A tan cat.",                ko:"황갈색 고양이 한 마리.",               em:"🟫🐱"},
+          {en:"A tan fat cat.",            ko:"황갈색의 뚱뚱한 고양이 한 마리.",        em:"🐈"},
+          {en:"A tan fat cat ran.",        ko:"황갈색의 뚱뚱한 고양이가 달렸어요.",      em:"🐈💨"},
+          {en:"A tan fat cat ran fast.",   ko:"황갈색의 뚱뚱한 고양이가 빠르게 달렸어요.", em:"🐈⚡🐈⚡🐈"},
+          {en:"A tan fat cat is last.",    ko:"황갈색의 뚱뚱한 고양이는 꼴찌예요.",      em:"🐈💦🏁"},
+          {en:"A tan fat cat is sad.",     ko:"황갈색의 뚱뚱한 고양이는 슬퍼요.",       em:"😿"},
+          {en:"CATS CLAP!",                ko:"고양이들이 박수를 쳐요!",              em:"🐱👏🐱"},
+          {en:"A tan fat cat has pals.",   ko:"황갈색의 뚱뚱한 고양이는 친구들이 있어요.", em:"🐱🤝🐈🤝🐱"},
+          {en:"A tan fat cat is glad.",    ko:"황갈색의 뚱뚱한 고양이는 기뻐요.",       em:"😸✨"}
+        ],
+        gloss: {is:"~이다 / ~해요", glad:"기쁜", cats:"고양이들", pals:"친구들"}
+      }
+    ]
+  }
+  /* 다음 책 예시 ------------------------------------------
+  ,"2215": { series:"Now I'm Reading 1", books:[ {...}, {...} ] }
+  -------------------------------------------------------- */
+};
+
+const MISSIONS = [
+  {id:"flash",  ic:"🔊", name:"단어 듣기",    desc:"소리 듣고 따라 말하기", color:"#4DA3FF"},
+  {id:"listen", ic:"👂", name:"듣고 고르기",  desc:"들리는 단어 찾기",     color:"#9B6BFF"},
+  {id:"spell",  ic:"🔤", name:"철자 블록",    desc:"글자 블록 쌓기",       color:"#FF9F43"},
+  {id:"balloon",ic:"🎈", name:"풍선 터뜨리기", desc:"듣고 빨리 톡!",       color:"#38C47E"},
+  {id:"search", ic:"🔍", name:"단어 숨은그림", desc:"퍼즐 속 단어 찾기",    color:"#00B8A9"},
+  {id:"read",   ic:"📖", name:"책 읽기",      desc:"읽어주기 + 해석",      color:"#E86A92"},
+  {id:"quiz",   ic:"✏️", name:"확인 퀴즈",    desc:"빈칸 + 뜻 문제",       color:"#6C7AE0"}
+];
+
+/* ---------- 저장 (브라우저에 진행 상황 저장) ---------- */
+let USER = null;   // {cls, name, pin} 또는 {guest:true}
+let SAVE = {stars:0, done:{}};
+const storeKey = ()=> USER && !USER.guest ? `kelly_phonics_u_${USER.cls}_${USER.name}` : "kelly_phonics_v1";
+function loadSave(){ SAVE={stars:0,done:{}}; try{ const s=JSON.parse(localStorage.getItem(storeKey())); if(s) SAVE=Object.assign(SAVE,s); }catch(e){} refreshStars(); }
+function persist(){ try{ localStorage.setItem(storeKey(), JSON.stringify(SAVE)); }catch(e){} }
+function refreshStars(){ document.getElementById("starCount").textContent = SAVE.stars; }
+function addStars(n){ SAVE.stars += n; persist(); refreshStars(); }
+function markDone(key){ SAVE.done[key] = true; persist(); }
+const esc = t => String(t==null?"":t).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- 서버(구글 시트) 통신 ---------- */
+const QUEUE_KEY = "kelly_phonics_queue", SESSION_KEY = "kelly_phonics_session";
+function getQueue(){ try{ return JSON.parse(localStorage.getItem(QUEUE_KEY))||[]; }catch(e){ return []; } }
+function setQueue(q){ try{ localStorage.setItem(QUEUE_KEY, JSON.stringify(q)); }catch(e){} }
+async function api(body){ const r = await fetch(SCRIPT_URL, {method:"POST", body:JSON.stringify(body)}); return r.json(); }
+async function apiGet(action){ const r = await fetch(SCRIPT_URL+"?action="+action); return r.json(); }
+let flushing = false;
+async function flushQueue(){
+  if(!SCRIPT_URL || flushing) return;
+  const q = getQueue(); if(!q.length) return;
+  flushing = true;
+  try{ const res = await api({action:"records", items:q}); if(res.ok) setQueue(getQueue().slice(q.length)); }catch(e){ /* 인터넷이 끊기면 다음에 다시 보내요 */ }
+  flushing = false;
+}
+function sendRecord(rec){
+  if(!SCRIPT_URL || !USER || USER.guest) return;
+  setQueue(getQueue().concat([Object.assign({cls:USER.cls, name:USER.name, pin:USER.pin}, rec)]));
+  flushQueue();
+}
+setInterval(flushQueue, 60000);
+function setUser(u){
+  USER = u;
+  try{ u ? localStorage.setItem(SESSION_KEY, JSON.stringify(Object.assign({at:Date.now()}, u))) : localStorage.removeItem(SESSION_KEY); }catch(e){}
+  const chip=document.getElementById("userChip"), out=document.getElementById("logoutBtn");
+  if(u){ chip.textContent = u.guest ? "🎒 연습 모드" : `🙂 ${u.name}`; chip.classList.remove("hidden"); out.classList.remove("hidden"); }
+  else { chip.classList.add("hidden"); out.classList.add("hidden"); }
+  loadSave();
+}
+
+/* 미션마다 걸린 시간 / 틀린 단어 기록 */
+let CUR = {start:Date.now(), wrong:new Set()};
+function noteWrong(w){ CUR.wrong.add(w); }
+
+/* ---------- 상태 ---------- */
+let curSetId = null, curBook = 0, timers = [];
+function clearTimers(){ timers.forEach(t=>{clearTimeout(t);clearInterval(t)}); timers=[]; }
+function later(fn,ms){ const t=setTimeout(fn,ms); timers.push(t); return t; }
+const app = document.getElementById("app");
+const $ = (h)=>{ const d=document.createElement("div"); d.innerHTML=h.trim(); return d.firstElementChild; };
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = (a,n)=>shuffle(a).slice(0,n);
+
+/* ---------- 소리 (TTS + 효과음) ---------- */
+let soundOn = true, enVoice=null, koVoice=null;
+function loadVoices(){
+  const vs = speechSynthesis.getVoices();
+  const pref = ["Google US English","Samantha","Microsoft Aria","Microsoft Jenny","Microsoft Zira","Karen"];
+  enVoice = pref.map(n=>vs.find(v=>v.name.includes(n))).find(Boolean) || vs.find(v=>v.lang==="en-US") || vs.find(v=>v.lang.startsWith("en"));
+  koVoice = vs.find(v=>v.lang==="ko-KR" && v.name.includes("Google")) || vs.find(v=>v.lang.startsWith("ko"));
+}
+if("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function speak(text, opt={}){
+  if(!soundOn || !("speechSynthesis" in window)) { opt.onend && later(opt.onend, 600); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const ko = opt.lang==="ko";
+  u.lang = ko ? "ko-KR" : "en-US";
+  const v = ko ? koVoice : enVoice; if(v) u.voice = v;
+  u.rate = opt.rate || (ko ? 1 : 0.8);
+  u.pitch = ko ? 1 : 1.1;
+  if(opt.onend) u.onend = opt.onend;
+  if(opt.onboundary) u.onboundary = opt.onboundary;
+  speechSynthesis.speak(u);
+}
+let actx=null;
+function beep(type){
+  if(!soundOn) return;
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const notes = type==="good" ? [660,880,1320] : type==="pop" ? [900] : type==="win" ? [523,659,784,1047] : [220,180];
+    notes.forEach((f,i)=>{
+      const o=actx.createOscillator(), g=actx.createGain();
+      o.type = type==="bad" ? "sawtooth" : "triangle"; o.frequency.value=f;
+      g.gain.setValueAtTime(.18, actx.currentTime+i*.1);
+      g.gain.exponentialRampToValueAtTime(.001, actx.currentTime+i*.1+.25);
+      o.connect(g).connect(actx.destination); o.start(actx.currentTime+i*.1); o.stop(actx.currentTime+i*.1+.3);
+    });
+  }catch(e){}
+}
+document.getElementById("soundBtn").onclick = e => { soundOn=!soundOn; e.target.textContent = soundOn?"🔊":"🔇"; if(!soundOn) speechSynthesis.cancel(); };
+
+function tip(text){ const t=document.getElementById("tip"); t.textContent=text; t.classList.remove("hidden"); clearTimeout(tip._t); tip._t=setTimeout(()=>t.classList.add("hidden"),1800); }
+
+/* 단어 표시: 이 책의 모음은 빨간색 */
+function colorWord(w, vowel){
+  return [...w.en].map(c => c===" " ? "&nbsp;" : (w.p && c===vowel ? `<span class="vowel">${c}</span>` : `<span>${c}</span>`)).join("");
+}
+
+/* ---------- 축하 ---------- */
+const PRAISE = ["Great job!","Super!","Excellent!","Well done!","Awesome!","Fantastic!"];
+function celebrate(title, stars, onClose){
+  beep("win"); confetti(); speak(PRAISE[Math.floor(Math.random()*PRAISE.length)]);
+  const ov = $(`<div class="overlay"><div class="cheer"><div class="em">🏆</div><h2>${title}</h2>
+    <div class="stars">${"⭐".repeat(stars)}</div><p style="font-size:20px;color:#7a7a8c">별 ${stars}개를 받았어요!</p>
+    <button class="big green">다음으로 ▶</button></div></div>`);
+  ov.querySelector("button").onclick = ()=>{ ov.remove(); onClose && onClose(); };
+  document.body.appendChild(ov);
+  addStars(stars);
+}
+function confetti(){
+  const c=document.getElementById("confetti"), x=c.getContext("2d");
+  c.width=innerWidth; c.height=innerHeight;
+  const cols=["#FF6B9A","#FFD43B","#4DA3FF","#38C47E","#9B6BFF","#FF9F43"];
+  let ps=Array.from({length:140},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.5,vx:(Math.random()-.5)*4,vy:2+Math.random()*4,s:6+Math.random()*8,c:cols[Math.floor(Math.random()*6)],r:Math.random()*6}));
+  let f=0;(function draw(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore();});
+    if(++f<180) requestAnimationFrame(draw); else x.clearRect(0,0,c.width,c.height);})();
+}
+
+/* =========================================================
+   화면 1 : 책 번호 찾기
+   ========================================================= */
+function showHome(){
+  clearTimers(); speechSynthesis.cancel(); curSetId=null;
+  document.getElementById("brand").textContent = "Kelly English 파닉스 놀이터";
+  let typed = "";
+  app.innerHTML = "";
+  const el = $(`<section>
+    <h1>📚 오늘 읽을 책 번호는?</h1>
+    <p class="sub">책 뒤에 있는 번호를 눌러 주세요 (예: 2214)</p>
+    <div class="search-box">
+      <div class="display en" id="disp"><span class="ph">번호 입력</span></div>
+      <div class="keypad" id="pad"></div>
+      <div class="msg" id="msg"></div>
+    </div>
+    <div class="shelf" id="shelf"></div>
+  </section>`);
+  app.appendChild(el);
+  const disp=el.querySelector("#disp"), msg=el.querySelector("#msg"), pad=el.querySelector("#pad");
+  const render=()=>{ disp.innerHTML = typed ? typed : '<span class="ph">번호 입력</span>'; };
+  ["1","2","3","4","5","6","7","8","9","del","0","go"].forEach(k=>{
+    const b=$(`<button class="key ${k==='go'?'go':k==='del'?'del':''} en">${k==='del'?'⌫':k==='go'?'GO!':k}</button>`);
+    b.onclick=()=>{
+      msg.textContent="";
+      if(k==="del") typed=typed.slice(0,-1);
+      else if(k==="go") return tryOpen(typed);
+      else if(typed.length<6) typed+=k;
+      render();
+    };
+    pad.appendChild(b);
+  });
+  function tryOpen(num){
+    num = (num||"").replace(/^k/i,"");
+    if(BOOK_SETS[num]) openSet(num);
+    else { msg.textContent = num ? `${num}번 책은 아직 없어요 😅 선생님께 물어보세요!` : "번호를 먼저 눌러 주세요!"; disp.classList.add("shake"); setTimeout(()=>disp.classList.remove("shake"),400); beep("bad"); }
+  }
+  // 키보드 입력도 가능
+  el.onkeydown=null;
+  window.onkeydown = e=>{
+    if(curSetId) return;
+    if(/^\d$/.test(e.key) && typed.length<6){ typed+=e.key; render(); }
+    else if(e.key==="Backspace"){ typed=typed.slice(0,-1); render(); }
+    else if(e.key==="Enter") tryOpen(typed);
+  };
+  const shelf=el.querySelector("#shelf");
+  Object.entries(BOOK_SETS).forEach(([id,s])=>{
+    const b=$(`<button><span class="en">${id}</span> ${s.books.map(b=>b.cover).join(" ")}<small>${s.books.map(b=>b.title).join(" · ")}</small></button>`);
+    b.onclick=()=>openSet(id); shelf.appendChild(b);
+  });
+}
+
+/* =========================================================
+   화면 2 : 책 세트 (2권) 미션 지도
+   ========================================================= */
+function openSet(id, bookIdx){
+  clearTimers(); speechSynthesis.cancel();
+  curSetId=id; if(bookIdx!==undefined) curBook=bookIdx; else curBook = curBook||0;
+  const set=BOOK_SETS[id];
+  if(curBook>=set.books.length) curBook=0;
+  document.getElementById("brand").textContent = `K${id} · ${set.series}`;
+  app.innerHTML="";
+  const el=$(`<section>
+    <div class="booktabs" id="tabs"></div>
+    <div class="missions" id="ms"></div>
+    <div class="together">
+      <h2>🤝 두 권 함께 복습</h2>
+      <div class="row" id="tog"></div>
+    </div>
+    <div class="plan">⏰ <b>90분 수업 추천 순서</b><br>
+      1권 미션 ①~⑦ (약 35분) → 쉬는 시간 → 2권 미션 ①~⑦ (약 35분) → 두 권 함께 복습 (약 15분)<br>
+      ⭐ 별을 모아 보세요! 끝낸 미션에는 ✅ 표시가 생겨요.</div>
+  </section>`);
+  app.appendChild(el);
+  const tabs=el.querySelector("#tabs");
+  set.books.forEach((b,i)=>{
+    const t=$(`<button class="booktab ${i===curBook?'on':''}"><span class="em">${b.cover}</span><span class="en">${b.title}</span><div class="snd">${b.soundName} (${b.sound})</div></button>`);
+    t.onclick=()=>{ openSet(id,i); speak(b.title); };
+    tabs.appendChild(t);
+  });
+  const ms=el.querySelector("#ms");
+  MISSIONS.forEach((m,i)=>{
+    const key=`${id}-${curBook}-${m.id}`;
+    const b=$(`<button class="mission" style="background:${m.color}"><span class="num">${i+1}</span>${SAVE.done[key]?'<span class="done">✅</span>':''}
+      <span class="ic">${m.ic}</span>${m.name}<small>${m.desc}</small></button>`);
+    b.onclick=()=>startMission(m.id);
+    ms.appendChild(b);
+  });
+  const tog=el.querySelector("#tog");
+  const sorts = set.books.map(b=>b.sound);
+  const togMissions = [
+    {id:"sort", ic:"🧺", name:"소리 분류 게임", desc: new Set(sorts).size>1 ? set.books.map(b=>b.sound).join(" vs ") : "소리 바구니", color:"#FF9F43"},
+    {id:"mix",  ic:"🎈", name:"두 권 풍선 대결", desc:"20개 단어 섞어서!", color:"#4DA3FF"}
+  ];
+  togMissions.forEach(m=>{
+    const key=`${id}-all-${m.id}`;
+    const b=$(`<button class="mission" style="background:${m.color}">${SAVE.done[key]?'<span class="done">✅</span>':''}<span class="ic">${m.ic}</span>${m.name}<small>${m.desc}</small></button>`);
+    b.onclick=()=>startTogether(m.id);
+    tog.appendChild(b);
+  });
+}
+
+/* 활동 화면 틀 */
+function frame(title, backFn){
+  clearTimers(); speechSynthesis.cancel();
+  CUR = {start:Date.now(), wrong:new Set()};
+  app.innerHTML="";
+  const el=$(`<section><div class="act-head"><button class="iconbtn">◀ 미션</button><h2>${title}</h2></div><div class="progress"><div></div></div><div class="body"></div></section>`);
+  el.querySelector(".iconbtn").onclick = backFn || (()=>openSet(curSetId));
+  app.appendChild(el);
+  return {body:el.querySelector(".body"), setProg:(r)=>el.querySelector(".progress>div").style.width=(r*100)+"%"};
+}
+function book(){ return BOOK_SETS[curSetId].books[curBook]; }
+function allWords(){ return BOOK_SETS[curSetId].books.flatMap((b,bi)=>b.words.map(w=>Object.assign({vowel:b.vowel, bi},w))); }
+function bookWords(){ const b=book(); return b.words.map(w=>Object.assign({vowel:b.vowel, bi:curBook},w)); }
+const MISSION_NAMES = {sort:"소리 분류 게임", mix:"두 권 풍선 대결"};
+MISSIONS.forEach(m=>MISSION_NAMES[m.id]=m.name);
+function finish(key, title, stars, score=null, total=null){
+  markDone(key);
+  const [setId, bk, mission] = key.split("-");
+  const set = BOOK_SETS[setId];
+  sendRecord({
+    time: new Date().toISOString(), setId, key, mission, missionName: MISSION_NAMES[mission]||mission,
+    book: bk==="all" ? "두 권" : String(Number(bk)+1),
+    bookTitle: bk==="all" ? set.books.map(b=>b.title).join(" + ") : set.books[Number(bk)].title,
+    score, total, stars, seconds: Math.round((Date.now()-CUR.start)/1000), wrong: [...CUR.wrong]
+  });
+  celebrate(title, stars, ()=>openSet(curSetId));
+}
+
+function startMission(id){
+  const k=`${curSetId}-${curBook}-${id}`;
+  const m=MISSIONS.find(x=>x.id===id);
+  const t=`${m.ic} ${m.name} · ${book().title}`;
+  ({flash:()=>gFlash(t,k), listen:()=>gListen(t,k,bookWords(),8), spell:()=>gSpell(t,k),
+    balloon:()=>gBalloon(t,k,bookWords(),8), search:()=>gSearch(t,k), read:()=>gRead(t,k), quiz:()=>gQuiz(t,k)})[id]();
+}
+function startTogether(id){
+  const k=`${curSetId}-all-${id}`;
+  if(id==="sort") gSort("🧺 소리 분류 게임",k);
+  if(id==="mix") gBalloon("🎈 두 권 풍선 대결",k,allWords(),12);
+}
+
+/* =========================================================
+   ① 단어 듣기 (플래시카드)
+   ========================================================= */
+function gFlash(title,key){
+  const {body,setProg}=frame(title);
+  const ws=bookWords(); let i=0; const seen=new Set();
+  body.innerHTML=`
+    <div class="flash" id="fc"><div class="flash-inner">
+      <div class="face front"><div class="em"></div><div class="word en"></div><div class="hint">카드를 누르면 뜻이 나와요</div></div>
+      <div class="face back"><div class="em"></div><div class="ko"></div><div class="hint"></div></div>
+    </div></div>
+    <div class="dots" id="dots"></div>
+    <div class="btnrow">
+      <button class="big alt" id="prev">◀</button>
+      <button class="big" id="say">🔊 듣기</button>
+      <button class="big pink" id="slow">🐢 천천히</button>
+      <button class="big green" id="split">✋ 글자씩</button>
+      <button class="big alt" id="next">▶</button>
+    </div>
+    <p class="sub">🎤 듣고 큰 소리로 3번 따라 말해 보세요!</p>`;
+  const fc=body.querySelector("#fc"), dots=body.querySelector("#dots");
+  ws.forEach(()=>dots.appendChild(document.createElement("i")));
+  function show(){
+    const w=ws[i]; fc.classList.remove("flipped"); seen.add(i);
+    fc.querySelector(".front .em").textContent=w.em;
+    fc.querySelector(".front .word").innerHTML=colorWord(w,w.vowel);
+    fc.querySelector(".back .em").textContent=w.em;
+    fc.querySelector(".back .ko").textContent=w.ko;
+    fc.querySelector(".back .hint").textContent=w.note||"";
+    [...dots.children].forEach((d,j)=>{d.className=(seen.has(j)?"seen ":"")+(j===i?"cur":"")});
+    setProg(seen.size/ws.length);
+    later(()=>speak(w.en),250);
+    if(seen.size===ws.length && !show.done){ show.done=true; later(()=>finish(key,"단어를 다 들었어요!",3,ws.length,ws.length),2200); }
+  }
+  fc.onclick=()=>{ fc.classList.toggle("flipped"); const w=ws[i]; fc.classList.contains("flipped") ? speak(w.ko,{lang:"ko"}) : speak(w.en); };
+  body.querySelector("#prev").onclick=()=>{ i=(i-1+ws.length)%ws.length; show(); };
+  body.querySelector("#next").onclick=()=>{ i=(i+1)%ws.length; show(); };
+  body.querySelector("#say").onclick=()=>speak(ws[i].en);
+  body.querySelector("#slow").onclick=()=>speak(ws[i].en,{rate:.45});
+  body.querySelector("#split").onclick=()=>{
+    fc.classList.remove("flipped");
+    const spans=[...fc.querySelectorAll(".front .word span")]; let k=0;
+    const step=()=>{ spans.forEach(s=>s.classList.remove("lit")); if(k<spans.length){ spans[k].classList.add("lit"); beep("pop"); k++; later(step,450);} else { speak(ws[i].en,{rate:.6}); } };
+    step();
+  };
+  show();
+}
+
+/* =========================================================
+   ② 듣고 고르기
+   ========================================================= */
+function gListen(title,key,pool,rounds){
+  const {body,setProg}=frame(title);
+  const targets=pick(pool,Math.min(rounds,pool.length)); let r=0, score=0;
+  function round(){
+    if(r>=targets.length) return finish(key,`${targets.length}문제 중 ${score}개 한 번에 맞혔어요!`, score>=targets.length-1?3:score>=targets.length/2?2:1, score, targets.length);
+    setProg(r/targets.length);
+    const t=targets[r]; let tries=0;
+    const opts=shuffle([t,...pick(pool.filter(w=>w.en!==t.en),3)]);
+    body.innerHTML=`<button class="speaker">🔊</button><p class="sub">잘 듣고 맞는 그림을 눌러요!</p><div class="opts"></div>`;
+    body.querySelector(".speaker").onclick=()=>speak(t.en);
+    const box=body.querySelector(".opts");
+    opts.forEach(o=>{
+      const b=$(`<button class="opt"><span class="em">${o.em}</span><span class="en">${colorWord(o,o.vowel)}</span></button>`);
+      b.onclick=()=>{
+        if(b.classList.contains("wrong")||box.dataset.lock) return;
+        if(o.en===t.en){ box.dataset.lock=1; b.classList.add("right","pop"); beep("good"); if(!tries) score++; speak(t.en); r++; later(round,1100); }
+        else { tries++; noteWrong(t.en); b.classList.add("wrong","shake"); beep("bad"); later(()=>speak(t.en),300); }
+      };
+      box.appendChild(b);
+    });
+    later(()=>speak(t.en),400);
+  }
+  round();
+}
+
+/* =========================================================
+   ③ 철자 블록
+   ========================================================= */
+function gSpell(title,key){
+  const {body,setProg}=frame(title);
+  const ws=pick(bookWords().filter(w=>w.en.replace(/ /g,"").length>1),6); let r=0, perfect=0;
+  function round(){
+    if(r>=ws.length) return finish(key,"철자 블록 완성!", perfect>=5?3:perfect>=3?2:1, perfect, ws.length);
+    setProg(r/ws.length);
+    const w=ws[r], letters=[...w.en]; let pos=0, miss=0;
+    const extra=pick([..."abcdefghijklmnopqrstuvwxyz"].filter(c=>!w.en.includes(c)),2);
+    const tiles=shuffle(letters.filter(c=>c!==" ").concat(extra));
+    body.innerHTML=`<div class="spell-top"><div class="em">${w.em}</div><div class="ko">${w.ko}</div>
+      <button class="big" id="sp">🔊 다시 듣기</button></div><div class="slots"></div><div class="tiles"></div>`;
+    body.querySelector("#sp").onclick=()=>speak(w.en,{rate:.6});
+    const slots=body.querySelector(".slots"), tl=body.querySelector(".tiles");
+    letters.forEach(c=>slots.appendChild($(`<div class="slot en ${c===" "?"space":""}"></div>`)));
+    const skip=()=>{ while(letters[pos]===" ") pos++; }; skip();
+    tiles.forEach(c=>{
+      const b=$(`<button class="tile en">${c}</button>`);
+      b.onclick=()=>{
+        if(c===letters[pos]){
+          const s=slots.children[pos]; s.textContent=c; s.classList.add("fill","pop"); b.classList.add("used"); beep("pop"); pos++; skip();
+          if(pos>=letters.length){ if(!miss) perfect++; beep("good"); speak(w.en); r++; later(round,1300); }
+        } else { miss++; noteWrong(w.en); b.classList.add("shake"); beep("bad"); later(()=>b.classList.remove("shake"),400); }
+      };
+      tl.appendChild(b);
+    });
+    later(()=>speak(w.en,{rate:.6}),300);
+  }
+  round();
+}
+
+/* =========================================================
+   ④ 풍선 터뜨리기
+   ========================================================= */
+function gBalloon(title,key,pool,rounds){
+  const {body,setProg}=frame(title);
+  const targets=pick(pool,Math.min(rounds,pool.length)); let r=0, score=0;
+  const colors=["#FF6B9A","#4DA3FF","#38C47E","#FF9F43","#9B6BFF"];
+  body.innerHTML=`<button class="speaker" style="width:90px;height:90px;font-size:44px;margin-bottom:10px">🔊</button><div class="sky"></div>`;
+  const sky=body.querySelector(".sky");
+  body.querySelector(".speaker").onclick=()=>targets[r]&&speak(targets[r].en);
+  function round(){
+    sky.innerHTML="";
+    if(r>=targets.length) return finish(key,`풍선 ${score}개를 한 번에 터뜨렸어요!`, score>=targets.length-1?3:score>=targets.length/2?2:1, score, targets.length);
+    setProg(r/targets.length);
+    const t=targets[r]; let tries=0, done=false;
+    const opts=shuffle([t,...pick(pool.filter(w=>w.en!==t.en),3)]);
+    const dur = 7 + Math.max(0,4-r*.3);
+    opts.forEach((o,i)=>{
+      const b=$(`<button class="balloon en" style="left:${4+i*24}%;background:${colors[(i+r)%5]};animation-duration:${dur+Math.random()*1.5}s;animation-delay:${Math.random()*.6}s"><span class="em">${o.em}</span>${o.en}</button>`);
+      b.onclick=()=>{
+        if(done) return;
+        if(o.en===t.en){ done=true; b.classList.add("boom"); beep("good"); if(!tries) score++; speak(t.en); r++; later(round,1000); }
+        else { tries++; noteWrong(t.en); b.style.opacity=.35; b.disabled=true; beep("bad"); }
+      };
+      b.addEventListener("animationend",ev=>{ if(ev.animationName==="rise" && o.en===t.en && !done){ done=true; noteWrong(t.en); tip("놓쳤어요! 다시 해 봐요 🎈"); later(round,600);} });
+      sky.appendChild(b);
+    });
+    later(()=>speak(t.en),300);
+  }
+  round();
+}
+
+/* =========================================================
+   ⑤ 단어 숨은그림 (가로 → / 세로 ↓)
+   ========================================================= */
+function gSearch(title,key){
+  const {body,setProg}=frame(title);
+  const ws=bookWords().filter(w=>w.en.length>1 && !w.en.includes(" "));
+  const N=9, grid=Array.from({length:N},()=>Array(N).fill(""));
+  const placed=[];
+  ws.forEach(w=>{
+    const s=w.en;
+    for(let tryN=0;tryN<200;tryN++){
+      const dir=Math.random()<.5?[0,1]:[1,0];
+      const r0=Math.floor(Math.random()*(N-(dir[0]?s.length-1:0))), c0=Math.floor(Math.random()*(N-(dir[1]?s.length-1:0)));
+      let ok=true;
+      for(let k=0;k<s.length;k++){ const ch=grid[r0+dir[0]*k][c0+dir[1]*k]; if(ch && ch!==s[k]){ok=false;break;} }
+      if(!ok) continue;
+      for(let k=0;k<s.length;k++) grid[r0+dir[0]*k][c0+dir[1]*k]=s[k];
+      placed.push({w, cells:[...s].map((_,k)=>[r0+dir[0]*k,c0+dir[1]*k])}); break;
+    }
+  });
+  const abc="abcdefghijklmnopqrstuvwxyz";
+  grid.forEach(row=>row.forEach((c,j)=>{ if(!c) row[j]=abc[Math.floor(Math.random()*26)]; }));
+  body.innerHTML=`<p class="sub">단어의 <b>첫 글자</b>를 누르고, <b>마지막 글자</b>를 눌러요! (가로 → / 세로 ↓)</p>
+    <div class="hintbar"><button class="big pink" id="hintBtn">💡 힌트</button><span class="left">뜻 카드를 눌러도 힌트가 나와요</span></div>
+    <div class="wslist"></div><div class="ws" style="grid-template-columns:repeat(${N},1fr)"></div>`;
+  const list=body.querySelector(".wslist"), wsEl=body.querySelector(".ws");
+  const btn=[]; let start=null, found=0, hintTarget=null, hintLevel=0, hintsUsed=0;
+
+  /* 💡 힌트: 1번 → 첫 글자 반짝 + 소리 / 같은 단어 2번 → 단어 전체를 잠깐 보여줌 */
+  function clearHint(){ btn.forEach(x=>x.classList.remove("hint1","hint2")); placed.forEach(p=>p.tag.classList.remove("target")); }
+  function giveHint(p){
+    if(!p || p.ok) return;
+    hintLevel = (hintTarget===p) ? hintLevel+1 : 1;
+    hintTarget=p; hintsUsed++; noteWrong(p.w.en);
+    clearHint(); p.tag.classList.add("target");
+    const [r0,c0]=p.cells[0];
+    if(hintLevel===1){
+      void btn[r0*N+c0].offsetWidth; btn[r0*N+c0].classList.add("hint1");
+      speak(p.w.en,{rate:.6}); tip(`${p.w.em} "${p.w.en[0]}" 로 시작해요! (${p.w.en.length}글자)`);
+    } else {
+      p.cells.forEach(([x,y])=>btn[x*N+y].classList.add("hint2"));
+      speak(p.w.en,{rate:.6}); tip(`${p.w.em} ${p.w.en} 여기 있어요!`);
+      later(()=>{ p.cells.forEach(([x,y])=>btn[x*N+y].classList.remove("hint2")); if(!p.ok) btn[r0*N+c0].classList.add("hint1"); },2500);
+    }
+  }
+  body.querySelector("#hintBtn").onclick=()=>{
+    const p = (hintTarget && !hintTarget.ok) ? hintTarget : placed.find(x=>!x.ok);
+    giveHint(p);
+  };
+  placed.forEach(p=>{ const s=$(`<span>${p.w.em} ${p.w.ko}</span>`); s.onclick=()=>giveHint(p); p.tag=s; list.appendChild(s); });
+  grid.forEach((row,i)=>row.forEach((c,j)=>{
+    const b=$(`<button class="en">${c}</button>`); btn.push(b);
+    b.onclick=()=>{
+      if(!start){ start=[i,j]; b.classList.add("sel"); return; }
+      const [a,d]=start; start=null; btn.forEach(x=>x.classList.remove("sel"));
+      const hit=placed.find(p=>!p.ok && p.cells[0][0]===a && p.cells[0][1]===d && p.cells.at(-1)[0]===i && p.cells.at(-1)[1]===j);
+      if(hit){ hit.ok=true; found++; if(hintTarget===hit){ clearHint(); hintTarget=null; hintLevel=0; } hit.cells.forEach(([x,y])=>btn[x*N+y].classList.add("found")); hit.tag.classList.add("ok"); hit.tag.textContent=`${hit.w.em} ${hit.w.en}`; beep("good"); speak(hit.w.en); setProg(found/placed.length);
+        if(found===placed.length) later(()=>finish(key,"숨은 단어를 모두 찾았어요!", hintsUsed<=2?3:hintsUsed<=6?2:1, placed.length, placed.length),900); }
+      else if(!(a===i&&d===j)){ beep("bad"); wsEl.classList.add("shake"); later(()=>wsEl.classList.remove("shake"),400); }
+    };
+    wsEl.appendChild(b);
+  }));
+}
+
+/* =========================================================
+   ⑥ 책 읽기 (읽어주기 + 해석 + 단어 누르면 뜻)
+   ========================================================= */
+function gRead(title,key){
+  const {body,setProg}=frame(title);
+  const b=book();
+  let pages=b.story, preview=false;
+  if(!pages.length){
+    preview=true;
+    const s=b.blank;
+    pages=[{en:`${s.before} ${s.answer} ${s.after}`.replace(" .","."), ko:s.ko, em:b.cover}];
+  }
+  const vocab={}; b.words.forEach(w=>vocab[w.en.toLowerCase()]=w);
+  const gloss=Object.assign({a:"한 개의 / 하나의"}, b.gloss||{});
+  // 단어 찾기: cats → cat, pals → pal 처럼 복수형 s 도 찾아줌
+  const lookup=c=> vocab[c] ? vocab[c] : (c.endsWith("s") && vocab[c.slice(0,-1)]) ? vocab[c.slice(0,-1)] : null;
+  let p=0, showKo=false, auto=false;
+  function render(){
+    const pg=pages[p]; setProg((p+1)/pages.length);
+    const toks=pg.en.split(/\s+/);
+    body.innerHTML=`${preview?`<div class="notice">📢 책 본문은 아직 준비 중이에요. 지금은 워크시트 문장으로 연습해요!<br>(선생님: 책 파일을 넣어 주면 이 화면에서 페이지별로 읽어주고 해석해 줘요.)</div>`:""}
+      <div class="page"><div style="font-size:18px;color:#9a8f7a">📄 ${p+1} / ${pages.length}</div><div class="em">${pg.em||""}</div>
+      <div class="sent en">${toks.map((t,k)=>{const c=t.toLowerCase().replace(/[^a-z']/g,""); return `<span class="w ${lookup(c)?'vocab':''}" data-k="${k}" data-c="${c}">${t}</span>`;}).join(" ")}</div>
+      <div class="trans ${showKo?'':'hidden'}">${pg.ko}</div></div>
+      <div class="btnrow">
+        <button class="big alt" id="pv" ${p===0?"disabled style='opacity:.3'":""}>◀</button>
+        <button class="big" id="rd">🔊 읽어주기</button>
+        <button class="big pink" id="rs">🐢 천천히</button>
+        <button class="big green" id="tr">🇰🇷 해석 ${showKo?'숨기기':'보기'}</button>
+        <button class="big alt" id="nx">${p===pages.length-1?"다 읽었어요 ✔":"▶"}</button>
+      </div>
+      ${pages.length>1?`<div class="btnrow" style="margin-top:0"><button class="big" id="auto" style="background:${auto?'#FF5A5A':'#9B6BFF'}">${auto?'⏹ 멈추기':'▶▶ 처음부터 끝까지 듣기'}</button></div>`:""}
+      <p class="sub">💡 밑줄 단어를 누르면 소리와 뜻이 나와요 · 듣고 나서 따라 읽어 보세요!</p>`;
+    const spans=[...body.querySelectorAll(".sent .w")];
+    spans.forEach(s=>s.onclick=()=>{ const c=s.dataset.c, w=lookup(c); speak(c); if(w) tip(`${w.em} ${w.en} = ${w.ko}`); else if(gloss[c]) tip(`${c} = ${gloss[c]}`); });
+    const read=(rate,onDone)=>{
+      clearTimers(); spans.forEach(s=>s.classList.remove("hl"));
+      const starts=[]; let pos=0; toks.forEach(t=>{starts.push(pos); pos+=t.length+1;});
+      let gotBoundary=false;
+      const hl=k=>{ spans.forEach(s=>s.classList.remove("hl")); if(spans[k]) spans[k].classList.add("hl"); };
+      // 경계 이벤트가 없는 음성을 위한 예상 타이머
+      let acc=250; toks.forEach((t,k)=>{ later(()=>{ if(!gotBoundary) hl(k); }, acc); acc += (260+t.length*70)/rate*0.8; });
+      // 대문자 문장(CATS CLAP!)은 글자 하나씩 읽지 않도록 소문자로 읽기 (글자 수는 같음)
+      const txt = pg.en===pg.en.toUpperCase() ? pg.en[0]+pg.en.slice(1).toLowerCase() : pg.en;
+      speak(txt,{rate, onboundary:e=>{ if(e.name && e.name!=="word") return; gotBoundary=true; let k=starts.findIndex((s,i)=>e.charIndex>=s && (i===starts.length-1||e.charIndex<starts[i+1])); hl(k); },
+        onend:()=>{ later(()=>spans.forEach(s=>s.classList.remove("hl")),300);
+          if(showKo) later(()=>speak(pg.ko,{lang:"ko", onend:()=>onDone&&later(onDone,700)}),500);
+          else if(onDone) later(onDone,1200); }});
+    };
+    const autoNext=()=>{ if(!auto) return; if(p<pages.length-1){ p++; render()(.8,autoNext); } else { auto=false; render(); } };
+    body.querySelector("#rd").onclick=()=>read(.8);
+    body.querySelector("#rs").onclick=()=>read(.5);
+    body.querySelector("#tr").onclick=()=>{ showKo=!showKo; render(); if(showKo) speak(pg.ko,{lang:"ko"}); };
+    body.querySelector("#pv").onclick=()=>{ auto=false; if(p>0){p--; render()(.8);} };
+    body.querySelector("#nx").onclick=()=>{ auto=false; if(p<pages.length-1){p++; const r=render(); later(()=>r(.8),300);} else finish(key,`${b.title} 읽기 완료!`,2); };
+    const ab=body.querySelector("#auto");
+    if(ab) ab.onclick=()=>{ if(auto){ auto=false; clearTimers(); speechSynthesis.cancel(); render(); } else { auto=true; p=0; render()(.8,autoNext); } };
+    return read;
+  }
+  const read=render(); later(()=>read(.8),500);
+}
+
+/* =========================================================
+   ⑦ 확인 퀴즈 (워크시트 빈칸 + 뜻 고르기)
+   ========================================================= */
+function gQuiz(title,key){
+  const {body,setProg}=frame(title);
+  const b=book(), ws=bookWords();
+  const qs=[{type:"blank"}, ...pick(ws,4).map(w=>({type:"mean",w}))];
+  let r=0, score=0;
+  function round(){
+    if(r>=qs.length) return finish(key,`${qs.length}문제 중 ${score}개 정답!`, score>=qs.length-1?3:score>=3?2:1, score, qs.length);
+    setProg(r/qs.length);
+    const q=qs[r]; let tries=0;
+    if(q.type==="blank"){
+      const s=b.blank;
+      body.innerHTML=`<p class="sub">📗 책 내용에 맞는 단어를 골라요!</p>
+        <div class="qsent en">${s.before} <span class="blank">&nbsp;</span>${s.after.startsWith(".")?"":" "}${s.after}</div>
+        <p class="sub">${s.ko}</p><div class="opts" style="grid-template-columns:repeat(3,1fr)"></div>`;
+      const box=body.querySelector(".opts");
+      s.choices.forEach(c=>{
+        const btn=$(`<button class="opt en">${c}</button>`);
+        btn.onclick=()=>{
+          if(box.dataset.lock||btn.classList.contains("wrong")) return;
+          speak(c);
+          if(c===s.answer){ box.dataset.lock=1; btn.classList.add("right"); body.querySelector(".blank").textContent=c; beep("good"); if(!tries) score++;
+            later(()=>speak(`${s.before} ${s.answer}${s.after.startsWith(".")?"":" "}${s.after}`),700); r++; later(round,3200); }
+          else { tries++; noteWrong(s.answer); btn.classList.add("wrong","shake"); beep("bad"); }
+        };
+        box.appendChild(btn);
+      });
+    } else {
+      const w=q.w, opts=shuffle([w,...pick(ws.filter(x=>x.en!==w.en),2)]);
+      body.innerHTML=`<p class="sub">뜻에 맞는 영어 단어는?</p><div class="qsent">${w.ko}</div><div class="opts" style="grid-template-columns:repeat(3,1fr)"></div>`;
+      speak(w.ko,{lang:"ko"});
+      const box=body.querySelector(".opts");
+      opts.forEach(o=>{
+        const btn=$(`<button class="opt"><span class="en">${colorWord(o,o.vowel)}</span></button>`);
+        btn.onclick=()=>{
+          if(box.dataset.lock||btn.classList.contains("wrong")) return;
+          speak(o.en);
+          if(o.en===w.en){ box.dataset.lock=1; btn.classList.add("right"); btn.querySelector("span").insertAdjacentHTML("beforebegin",`<span class="em">${w.em}</span>`); beep("good"); if(!tries) score++; r++; later(round,1300); }
+          else { tries++; noteWrong(w.en); btn.classList.add("wrong","shake"); beep("bad"); }
+        };
+        box.appendChild(btn);
+      });
+    }
+  }
+  round();
+}
+
+/* =========================================================
+   🧺 소리 분류 게임 (두 권의 파닉스 소리 비교)
+   ========================================================= */
+function gSort(title,key){
+  const {body,setProg}=frame(title);
+  const set=BOOK_SETS[curSetId];
+  const sounds=[...new Set(set.books.map(b=>b.sound))];
+  if(sounds.length<2){ body.innerHTML=`<p class="sub">두 권의 파닉스 소리가 같아서 분류 게임이 없어요 🙂</p>`; return; }
+  const bins=set.books.map((b,i)=>({b,i,color:i?"#FF6B9A":"#4DA3FF"}));
+  const items=shuffle(allWords().filter(w=>w.p && !w.en.includes(" "))).slice(0,12);
+  let r=0, score=0;
+  function round(){
+    if(r>=items.length) return finish(key,`${items.length}개 중 ${score}개 정확히 분류!`, score>=items.length-1?3:score>=items.length/2?2:1, score, items.length);
+    setProg(r/items.length);
+    const w=items[r]; let tries=0;
+    body.innerHTML=`<p class="sub">단어 소리를 듣고 맞는 바구니에 넣어요!</p>
+      <div class="sortcard"><div class="em">${w.em}</div><div class="word en">${w.en}</div><button class="big" id="sp">🔊</button></div>
+      <div class="baskets"></div>`;
+    body.querySelector("#sp").onclick=()=>speak(w.en);
+    const bx=body.querySelector(".baskets");
+    bins.forEach(bin=>{
+      const el=$(`<button class="basket" style="background:${bin.color}"><span class="em">🧺</span><span class="en">${bin.b.sound}</span><div style="font-size:18px">${bin.b.soundName} · ${bin.b.cover}</div></button>`);
+      el.onclick=()=>{
+        if(bx.dataset.lock) return;
+        if(bin.i===w.bi){ bx.dataset.lock=1; el.classList.add("pop"); beep("good"); if(!tries) score++;
+          body.querySelector(".word").innerHTML=colorWord(w,w.vowel); speak(`${w.en}. ${w.en}.`,{rate:.6}); r++; later(round,1800); }
+        else { tries++; noteWrong(w.en); el.classList.add("shake"); beep("bad"); later(()=>el.classList.remove("shake"),400); }
+      };
+      bx.appendChild(el);
+    });
+    later(()=>speak(w.en),300);
+  }
+  round();
+}
+
+/* =========================================================
+   👋 아이 로그인 : 반 → 이름 → 비밀번호 4자리
+   ========================================================= */
+function resetScreen(){ clearTimers(); speechSynthesis.cancel(); curSetId=null; window.onkeydown=null;
+  document.getElementById("brand").textContent = "Kelly English 파닉스 놀이터"; app.innerHTML=""; }
+
+async function showLogin(){
+  resetScreen();
+  const el=$(`<section>
+    <h1>👋 안녕! 누구예요?</h1>
+    <div id="lb"></div>
+    <div class="linkrow">
+      <button class="linkbtn" id="guestBtn">🎒 로그인 없이 연습하기 (기록 안 남아요)</button>
+      <button class="linkbtn" id="teacherBtn">👩‍🏫 선생님</button>
+    </div>
+  </section>`);
+  app.appendChild(el);
+  const lb=el.querySelector("#lb");
+  el.querySelector("#guestBtn").onclick=()=>{ setUser({guest:true}); showHome(); };
+  el.querySelector("#teacherBtn").onclick=showTeacherLogin;
+  if(!SCRIPT_URL){
+    lb.innerHTML=`<div class="notice" style="max-width:640px;margin:10px auto">📢 아직 기록 저장(구글 시트)이 연결되지 않았어요.<br>지금은 아래 <b>연습하기</b>로 들어가세요. (선생님: 설정 안내서 2~3단계대로 웹 앱 주소를 넣어 주세요.)</div>`;
+    return;
+  }
+  lb.innerHTML=`<p class="sub">불러오는 중... ⏳</p>`;
+  try{ const r = await apiGet("roster"); if(!r.ok) throw 0; }
+  catch(e){
+    lb.innerHTML=`<p class="sub">인터넷 연결을 확인해 주세요 📶</p><div class="btnrow"><button class="big" id="retry">🔄 다시 시도</button></div>`;
+    lb.querySelector("#retry").onclick=showLogin; return;
+  }
+  // 아이디(kelly5017) + 비밀번호(5017) 입력
+  lb.innerHTML=`<div class="search-box" style="text-align:center">
+    <p class="sub" style="margin:0 0 6px">아이디</p>
+    <input class="tinput" id="lid" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="kelly1234" style="max-width:none;font-size:30px;text-align:center">
+    <p class="sub" style="margin:14px 0 6px">비밀번호</p>
+    <input class="tinput" id="lpw" type="password" inputmode="numeric" autocomplete="off" placeholder="1234" style="max-width:none;font-size:30px;text-align:center">
+    <div class="btnrow"><button class="big green" id="lgo" style="font-size:30px;padding:14px 40px">들어가기 ▶</button></div>
+    <div class="msg" id="lm"></div></div>`;
+  const idEl=lb.querySelector("#lid"), pwEl=lb.querySelector("#lpw"), m=lb.querySelector("#lm"), box=lb.querySelector(".search-box");
+  const fail=t=>{ m.style.color=""; m.textContent=t; beep("bad"); box.classList.add("shake"); setTimeout(()=>box.classList.remove("shake"),400); };
+  let busy=false;
+  const go=async()=>{
+    if(busy) return;
+    const id=idEl.value.replace(/\s+/g,"").toLowerCase(), pw=pwEl.value.replace(/\s+/g,"").toLowerCase();
+    if(!/^(kelly)?\d{4}$/.test(id)) return fail("아이디를 다시 확인해 주세요 (예: kelly1234)");
+    if(!pw) return fail("비밀번호를 써 주세요");
+    busy=true; m.style.color="var(--muted)"; m.textContent="확인 중...";
+    try{
+      const res=await api({action:"loginId", id, pw});
+      if(res.ok){
+        setUser({cls:res.cls, name:res.name, pin:id.replace(/^kelly/,"")});
+        SAVE.stars=Math.max(SAVE.stars, res.stars||0); SAVE.done=Object.assign(SAVE.done, res.done||{}); persist(); refreshStars();
+        speak(`안녕, ${res.name}!`,{lang:"ko"}); beep("good"); flushQueue(); showHome(); busy=false; return;
+      }
+      if(res.error==="no id") fail("없는 아이디예요. 다시 확인해 주세요!");
+      else if(res.error==="wrong pw"){ pwEl.value=""; fail("비밀번호가 틀렸어요. 다시 해 봐요!"); }
+      else if(res.error==="unknown action") fail("⚙️ 선생님: 구글 시트 코드가 예전 버전이에요. Apps Script에서 '배포 관리 → 수정 → 새 버전'으로 다시 배포해 주세요.");
+      else fail("⚙️ 선생님: 시트 오류 — " + (res.error||"알 수 없음"));
+    }catch(e){ fail("⚙️ 시트에 연결하지 못했어요. 인터넷과 웹 앱 배포 설정(액세스: 모든 사용자)을 확인해 주세요."); }
+    busy=false;
+  };
+  lb.querySelector("#lgo").onclick=go;
+  idEl.onkeydown=e=>{ if(e.key==="Enter") pwEl.focus(); };
+  pwEl.onkeydown=e=>{ if(e.key==="Enter") go(); };
+}
+
+/* =========================================================
+   👩‍🏫 선생님 모드 : 현황표 / 학생별 기록 / 학생 추가
+   ========================================================= */
+let TEACHER = null;   // {pw, data}
+function showTeacherLogin(){
+  resetScreen();
+  const el=$(`<section><h1>👩‍🏫 선생님 모드</h1><div class="panel" style="max-width:480px;margin:0 auto;text-align:center" id="tp"></div>
+    <div class="linkrow"><button class="linkbtn" id="tb">◀ 아이 로그인 화면</button></div></section>`);
+  app.appendChild(el);
+  el.querySelector("#tb").onclick=showLogin;
+  const tp=el.querySelector("#tp");
+  if(!SCRIPT_URL){ tp.innerHTML=`<p>기록 저장이 아직 연결되지 않았어요.<br>설정 안내서대로 구글 시트를 만들고, 이 파일의 <b>SCRIPT_URL</b>에 웹 앱 주소를 넣어 주세요.</p>`; return; }
+  tp.innerHTML=`<p>선생님 비밀번호를 입력하세요</p><input class="tinput" type="password" id="tpw" autocomplete="current-password"><div class="btnrow"><button class="big green" id="tgo">들어가기</button></div><div class="msg" id="tmsg"></div>`;
+  const go=async()=>{
+    const pw=tp.querySelector("#tpw").value, m=tp.querySelector("#tmsg");
+    m.style.color="var(--muted)"; m.textContent="불러오는 중...";
+    try{ const res=await api({action:"dashboard", pw}); if(!res.ok){ m.style.color=""; m.textContent="비밀번호가 맞지 않아요"; return; } TEACHER={pw,data:res}; showDashboard(); }
+    catch(e){ m.style.color=""; m.textContent="인터넷 연결 또는 웹 앱 주소를 확인해 주세요"; }
+  };
+  tp.querySelector("#tgo").onclick=go;
+  tp.querySelector("#tpw").onkeydown=e=>{ if(e.key==="Enter") go(); };
+}
+async function reloadDashboard(keepCls){
+  try{ const res=await api({action:"dashboard", pw:TEACHER.pw}); if(res.ok){ TEACHER.data=res; showDashboard(keepCls); } }catch(e){ tip("불러오기 실패 📶"); }
+}
+const fmtTime=t=>{ const d=new Date(t); return isNaN(d)? t : d.toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"}); };
+const pct=(a,b)=>b?Math.round(a/b*100):null;
+const pctCell=v=> v===null?"-":`<b class="${v>=80?'score-hi':v<60?'score-lo':''}">${v}%</b>`;
+
+function showDashboard(selCls){
+  resetScreen();
+  document.getElementById("brand").textContent="👩‍🏫 선생님 모드";
+  const {students, records}=TEACHER.data;
+  const classes=[...new Set(students.map(s=>s.cls).concat(records.map(r=>r.cls)))];
+  if(!selCls || !classes.includes(selCls)) selCls=classes[0]||"";
+  const el=$(`<section>
+    <div class="trow" style="margin:6px 0 14px">
+      <b style="font-size:22px">반</b><select id="cs">${classes.map(c=>`<option ${c===selCls?'selected':''}>${esc(c)}</option>`).join("")}</select>
+      <button class="big alt" id="rf" style="font-size:18px;padding:8px 14px">🔄 새로고침</button>
+      <button class="big alt" id="ex" style="font-size:18px;padding:8px 14px">🚪 나가기</button>
+    </div>
+    <div class="panel"><h3>📋 반 현황 <small style="font-size:15px;color:#7a7a8c">(이름을 누르면 자세히 보여요)</small></h3><div class="tblwrap" id="sum"></div></div>
+    <div class="panel"><h3>❗ 우리 반이 자주 틀린 단어</h3><div class="chips" id="ww"></div></div>
+    <div class="panel"><h3>➕ 학생 추가</h3>
+      <div class="trow"><input id="nc" placeholder="반 (예: LEVEL P)" value="${esc(selCls||"LEVEL P")}"><input id="nn" placeholder="이름"><input id="np" placeholder="번호 4자리 (kelly 뒤 숫자)" maxlength="4" inputmode="numeric">
+      <button class="big green" id="add" style="font-size:18px;padding:8px 16px">추가</button></div>
+      <div class="msg" id="am" style="text-align:left"></div>
+      <p style="color:#7a7a8c;font-size:15px;margin:8px 0 0">구글 시트의 '학생' 탭에서 직접 고쳐도 돼요.</p></div>
+  </section>`);
+  app.appendChild(el);
+  el.querySelector("#cs").onchange=e=>showDashboard(e.target.value);
+  el.querySelector("#rf").onclick=()=>reloadDashboard(selCls);
+  el.querySelector("#ex").onclick=()=>{ TEACHER=null; showLogin(); };
+
+  const recs=records.filter(r=>r.cls===selCls);
+  const names=[...new Set(students.filter(s=>s.cls===selCls).map(s=>s.name).concat(recs.map(r=>r.name)))];
+  const rows=names.map(n=>{
+    const rs=recs.filter(r=>r.name===n), st=students.find(s=>s.cls===selCls&&s.name===n);
+    const scored=rs.filter(r=>r.total), quiz=rs.filter(r=>r.mission==="quiz"&&r.total);
+    const last=rs.reduce((a,r)=>!a||r.time>a.time?r:a,null);
+    return {n, pin:st?st.pin:"(삭제됨)", last, stars:rs.reduce((a,r)=>a+r.stars,0), done:new Set(rs.map(r=>r.key)).size,
+      acc:pct(scored.reduce((a,r)=>a+r.score,0), scored.reduce((a,r)=>a+r.total,0)),
+      quiz:pct(quiz.reduce((a,r)=>a+r.score,0), quiz.reduce((a,r)=>a+r.total,0)),
+      mins:Math.round(rs.reduce((a,r)=>a+r.seconds,0)/60)};
+  });
+  el.querySelector("#sum").innerHTML = rows.length ? `<table class="tbl"><tr><th>이름</th><th>아이디</th><th>마지막 학습</th><th>최근 책</th><th>⭐ 별</th><th>끝낸 미션</th><th>확인 퀴즈</th><th>전체 정답률</th><th>학습 시간</th></tr>
+    ${rows.map(r=>`<tr class="click" data-n="${esc(r.n)}"><td><b>${esc(r.n)}</b></td><td class="en">${r.pin==='(삭제됨)'?r.pin:'kelly'+esc(r.pin)}</td><td>${r.last?fmtTime(r.last.time):"-"}</td><td>${r.last?`K${esc(r.last.setId)} ${esc(r.last.bookTitle)}`:"-"}</td><td>${r.stars}</td><td>${r.done}</td><td>${pctCell(r.quiz)}</td><td>${pctCell(r.acc)}</td><td>${r.mins}분</td></tr>`).join("")}</table>`
+    : `<p class="sub">이 반에는 아직 학생이 없어요.</p>`;
+  el.querySelectorAll("#sum tr.click").forEach(tr=>tr.onclick=()=>showStudent(selCls, tr.dataset.n));
+
+  const cnt={}; recs.forEach(r=>r.wrong.split(",").map(x=>x.trim()).filter(Boolean).forEach(w=>cnt[w]=(cnt[w]||0)+1));
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  el.querySelector("#ww").innerHTML = top.length ? top.map(([w,c])=>`<span class="en">${esc(w)} · ${c}번</span>`).join("") : `<span style="background:#E3FFF0">아직 없어요 👍</span>`;
+
+  el.querySelector("#add").onclick=async()=>{
+    const cls=el.querySelector("#nc").value.trim(), name=el.querySelector("#nn").value.trim(), pin=el.querySelector("#np").value.trim(), m=el.querySelector("#am");
+    if(!cls||!name||!/^\d{4}$/.test(pin)){ m.textContent="반, 이름, 번호 4자리를 모두 넣어 주세요"; return; }
+    m.style.color="var(--muted)"; m.textContent="추가하는 중...";
+    try{ const res=await api({action:"addStudent", pw:TEACHER.pw, cls, name, pin});
+      if(res.ok){ tip(`${name} 추가 완료!`); reloadDashboard(cls); } else { m.style.color=""; m.textContent=res.error||"추가하지 못했어요"; } }
+    catch(e){ m.style.color=""; m.textContent="인터넷 연결을 확인해 주세요"; }
+  };
+}
+
+function showStudent(cls, name){
+  resetScreen();
+  document.getElementById("brand").textContent=`👩‍🏫 ${cls} · ${name}`;
+  const rs=TEACHER.data.records.filter(r=>r.cls===cls&&r.name===name).sort((a,b)=>a.time<b.time?1:-1);
+  const sets=[...new Set(rs.map(r=>r.setId))];
+  const doneKeys=new Set(rs.map(r=>r.key));
+  const el=$(`<section>
+    <div class="trow" style="margin:6px 0 14px"><button class="big alt" id="bk" style="font-size:18px;padding:8px 14px">◀ 반 현황</button>
+      <h2 style="margin:0">${esc(name)} 학습 기록</h2></div>
+    <div class="panel"><h3>📚 책별 진도</h3><div id="pg"></div></div>
+    <div class="panel"><h3>🕘 전체 기록</h3><div class="tblwrap" id="hist"></div></div>
+    <div class="panel"><h3>⚙️ 학생 관리</h3><button class="big alt" id="del" style="font-size:17px;padding:8px 14px;color:#d63c3c">이 학생을 명단에서 삭제</button>
+      <span style="color:#7a7a8c;font-size:15px">  예전 학습 기록은 시트에 그대로 남아요.</span></div>
+  </section>`);
+  app.appendChild(el);
+  el.querySelector("#bk").onclick=()=>showDashboard(cls);
+  const cols=MISSIONS.map(m=>m.ic+" "+m.name);
+  el.querySelector("#pg").innerHTML = sets.length ? sets.map(id=>{
+    const set=BOOK_SETS[id];
+    const head=`<tr><th>K${esc(id)}</th>${cols.map(c=>`<th>${c}</th>`).join("")}</tr>`;
+    const body=(set?set.books:[]).map((b,i)=>`<tr><td><b class="en">${esc(b.title)}</b></td>${MISSIONS.map(m=>`<td>${doneKeys.has(`${id}-${i}-${m.id}`)?"✅":"⬜"}</td>`).join("")}</tr>`).join("");
+    const tog=`<tr><td>두 권 복습</td><td colspan="${MISSIONS.length}" style="text-align:left">🧺 소리 분류 ${doneKeys.has(`${id}-all-sort`)?"✅":"⬜"} · 🎈 풍선 대결 ${doneKeys.has(`${id}-all-mix`)?"✅":"⬜"}</td></tr>`;
+    return `<div style="overflow:auto;margin-bottom:12px"><table class="grid-prog">${head}${body}${tog}</table></div>`;
+  }).join("") : `<p class="sub">아직 기록이 없어요.</p>`;
+  el.querySelector("#hist").innerHTML = rs.length ? `<table class="tbl"><tr><th>날짜</th><th>책</th><th>미션</th><th>점수</th><th>⭐</th><th>시간</th><th>틀린/힌트 단어</th></tr>
+    ${rs.map(r=>`<tr><td>${fmtTime(r.time)}</td><td>K${esc(r.setId)} ${esc(r.bookTitle)}</td><td>${esc(r.missionName)}</td><td>${r.total?`${r.score}/${r.total} ${pctCell(pct(r.score,r.total))}`:"-"}</td><td>${r.stars}</td><td>${Math.max(1,Math.round(r.seconds/60))}분</td><td class="en" style="font-weight:600">${esc(r.wrong)||"-"}</td></tr>`).join("")}</table>` : "";
+  el.querySelector("#del").onclick=async()=>{
+    if(!confirm(`${name} 학생을 명단에서 삭제할까요? (기록은 남아요)`)) return;
+    try{ const res=await api({action:"deleteStudent", pw:TEACHER.pw, cls, name}); if(res.ok){ tip("삭제했어요"); reloadDashboard(cls); } else tip(res.error||"삭제 실패"); }catch(e){ tip("인터넷 연결을 확인해 주세요"); }
+  };
+}
+
+/* ---------- 시작 ---------- */
+document.getElementById("homeBtn").onclick=()=> USER ? showHome() : showLogin();
+document.getElementById("logoutBtn").onclick=()=>{ flushQueue(); setUser(null); showLogin(); };
+(function start(){
+  // 같은 태블릿에서 3시간 안에 다시 열면 로그인 유지
+  let sess=null; try{ sess=JSON.parse(localStorage.getItem(SESSION_KEY)); }catch(e){}
+  if(sess && Date.now()-sess.at < 3*60*60*1000 && (sess.guest || SCRIPT_URL)){ const {at,...u}=sess; setUser(u); }
+  else setUser(null);
+  flushQueue();
+  // 주소 끝에 #2214 를 붙이면 바로 그 책으로 열려요
+  const h=location.hash.replace("#","");
+  if(!USER) showLogin(); else if(BOOK_SETS[h]) openSet(h); else showHome();
+})();
+</script>
+</body>
+</html>
