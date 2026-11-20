@@ -895,6 +895,8 @@ const pv=w=>`<div class="pv">${PIC(w.en)}</div>`;
 /* =========================================================
    🔊 목소리 : 기기에서 가장 자연스러운 음성을 골라요 (여자/남자 선택)
    ========================================================= */
+/* 🎙 기본 목소리 (이름이 정확히 같은 목소리가 기기에 있으면 그걸 써요. 없으면 가장 자연스러운 목소리로 자동 선택) */
+const PREFERRED = { female:"Google US English", male:"Google UK English Male", ko:"Google 한국의" };
 let soundOn=true, VOICE_PREF="female", enF=null, enM=null, koVoice=null;
 try{ VOICE_PREF=localStorage.getItem("kelly_voice")||"female"; }catch(e){}
 const FEMALE=/samantha|ava|allison|susan|victoria|karen|moira|tessa|fiona|zira|aria|jenny|michelle|libby|sonia|natasha|emma|joanna|salli|kendra|kimberly|ivy|serena|female|google us english|nicky|zoe|evelyn|catherine|ana\b/i;
@@ -905,10 +907,12 @@ function loadVoices(){
   if(!("speechSynthesis" in window)) return;
   const vs=speechSynthesis.getVoices(); if(!vs.length) return;
   const en=vs.filter(v=>/^en/i.test(v.lang)).sort((a,b)=>vq(b)-vq(a));
-  enF = en.find(v=>FEMALE.test(v.name)&&!MALE.test(v.name)) || en.find(v=>!MALE.test(v.name)) || en[0] || null;
-  enM = en.find(v=>MALE.test(v.name)&&!/female/i.test(v.name)) || null;
+  const byName=n=>vs.find(v=>v.name===n);
+  // 선생님이 고른 목소리 (크롬): 여자 Google US English / 남자 Google UK English Male / 한국어 Google 한국의
+  enF = byName(PREFERRED.female) || en.find(v=>FEMALE.test(v.name)&&!MALE.test(v.name)) || en.find(v=>!MALE.test(v.name)) || en[0] || null;
+  enM = byName(PREFERRED.male) || en.find(v=>MALE.test(v.name)&&!/female/i.test(v.name)) || null;
   const ko=vs.filter(v=>/^ko/i.test(v.lang)).sort((a,b)=>{ const s=v=>(/natural|neural|online/i.test(v.name)?100:0)+(/premium|enhanced|siri|yuna|sora|heami|sunhi|injoon/i.test(v.name)?60:0)+(/google/i.test(v.name)?40:0); return s(b)-s(a); });
-  koVoice = ko[0] || null;
+  koVoice = byName(PREFERRED.ko) || ko[0] || null;
 }
 if("speechSynthesis" in window){ loadVoices(); speechSynthesis.onvoiceschanged=loadVoices; }
 const sayText=t=>String(t).replace(/(^|[^A-Za-z'])[Aa](?=$|[^A-Za-z'])/g,"$1uh");
