@@ -641,6 +641,35 @@ main#app section{padding-bottom:150px}
 .finstamp{position:absolute;top:-10px;right:-8px;width:34px;transform:rotate(10deg)}.finstamp svg{width:100%;height:auto}
 @media (max-width:900px){.cgrid{grid-template-columns:1fr}}
 
+/* 선생님 화면은 넓게 */
+main:has(.ttabs){max-width:none;padding-left:24px;padding-right:24px}
+.tbl.asg{width:100%}
+.pwform{display:flex;flex-direction:column;gap:10px}
+.pwform label{display:flex;flex-direction:column;gap:4px;font-size:16px}
+.pwform input{font-size:18px;padding:10px;border-radius:10px;border:2px solid #E5DDD0}
+.pwform .big{align-self:flex-start;font-size:17px;padding:10px 18px}
+
+/* 풍선 : 터진 자리 뜻 카드 */
+.popcard{position:absolute;width:210px;height:78px;margin:-39px 0 0 -105px;perspective:700px;z-index:6;pointer-events:none;animation:popin .4s cubic-bezier(.3,1.7,.5,1)}
+@keyframes popin{from{transform:scale(.2)}}
+.popcard.bye{animation:popout .3s forwards}@keyframes popout{to{transform:scale(.6) translateY(-20px);opacity:0}}
+.popcard .mci,.tcard .mci{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,1.5,.5,1);transform-style:preserve-3d}
+.popcard.flipped .mci,.tcard.flipped .mci{transform:rotateY(180deg)}
+.popcard .mcf.front{background:#fff;border:3px solid #FFC2D6;color:var(--ink)}
+.popcard .mcf.front b{font-size:26px}
+/* 스펠 학습 : 뜻 카드 */
+.tcard{perspective:900px;height:236px;margin-bottom:6px}
+.tcard .mcf{flex-direction:column;gap:0;box-shadow:none;padding:4px}
+.tcard .tfront{background:#fff;border:none}
+.tcard .tback{background:linear-gradient(135deg,#FF7FA8,#FF9F6B);color:#fff;transform:rotateY(180deg);border:4px solid #fff;box-shadow:0 6px 0 rgba(0,0,0,.1)}
+.tcard .tback .tpic{background:#fff;border-radius:20px;width:120px;height:120px;padding:4px}
+.tko{display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.tko .en{font-size:26px;opacity:.9}.tko span{font-size:42px;text-shadow:0 3px 0 rgba(0,0,0,.15)}
+@media (max-width:640px){.tcard{height:180px}.tko span{font-size:30px}.tcard .tback .tpic{width:86px;height:86px}.popcard{width:170px;height:66px;margin:-33px 0 0 -85px}.popcard .mcf.back .ko{font-size:18px}}
+/* 화면을 아래로 당겨도 새로고침되지 않게 */
+html,body{overscroll-behavior-y:none}
+.tpts{color:#FF4F86;font-size:26px;margin-left:6px;display:inline-block;animation:kkbub .4s cubic-bezier(.3,1.8,.5,1)}
+
 </style>
 </head>
 <body>
@@ -1129,7 +1158,7 @@ const totalPts=()=> Math.max(Object.values(SAVE.best).reduce((a,b)=>a+b,0), SAVE
 const esc=t=>String(t==null?"":t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 /* ---------- 서버 ---------- */
-const QUEUE_KEY="kelly_phonics_queue", SESSION_KEY="kelly_phonics_session";
+const QUEUE_KEY="kelly_phonics_queue", SESSION_KEY="kelly_phonics_session", TEACHER_KEY="kelly_phonics_teacher", PLACE_KEY="kelly_phonics_place";
 function getQueue(){ try{ return JSON.parse(localStorage.getItem(QUEUE_KEY))||[]; }catch(e){ return []; } }
 function setQueue(q){ try{ localStorage.setItem(QUEUE_KEY,JSON.stringify(q)); }catch(e){} }
 /* 서버 기록을 기준으로 진도 맞추기 (아직 못 보낸 기록은 더해서) */
@@ -1144,7 +1173,7 @@ function applyServer(res){
 async function refreshProfile(force){
   if(!USER||USER.guest||!SCRIPT_URL||!USER.pin) return;
   if(!force&&Date.now()-(refreshProfile._at||0)<60000) return; refreshProfile._at=Date.now();
-  try{ const res=await api({action:"loginId",id:USER.pin,pw:USER.pin}); if(!res.ok) return;
+  try{ const res=await api({action:"loginId",id:USER.pin,pw:USER.pw||USER.pin}); if(!res.ok) return;
     const before=JSON.stringify(USER.classes||null); applyServer(res); USER.classes=res.classes; setUser(USER);
     if(JSON.stringify(USER.classes||null)!==before&&document.getElementById("shelf")&&!curSetId) showHome(); }catch(e){}
 }
@@ -1322,7 +1351,7 @@ async function showLogin(){
   catch(e){ lb.innerHTML=`<p class="sub">${ICON("wifi")} 인터넷 연결을 확인해 주세요</p><div class="btnrow"><button class="big" id="retry">${ICON("refresh")} 다시 시도</button></div>`; lb.querySelector("#retry").onclick=showLogin; return; }
   lb.innerHTML=`<div class="search-box" style="text-align:center">
     <p class="sub" style="margin:0 0 6px">아이디</p><input class="tinput en" id="lid" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="kelly1234">
-    <p class="sub" style="margin:14px 0 6px">비밀번호</p><input class="tinput en" id="lpw" type="password" inputmode="numeric" autocomplete="off" placeholder="1234">
+    <p class="sub" style="margin:14px 0 6px">비밀번호</p><input class="tinput en" id="lpw" type="password" autocomplete="off" placeholder="1234">
     <div class="btnrow"><button class="big green" id="lgo" style="font-size:28px;padding:12px 40px">들어가기 ${ICON("right")}</button></div><div class="msg" id="lm"></div></div>`;
   const idEl=lb.querySelector("#lid"), pwEl=lb.querySelector("#lpw"), m=lb.querySelector("#lm"), box=lb.querySelector(".search-box");
   const fail=t=>{ m.style.color=""; m.innerHTML=t; beep("bad"); box.classList.add("shake"); setTimeout(()=>box.classList.remove("shake"),400); };
@@ -1334,7 +1363,7 @@ async function showLogin(){
       if(!pwEl.value) return fail("선생님 비밀번호를 써 주세요");
       busy=true; m.style.color="var(--muted)"; m.innerHTML=`${ICON("loading")} 확인 중...`;
       try{ const res=await api({action:"dashboard",pw:pwEl.value}); busy=false;
-        if(res.ok){ TEACHER={pw:pwEl.value,data:res}; return showDashboard(); } return fail("선생님 비밀번호가 맞지 않아요"); }
+        if(res.ok){ TEACHER={pw:pwEl.value,data:res}; try{ sessionStorage.setItem(TEACHER_KEY,pwEl.value); }catch(e){} return showDashboard(); } return fail("선생님 비밀번호가 맞지 않아요"); }
       catch(e){ busy=false; return fail(`${ICON("wifi")} 시트에 연결하지 못했어요`); } }
     if(!/^(kelly)?\d{4}$/.test(id)) return fail("아이디를 다시 확인해 주세요 (예: kelly1234)");
     if(!pw) return fail("비밀번호를 써 주세요");
@@ -1342,7 +1371,7 @@ async function showLogin(){
     try{
       const res=await api({action:"loginId",id,pw});
       if(res.ok){
-        setUser({cls:res.cls,name:res.name,pin:id.replace(/^kelly/,""),classes:res.classes});
+        setUser({cls:res.cls,name:res.name,pin:id.replace(/^kelly/,""),pw,classes:res.classes});
         applyServer(res); refreshProfile._at=Date.now();
         speak(`안녕, ${res.name}!`,{lang:"ko"}); beep("good"); flushQueue(); showHome(); busy=false; return;
       }
@@ -1364,6 +1393,7 @@ async function showLogin(){
 /* 이 학생에게 배정된 클래스 (없으면 null → 모든 책) */
 function myClasses(){ return USER&&!USER.guest&&Array.isArray(USER.classes)&&USER.classes.length ? USER.classes : null; }
 function showHome(){
+  try{ sessionStorage.removeItem(PLACE_KEY); }catch(e){}
   resetScreen();
   let typed="";
   const el=$(`<section><h1>${ICON("shelf")} 오늘 읽을 책 번호는?</h1><p class="sub">책 뒤에 있는 번호를 눌러 주세요 (예: 2214)</p>
@@ -1406,6 +1436,7 @@ function showHome(){
 function openSet(id,bookIdx){
   clearTimers(); speechSynthesis.cancel(); stopMic(); gRecord._stop&&gRecord._stop();
   curSetId=id; if(bookIdx!==undefined) curBook=bookIdx;
+  try{ sessionStorage.setItem(PLACE_KEY,JSON.stringify({set:id,book:curBook})); }catch(e){}
   const set=BOOK_SETS[id]; if(curBook>=set.books.length) curBook=0;
   document.getElementById("brand").textContent=`K${id} · ${set.series}`;
   app.innerHTML="";
@@ -1423,7 +1454,7 @@ function openSet(id,bookIdx){
   const cls=MISSIONS.filter(m=>m.group==="class"), home=MISSIONS.filter(m=>m.group==="home");
   const left=cls.filter(m=>m.req&&!isDone(m));
   const card=(m,i,box)=>{
-    const done=isDone(m), locked=m.test&&left.length>0&&!done, best=SAVE.best[`${id}-${curBook}-${m.id}`];
+    const done=isDone(m), locked=m.test&&left.length>0&&!done&&!(USER&&USER.guest), best=SAVE.best[`${id}-${curBook}-${m.id}`];
     const ready=m.test&&!locked&&!done;
     const b=$(`<button class="mission ${done?'is-done':''} ${locked?'locked':''} ${ready?'ready':''}" style="background:${m.color}"><span class="num">${i+1}</span>
       ${done?`<span class="donebig">${ICON("check")}</span>`:''}${locked?`<span class="lockbig">${ICON("lock")}</span>`:''}
@@ -1594,46 +1625,49 @@ function gType(title,key,ic,sk){
   const ws=shuffle(bookWords().filter(w=>w.en.replace(/ /g,"").length>1)); let r=0, okN=0, pos=0, miss=0, tLeft=0, tAll=0, tick=null, lock=false;
   const rows=["qwertyuiop","asdfghjkl","zxcvbnm"];
   body.innerHTML=`<div class="typebox">
-      <div class="tpic" id="tpic"></div>
-      <div class="tword en" id="tword"></div>
+      <div class="tcard" id="tcard"><div class="mci"><div class="mcf tfront"><div class="tpic" id="tpic"></div><div class="tword en" id="tword"></div></div>
+        <div class="mcf tback"><div class="tpic" id="tpic2"></div><div class="tko" id="tko"></div></div></div></div>
       <div class="tbar"><i id="tfill"></i><span id="tsec"></span></div>
       <div class="tmsg" id="tmsg"></div>
     </div>
-    <div class="kbd" id="kbd">${rows.map((row,i)=>`<div class="krow" style="padding-left:${i*4.5}%">${[...row].map(c=>`<button class="key" data-k="${c}">${c}</button>`).join("")}</div>`).join("")}
-      <div class="krow"><button class="key space" data-k=" ">space</button></div></div>`;
+    <div class="kbd" id="kbd">${rows.map((row,i)=>`<div class="krow" style="padding-left:${i*4.5}%">${[...row].map(c=>`<button class="key" data-k="${c}">${c}</button>`).join("")}</div>`).join("")}</div>`;
   const root=body.firstElementChild, tw=body.querySelector("#tword"), fill=body.querySelector("#tfill"), sec=body.querySelector("#tsec"), msg=body.querySelector("#tmsg");
   const keyEl=c=>body.querySelector(`.key[data-k="${c}"]`);
   let hintT=null;
   function stopTick(){ clearInterval(tick); tick=null; clearTimeout(hintT); }
   function hint(){ clearTimeout(hintT); body.querySelectorAll(".key.hint").forEach(k=>k.classList.remove("hint"));
-    hintT=setTimeout(()=>{ const w=ws[r]; if(!w||lock) return; const k=keyEl(w.en[pos].toLowerCase()); k&&k.classList.add("hint"); },2200); }
+    hintT=setTimeout(()=>{ const w=ws[r]; if(!w||lock||pos>=w.en.length) return; const k=keyEl(w.en[pos].toLowerCase()); k&&k.classList.add("hint"); },2200); }
+  const skipSpaces=()=>{ const w=ws[r].en; while(pos<w.length&&!/[a-z]/i.test(w[pos])) pos++; };
   function paint(){ const w=ws[r].en; tw.innerHTML=[...w].map((c,i)=>`<span class="${i<pos?"ok":""} ${i===pos?"cur":""} ${c===" "?"sp":""}">${c===" "?"&nbsp;":esc(c)}</span>`).join(""); }
   function draw(){ const f=Math.max(0,tLeft/tAll); fill.style.width=(f*100)+"%"; fill.style.background=f>.5?"#38C47E":f>.25?"#FFB020":"#FF4D6A"; sec.textContent=Math.max(0,tLeft).toFixed(1)+"초"; root.classList.toggle("hurry",f<=.25); }
   function round(){
     if(r>=ws.length){ stopTick(); return finish(key,`스펠 학습 ${okN} / ${ws.length} (${sp.name})`,GAME.pts,okN,ws.length); }
     const w=ws[r]; pos=0; miss=0; lock=false;
     setProg(r/ws.length,`${r+1} / ${ws.length}`);
-    body.querySelector("#tpic").innerHTML=PIC(w.en); paint(); msg.textContent=""; root.classList.remove("timeout","done");
+    body.querySelector("#tcard").classList.remove("flipped");
+    body.querySelector("#tpic").innerHTML=PIC(w.en); body.querySelector("#tpic2").innerHTML=PIC(w.en);
+    body.querySelector("#tko").innerHTML=`<b class="en">${esc(w.en)}</b><span>${esc(w.ko)}</span>`;
+    skipSpaces(); paint(); msg.textContent=""; root.classList.remove("timeout","done");
     tAll=tLeft=sp.base+sp.per*w.en.replace(/ /g,"").length; draw();
     speak(w.en); hint();
     stopTick(); tick=setInterval(()=>{ tLeft-=.1; draw(); if(tLeft<=0) timeUp(); },100);
   }
   function timeUp(){ if(lock) return; lock=true; stopTick(); const w=ws[r]; noteWrong(w.en); GAME.streak=0; hudDraw();
     pos=w.en.length; paint(); root.classList.add("timeout"); msg.innerHTML=`시간 끝! 정답은 <b class="en">${esc(w.en)}</b>`; beep("bad"); cheer(false);
-    r++; later(round,1800); }
+    setTimeout(()=>body.querySelector("#tcard").classList.add("flipped"),900); r++; later(round,2700); }
   function press(c){
-    if(lock||!ws[r]) return; const w=ws[r].en, want=w[pos].toLowerCase(); const k=keyEl(c);
+    if(lock||!ws[r]||c===" ") return; const w=ws[r].en, want=w[pos].toLowerCase(); const k=keyEl(c);
     if(k){ k.classList.remove("down"); void k.offsetWidth; k.classList.add("down"); }
-    if(c===want){ pos++; paint(); hint();
+    if(c===want){ pos++; skipSpaces(); paint(); hint();
       if(pos>=w.length){ lock=true; stopTick(); okN++; root.classList.add("done");
         const ratio=Math.max(0,tLeft/tAll), pts=Math.round((8+ratio*12)*sp.mult)+(miss===0?5:0);
-        GAME.streak++; addPts(pts, miss===0?`실수 없이! +5`:""); beep(GAME.streak>=3?"combo":"good"); cheer(true); speak(w);
-        msg.innerHTML=`${ICON("check")} ${miss===0?"완벽해요!":"잘했어요!"}`; r++; later(round,1400); } }
+        GAME.streak++; addPts(pts,"",true); beep(GAME.streak>=3?"combo":"good"); cheer(true); speak(w);
+        msg.innerHTML=`${ICON("check")} ${miss===0?"완벽해요! 실수 없이":"잘했어요!"} <b class="tpts">+${pts}점</b>`; setTimeout(()=>body.querySelector("#tcard").classList.add("flipped"),350); r++; later(round,2300); } }
     else { miss++; beep("bad"); root.classList.remove("shake"); void root.offsetWidth; root.classList.add("shake"); if(k){ k.classList.add("bad"); setTimeout(()=>k.classList.remove("bad"),300); } }
   }
   body.querySelectorAll(".key").forEach(k=>k.addEventListener("pointerdown",e=>{ e.preventDefault(); press(k.dataset.k); }));
   const onKey=e=>{ if(!document.body.contains(root)) return cleanup();
-    if(e.key.length===1&&/[a-z ]/i.test(e.key)){ e.preventDefault(); press(e.key.toLowerCase()); } };
+    if(e.key.length===1&&/[a-z]/i.test(e.key)){ e.preventDefault(); press(e.key.toLowerCase()); } else if(e.key===" ") e.preventDefault(); };
   const cleanup=()=>{ clearInterval(iv); stopTick(); document.removeEventListener("keydown",onKey); };
   document.addEventListener("keydown",onKey);
   const iv=setInterval(()=>{ if(!document.body.contains(root)) cleanup(); },500);
@@ -1656,7 +1690,6 @@ function gBalloon(title,key,ic,speedKey){
   const cloud=`<svg viewBox="0 0 120 60"><ellipse cx="40" cy="38" rx="34" ry="18" fill="#fff"/><ellipse cx="70" cy="30" rx="30" ry="22" fill="#fff"/><ellipse cx="92" cy="40" rx="24" ry="15" fill="#fff"/></svg>`;
   const bird=`<svg viewBox="0 0 40 20"><path d="M2 12 q9 -10 18 0 q9 -10 18 0" stroke="#4B5563" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
   body.innerHTML=`<div class="bgtop"><button class="speaker small" id="sp">${ICON("speaker")}</button>
-      <div class="mcard" id="mcard"><div class="mci"><div class="mcf front"><span class="q">?</span><small>풍선을 터뜨리면<br>뜻이 나와요</small></div><div class="mcf back"></div></div></div>
       <div class="hearts" id="hearts"></div></div>
     <div class="sky2">
       <svg class="skybg" viewBox="0 0 800 540" preserveAspectRatio="xMidYMid slice"><rect width="800" height="540" fill="url(#gSky)"/>
@@ -1672,11 +1705,14 @@ function gBalloon(title,key,ic,speedKey){
       <div class="bcat" id="bcat">${KK("testq")}</div>
     </div>`;
   const field=body.querySelector("#field"), sky=body.querySelector(".sky2"), bcat=body.querySelector("#bcat");
-  const mcard=body.querySelector("#mcard");
-  const showMeaning=w=>{ const f=mcard.querySelector(".front"), bk=mcard.querySelector(".back");
-    mcard.classList.remove("flipped"); f.innerHTML=`<span class="mp">${PIC(w.en)}</span><b class="en">${esc(w.en)}</b>`;
-    bk.innerHTML=`<span class="mp">${PIC(w.en)}</span><div><b class="en">${esc(w.en)}</b><span class="ko">${esc(w.ko)}</span></div>`;
-    void mcard.offsetWidth; setTimeout(()=>mcard.classList.add("flipped"),380); };
+  /* 터진 자리에 뜻 카드가 나타나 뒤집혀요 (다음 풍선을 터뜨릴 때까지 보여요) */
+  const showMeaning=(w,wrap)=>{ sky.querySelectorAll(".popcard").forEach(e=>{ e.classList.add("bye"); setTimeout(()=>e.remove(),300); });
+    const sr=sky.getBoundingClientRect(); let cx=sr.width/2, cy=sr.height*.45;
+    if(wrap&&wrap.isConnected){ const br=wrap.querySelector(".balloon2").getBoundingClientRect(); cx=br.left-sr.left+br.width/2; cy=br.top-sr.top+br.height/2; }
+    cx=Math.min(Math.max(cx,110),sr.width-110); cy=Math.min(Math.max(cy,70),sr.height-150);
+    const c=$(`<div class="popcard" style="left:${cx}px;top:${cy}px"><div class="mci"><div class="mcf front"><span class="mp">${PIC(w.en)}</span><b class="en">${esc(w.en)}</b></div>
+      <div class="mcf back"><span class="mp">${PIC(w.en)}</span><div><b class="en">${esc(w.en)}</b><span class="ko">${esc(w.ko)}</span></div></div></div></div>`);
+    sky.appendChild(c); setTimeout(()=>c.classList.add("flipped"),420); };
   body.querySelector("#sp").onclick=()=>targets[r]&&speak(targets[r].en);
   const heartSvg=on=>`<svg viewBox="0 0 40 36" class="hrt ${on?"":"off"}"><path d="M20 34 C-6 16 2 -4 20 8 C38 -4 46 16 20 34Z" fill="${on?"url(#gRed)":"#D9D3C7"}" stroke="${on?"#9B1C1C":"#B5AE9F"}" stroke-width="2.5"/></svg>`;
   const drawHearts=()=>{ body.querySelector("#hearts").innerHTML=[0,1,2].map(i=>heartSvg(i<lives)).join(""); };
@@ -1713,14 +1749,14 @@ function gBalloon(title,key,ic,speedKey){
         <button class="balloon2 ${gold?"gold":""}" style="--c:${colors[(i+r)%colors.length]};--sc:${scale};animation-duration:${(2+Math.random()*1.2).toFixed(2)}s"><span class="pvb">${PIC(o.en)}</span><b class="en">${esc(o.en)}</b>${gold?`<span class="gsp">${ICON("sparkle")}</span>`:""}</button><i class="bstr"></i></div>`);
       const btn=wrap.querySelector("button");
       btn.onclick=()=>{ if(done||over||btn.disabled) return;
-        if(o.en===t.en){ done=true; burst(wrap,gold); wrap.remove(); beep("pop"); if(!tries) score++;
+        if(o.en===t.en){ done=true; burst(wrap,gold); showMeaning(t,wrap); wrap.remove(); beep("pop"); if(!tries) score++;
           const base=(speedKey==="fast"?15:10)*(gold&&!tries?2:1);
           if(!tries){ GAME.streak++; addPts(base+(GAME.streak>=3?5:0), gold?`${ICON("sparkle")} 황금 ×2`:(GAME.streak>=3?`${ICON("fire")} ${GAME.streak}연속!`:"")); beep(GAME.streak>=3?"combo":"good"); }
           else { GAME.streak=0; hudDraw(); beep("good"); }
           if([5,8].includes(GAME.streak)) later(()=>bigPts(0,GAME.streak>=8?"대단해!":"최고야!"),500);
-          drawCombo(); catDo("jump"); speak(t.en); showMeaning(t); r++; later(round,1100); }
+          drawCombo(); catDo("jump"); speak(t.en); r++; later(round,1100); }
         else { tries++; GAME.streak=0; hudDraw(); drawCombo(); noteWrong(t.en); btn.disabled=true; btn.classList.add("bad"); beep("bad"); if(loseLife()) return; } };
-      wrap.addEventListener("animationend",ev=>{ if(ev.target!==wrap||over) return; if(o.en===t.en&&!done){ done=true; GAME.streak=0; hudDraw(); drawCombo(); noteWrong(t.en); showMeaning(t); if(!loseLife(`${KK("late","tipk")}<span>앗, 늦었다!<br>다음엔 잡자!</span>`)) later(round,700); } });
+      wrap.addEventListener("animationend",ev=>{ if(ev.target!==wrap||over) return; if(o.en===t.en&&!done){ done=true; GAME.streak=0; hudDraw(); drawCombo(); noteWrong(t.en); showMeaning(t,null); if(!loseLife(`${KK("late","tipk")}<span>앗, 늦었다!<br>다음엔 잡자!</span>`)) later(round,700); } });
       field.appendChild(wrap);
     });
     later(()=>speak(t.en),300);
@@ -1799,6 +1835,7 @@ function gRead(title,key,ic){
     const ab=body.querySelector("#auto"); if(ab) ab.onclick=()=>{ if(auto){ auto=false; clearTimers(); speechSynthesis.cancel(); render(); } else { auto=true; p=0; render()(.85,autoNext); } };
     return read;
   }
+  onSwipe(body,()=>{ const n=body.querySelector("#nx"); n&&!n.disabled&&n.click(); },()=>{ const v=body.querySelector("#pv"); v&&!v.disabled&&v.click(); });
   const read=render(); later(()=>read(.85),500);
 }
 
@@ -1933,18 +1970,18 @@ function showTeacherLogin(){
   if(!SCRIPT_URL){ tp.innerHTML=`<p>기록 저장이 아직 연결되지 않았어요.</p>`; return; }
   tp.innerHTML=`<p>선생님 비밀번호를 입력하세요</p><input class="tinput" type="password" id="tpw" autocomplete="current-password"><div class="btnrow"><button class="big green" id="tgo">들어가기</button></div><div class="msg" id="tmsg"></div>`;
   const go=async()=>{ const pw=tp.querySelector("#tpw").value, m=tp.querySelector("#tmsg"); m.style.color="var(--muted)"; m.textContent="불러오는 중...";
-    try{ const res=await api({action:"dashboard",pw}); if(!res.ok){ m.style.color=""; m.textContent="비밀번호가 맞지 않아요"; return; } TEACHER={pw,data:res}; showDashboard(); }
+    try{ const res=await api({action:"dashboard",pw}); if(!res.ok){ m.style.color=""; m.textContent="비밀번호가 맞지 않아요"; return; } TEACHER={pw,data:res}; try{ sessionStorage.setItem(TEACHER_KEY,pw); }catch(e){} showDashboard(); }
     catch(e){ m.style.color=""; m.textContent="인터넷 연결 또는 웹 앱 주소를 확인해 주세요"; } };
   tp.querySelector("#tgo").onclick=go; tp.querySelector("#tpw").onkeydown=e=>{ if(e.key==="Enter") go(); };
 }
 async function reloadDashboard(c,then){ try{ const res=await api({action:"dashboard",pw:TEACHER.pw}); if(res.ok){ TEACHER.data=res; then? then() : showDashboard(c); } else tip(esc(res.error||"불러오기 실패")); }catch(e){ tip("불러오기 실패"); } }
 function teacherTabs(on){
-  const t=$(`<div class="ttabs">${[["rec","board","학생 기록"],["cls","school","클래스 관리"],["asg","kid","학생 배정"]].map(([k,ic,nm])=>`<button data-k="${k}" class="${k===on?"on":""}">${ICON(ic)} ${nm}</button>`).join("")}
+  const t=$(`<div class="ttabs">${[["rec","board","학생 기록"],["cls","school","클래스 관리"],["asg","kid","학생 배정"],["set","lock","설정"]].map(([k,ic,nm])=>`<button data-k="${k}" class="${k===on?"on":""}">${ICON(ic)} ${nm}</button>`).join("")}
     <span class="sp"></span><button data-k="rf" class="alt">${ICON("refresh")} 새로고침</button><button data-k="ex" class="alt">${ICON("door")} 나가기</button></div>`);
   t.querySelectorAll("button").forEach(b=>b.onclick=()=>{ const k=b.dataset.k;
-    if(k==="rec") showDashboard(); else if(k==="cls") showClasses(); else if(k==="asg") showAssign();
-    else if(k==="rf") reloadDashboard(null,()=>({rec:showDashboard,cls:showClasses,asg:showAssign})[on]());
-    else { TEACHER=null; showLogin(); } });
+    if(k==="rec") showDashboard(); else if(k==="cls") showClasses(); else if(k==="asg") showAssign(); else if(k==="set") showTSettings();
+    else if(k==="rf") reloadDashboard(null,()=>({rec:showDashboard,cls:showClasses,asg:showAssign,set:showTSettings})[on]());
+    else { TEACHER=null; try{ sessionStorage.removeItem(TEACHER_KEY); }catch(e){} showLogin(); } });
   if(!TEACHER.data.classes) t.insertAdjacentHTML("beforeend",`<div class="notice" style="width:100%">${ICON("warn")}<div>클래스 기능을 쓰려면 구글 시트 코드를 새 버전으로 바꾸고 <b>setup</b>을 한 번 실행한 뒤 <b>새 버전으로 배포</b>해 주세요.</div></div>`);
   return t;
 }
@@ -1959,7 +1996,6 @@ function showDashboard(selCls){
   if(!selCls||!classes.includes(selCls)) selCls=classes[0]||"";
   const el=$(`<section><div id="tabs"></div><div class="trow" style="margin:6px 0 14px"><b style="font-size:20px">반</b><select id="cs">${classes.map(c=>`<option ${c===selCls?'selected':''}>${esc(c)}</option>`).join("")}</select></div>
     <div class="panel"><h3>${ICON("board")} 반 현황 <small style="font-size:14px;color:#7a7a8c">(이름을 누르면 자세히 보여요)</small></h3><div class="tblwrap" id="sum"></div></div>
-    <div class="panel"><h3>${ICON("alert")} 우리 반이 자주 틀린 단어</h3><div class="chips" id="ww"></div></div>
     <div class="panel"><h3>${ICON("plus")} 학생 추가</h3><div class="trow"><input id="nc" placeholder="반" value="${esc(selCls||"LEVEL P")}"><input id="nn" placeholder="이름"><input id="np" placeholder="번호 4자리 (kelly 뒤 숫자)" maxlength="4" inputmode="numeric">
       <button class="big green" id="add" style="font-size:16px;padding:8px 14px">추가</button></div><div class="msg" id="am" style="text-align:left"></div></div></section>`);
   app.appendChild(el);
@@ -1969,15 +2005,12 @@ function showDashboard(selCls){
   const names=[...new Set(students.filter(s=>s.cls===selCls).map(s=>s.name).concat(recs.map(r=>r.name)))];
   const rows=names.map(n=>{ const rs=recs.filter(r=>r.name===n), st=students.find(s=>s.cls===selCls&&s.name===n);
     const scored=rs.filter(r=>r.total), quiz=rs.filter(r=>r.mission==="quiz"&&r.total), last=rs.reduce((a,r)=>!a||r.time>a.time?r:a,null);
-    return {n, id:st?`kelly${st.pin}`:"(삭제됨)", last, pts:bestSum(rs), done:new Set(rs.map(r=>r.key)).size,
+    return {n, id:st?`kelly${st.pin}`:"(삭제됨)", pw:st?(st.pw||st.pin):"-", last, pts:bestSum(rs), done:new Set(rs.map(r=>r.key)).size,
       acc:pct(scored.reduce((a,r)=>a+r.score,0),scored.reduce((a,r)=>a+r.total,0)), quiz:pct(quiz.reduce((a,r)=>a+r.score,0),quiz.reduce((a,r)=>a+r.total,0)), mins:Math.round(rs.reduce((a,r)=>a+r.seconds,0)/60)}; })
     .sort((a,b)=>b.pts-a.pts);
-  el.querySelector("#sum").innerHTML= rows.length? `<table class="tbl"><tr><th>이름</th><th>아이디</th><th>점수</th><th>등급</th><th>끝낸 미션</th><th>TEST</th><th>전체 정답률</th><th>마지막 학습</th><th>최근 책</th><th>학습 시간</th></tr>
-    ${rows.map(r=>`<tr class="click" data-n="${esc(r.n)}"><td><b>${esc(r.n)}</b></td><td class="en">${esc(r.id)}</td><td><b>${r.pts}</b></td><td>${rankOf(r.pts).name}</td><td>${r.done}</td><td>${pctCell(r.quiz)}</td><td>${pctCell(r.acc)}</td><td>${r.last?fmtTime(r.last.time):"-"}</td><td>${r.last?`K${esc(r.last.setId)} ${esc(r.last.bookTitle)}`:"-"}</td><td>${r.mins}분</td></tr>`).join("")}</table>` : `<p class="sub">이 반에는 아직 학생이 없어요.</p>`;
+  el.querySelector("#sum").innerHTML= rows.length? `<table class="tbl"><tr><th>이름</th><th>아이디</th><th>비밀번호</th><th>점수</th><th>등급</th><th>끝낸 미션</th><th>TEST</th><th>전체 정답률</th><th>마지막 학습</th><th>최근 책</th><th>학습 시간</th></tr>
+    ${rows.map(r=>`<tr class="click" data-n="${esc(r.n)}"><td><b>${esc(r.n)}</b></td><td class="en">${esc(r.id)}</td><td class="en">${esc(r.pw)}</td><td><b>${r.pts}</b></td><td>${rankOf(r.pts).name}</td><td>${r.done}</td><td>${pctCell(r.quiz)}</td><td>${pctCell(r.acc)}</td><td>${r.last?fmtTime(r.last.time):"-"}</td><td>${r.last?`K${esc(r.last.setId)} ${esc(r.last.bookTitle)}`:"-"}</td><td>${r.mins}분</td></tr>`).join("")}</table>` : `<p class="sub">이 반에는 아직 학생이 없어요.</p>`;
   el.querySelectorAll("#sum tr.click").forEach(tr=>tr.onclick=()=>showStudent(selCls,tr.dataset.n));
-  const cnt={}; recs.forEach(r=>r.wrong.split(",").map(x=>x.trim()).filter(Boolean).forEach(w=>cnt[w]=(cnt[w]||0)+1));
-  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,15);
-  el.querySelector("#ww").innerHTML= top.length? top.map(([w,c])=>`<span class="en">${esc(w)} · ${c}번</span>`).join("") : `<span style="background:#E3FFF0">아직 없어요</span>`;
   el.querySelector("#add").onclick=async()=>{ const cls=el.querySelector("#nc").value.trim(), name=el.querySelector("#nn").value.trim(), pin=el.querySelector("#np").value.trim(), m=el.querySelector("#am");
     if(!cls||!name||!/^\d{4}$/.test(pin)){ m.textContent="반, 이름, 번호 4자리를 모두 넣어 주세요"; return; }
     m.style.color="var(--muted)"; m.textContent="추가하는 중...";
@@ -1993,7 +2026,10 @@ function showStudent(cls,name){
   const el=$(`<section><div class="trow" style="margin:6px 0 14px"><button class="big alt" id="bk" style="font-size:16px;padding:8px 12px">${ICON("left")} 반 현황</button><h2 style="margin:0">${esc(name)} 학습 기록 · ${bestSum(rs)}점</h2></div>
     <div class="panel"><h3>${ICON("school")} 클래스</h3><div class="chips">${(st.classes||[]).length?st.classes.map(c=>`<span>${esc(c)}</span>`).join(""):`<span style="background:#FFF3D6">아직 배정 안 됨</span>`}</div><p class="sub" style="text-align:left;margin:6px 0 0">'학생 배정' 탭에서 바꿀 수 있어요.</p></div>
     <div class="panel"><h3>${ICON("book")} 책별 진도 <small style="font-size:14px;color:#7a7a8c">(초기화하면 그 책 기록이 지워지고 처음부터 다시 해요)</small></h3><div id="pg"></div></div><div class="panel"><h3>${ICON("clock")} 전체 기록</h3><div class="tblwrap" id="hist"></div></div>
-    <div class="panel"><h3>${ICON("teacher")} 학생 관리</h3><button class="big alt" id="del" style="font-size:16px;padding:8px 12px;color:#d63c3c">이 학생을 명단에서 삭제</button> <span style="color:#7a7a8c;font-size:14px">예전 기록은 시트에 남아요.</span></div></section>`);
+    <div class="panel"><h3>${ICON("teacher")} 학생 관리</h3>
+      <div class="trow" style="margin-bottom:12px"><b>아이디</b><span class="en">kelly${esc(st.pin||"")}</span><b style="margin-left:14px">비밀번호</b><span class="en" id="curpw">${esc(st.pw||st.pin||"")}</span>
+        <input id="npw" placeholder="새 비밀번호 (영어·숫자 4~12자)" maxlength="12" style="flex:1;min-width:180px"><button class="big green" id="spw">비밀번호 바꾸기</button></div><div class="msg" id="pwm" style="text-align:left"></div>
+      <button class="big alt" id="del" style="font-size:16px;padding:8px 12px;color:#d63c3c">이 학생을 명단에서 삭제</button> <span style="color:#7a7a8c;font-size:14px">예전 기록은 시트에 남아요.</span></div></section>`);
   app.appendChild(el); el.querySelector("#bk").onclick=()=>showDashboard(cls);
   el.querySelector("#pg").innerHTML= sets.length? sets.map(id=>{ const set=BOOK_SETS[id];
     const head=`<tr><th>K${esc(id)} <button class="rst all" data-s="${esc(id)}" data-b="all">세트 전체 초기화</button></th>${MISSIONS.map(m=>`<th>${m.group==="home"?"숙제 · ":""}${m.name}</th>`).join("")}<th></th></tr>`;
@@ -2008,6 +2044,12 @@ function showStudent(cls,name){
     try{ const r=await api({action:"resetProgress",pw:TEACHER.pw,cls,name,setId:id,book:bk}); if(!r.ok) throw r.error;
       tip(`초기화했어요 (기록 ${r.removed}줄 삭제). 아이가 다시 로그인하면 반영돼요.`,3500); reloadDashboard(null,()=>showStudent(cls,name)); }
     catch(e){ b.disabled=false; b.textContent="초기화"; tip(typeof e==="string"?esc(e):"인터넷 연결을 확인해 주세요"); } });
+  el.querySelector("#spw").onclick=async()=>{ const np=el.querySelector("#npw").value.trim(), m=el.querySelector("#pwm");
+    if(!/^[A-Za-z0-9]{4,12}$/.test(np)){ m.textContent="영어나 숫자로 4~12글자로 써 주세요"; return; }
+    m.style.color="var(--muted)"; m.textContent="바꾸는 중...";
+    try{ const r=await api({action:"setStudentPw",pw:TEACHER.pw,cls,name,newPw:np}); if(!r.ok) throw r.error;
+      st.pw=np; el.querySelector("#curpw").textContent=np; el.querySelector("#npw").value=""; m.style.color="#2FA86A"; m.textContent=`바꿨어요! 이제 kelly${st.pin} / ${np} 로 로그인해요.`; }
+    catch(e){ m.style.color=""; m.textContent= e==="unknown action"?"구글 시트 코드를 새 버전으로 바꿔 주세요":(typeof e==="string"?e:"인터넷 연결을 확인해 주세요"); } };
   el.querySelector("#del").onclick=async()=>{ if(!confirm(`${name} 학생을 명단에서 삭제할까요? (기록은 남아요)`)) return;
     try{ const res=await api({action:"deleteStudent",pw:TEACHER.pw,cls,name}); if(res.ok){ tip("삭제했어요"); reloadDashboard(cls); } else tip(esc(res.error||"삭제 실패")); }catch(e){ tip("인터넷 연결을 확인해 주세요"); } };
 }
@@ -2105,9 +2147,34 @@ function showAssign(selCls){
   const ba=el.querySelector("#ba"), br=el.querySelector("#br"); if(ba){ ba.onclick=()=>bulk(true); br.onclick=()=>bulk(false); }
 }
 
+/* =========================================================
+   🔒 선생님 : 설정 (선생님 비밀번호 바꾸기)
+   ========================================================= */
+function showTSettings(){
+  resetScreen(); document.getElementById("brand").textContent="선생님 모드 · 설정";
+  const el=$(`<section><div id="tabs"></div>
+    <div class="panel" style="max-width:520px"><h3>${ICON("lock")} 선생님 비밀번호 바꾸기</h3>
+      <p class="sub" style="text-align:left">선생님 모드에 들어갈 때 쓰는 비밀번호예요. 띄어쓰기 없이 4글자 이상.</p>
+      <div class="pwform"><label>지금 비밀번호<input type="password" id="p0" autocomplete="current-password"></label>
+        <label>새 비밀번호<input type="password" id="p1" autocomplete="new-password"></label>
+        <label>새 비밀번호 한 번 더<input type="password" id="p2" autocomplete="new-password"></label>
+        <button class="big green" id="go">${ICON("check")} 바꾸기</button><div class="msg" id="m" style="text-align:left"></div></div></div>
+    <div class="panel" style="max-width:520px"><h3>${ICON("kid")} 학생 비밀번호</h3><p class="sub" style="text-align:left">'학생 기록'에서 학생 이름을 누르면 그 학생의 비밀번호를 바꿀 수 있어요.</p></div></section>`);
+  app.appendChild(el); el.querySelector("#tabs").replaceWith(teacherTabs("set"));
+  el.querySelector("#go").onclick=async()=>{ const p0=el.querySelector("#p0").value, p1=el.querySelector("#p1").value, p2=el.querySelector("#p2").value, m=el.querySelector("#m");
+    m.style.color="";
+    if(p0!==TEACHER.pw){ m.textContent="지금 비밀번호가 맞지 않아요"; return; }
+    if(p1.length<4||/\s/.test(p1)){ m.textContent="새 비밀번호는 띄어쓰기 없이 4글자 이상으로 해 주세요"; return; }
+    if(p1!==p2){ m.textContent="새 비밀번호 두 칸이 서로 달라요"; return; }
+    m.style.color="var(--muted)"; m.textContent="바꾸는 중...";
+    try{ const r=await api({action:"setTeacherPw",pw:p0,newPw:p1}); if(!r.ok) throw r.error;
+      TEACHER.pw=p1; try{ sessionStorage.setItem(TEACHER_KEY,p1); }catch(e){} el.querySelectorAll("input").forEach(i=>i.value=""); m.style.color="#2FA86A"; m.textContent="바꿨어요! 다음부터 새 비밀번호로 들어와요."; }
+    catch(e){ m.style.color=""; m.textContent= e==="unknown action"?"구글 시트 코드를 새 버전으로 바꿔 주세요":(typeof e==="string"?e:"인터넷 연결을 확인해 주세요"); } };
+}
+
 /* ---------- 시작 ---------- */
 document.getElementById("homeBtn").onclick=()=> USER? showHome() : showLogin();
-document.getElementById("logoutBtn").onclick=()=>{ flushQueue(); setUser(null); showLogin(); kkShow({img:"home",say:"오늘도 수고했어!<br>집에 가자~",mode:"grow",fx:"heart",ms:2200}); };
+document.getElementById("logoutBtn").onclick=()=>{ flushQueue(); try{ sessionStorage.removeItem(PLACE_KEY); }catch(e){} setUser(null); showLogin(); kkShow({img:"home",say:"오늘도 수고했어!<br>집에 가자~",mode:"grow",fx:"heart",ms:2200}); };
 document.getElementById("soundBtn").innerHTML=ICON("speaker");
 document.getElementById("homeBtn").innerHTML=ICON("home");
 document.getElementById("logoutBtn").innerHTML=ICON("door");
@@ -2204,10 +2271,18 @@ function bookDoneEvent(){
   document.body.insertAdjacentHTML("afterbegin",`<div class="kkbg">${h}</div>`); })();
 (function start(){
   let sess=null; try{ sess=JSON.parse(localStorage.getItem(SESSION_KEY)); }catch(e){}
-  if(sess&&Date.now()-sess.at<3*60*60*1000&&(sess.guest||SCRIPT_URL)){ const {at,...u}=sess; setUser(u); } else setUser(null);
+  // 로그인은 12시간 유지 (화면을 당겨 새로고침해도 풀리지 않아요)
+  if(sess&&Date.now()-sess.at<12*60*60*1000&&(sess.guest||SCRIPT_URL)){ const {at,...u}=sess; setUser(u); } else setUser(null);
   flushQueue();
+  // 선생님 모드였으면 다시 선생님 모드로
+  let tpw=null; try{ tpw=sessionStorage.getItem(TEACHER_KEY); }catch(e){}
+  if(tpw&&SCRIPT_URL){ app.innerHTML=`<section><div class="kong-load">${KK("coffee")}</div><p class="sub">${ICON("loading")} 선생님 모드 불러오는 중...</p></section>`;
+    api({action:"dashboard",pw:tpw}).then(res=>{ if(res.ok){ TEACHER={pw:tpw,data:res}; showDashboard(); } else { try{ sessionStorage.removeItem(TEACHER_KEY); }catch(e){} USER?showHome():showLogin(); } })
+      .catch(()=>{ USER?showHome():showLogin(); }); return; }
+  // 보던 책으로 돌아가기
+  let last=null; try{ last=JSON.parse(sessionStorage.getItem(PLACE_KEY)); }catch(e){}
   const h=location.hash.replace("#","");
-  if(!USER) showLogin(); else if(BOOK_SETS[h]) openSet(h,0); else showHome();
+  if(!USER) showLogin(); else if(BOOK_SETS[h]) openSet(h,0); else if(last&&BOOK_SETS[last.set]) openSet(last.set,last.book||0); else showHome();
 })();
 
 </script>
