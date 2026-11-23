@@ -539,7 +539,8 @@ main#app section{padding-bottom:150px}
 .avatar{position:relative;width:100%;aspect-ratio:4/3.4;border-radius:24px;overflow:hidden}
 .avbg{position:absolute;inset:0}.avbg svg{width:100%;height:100%;display:block}
 .avbg.plain{background:radial-gradient(circle at 50% 40%,#fff 0,#FFE3EE 70%)}
-.avfig{position:absolute;left:50%;bottom:0;height:88%;aspect-ratio:211/297;transform:translateX(-50%);animation:kkbob 2.6s ease-in-out infinite;transform-origin:50% 100%}
+.avfig{position:absolute;left:50%;bottom:0;height:88%;aspect-ratio:211/297;transform:translateX(-50%);animation:avbob 2.6s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes avbob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
 .avfig img,.avfig .avl{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .avpet{position:absolute;right:4%;bottom:3%;width:28%;animation:kkbob 1.8s ease-in-out infinite reverse}
 .avpet svg{width:100%;height:auto;filter:drop-shadow(0 4px 0 rgba(0,0,0,.12))}
@@ -1407,7 +1408,9 @@ async function showLogin(){
     <div class="linkrow"><button class="linkbtn" id="guestBtn">${ICON("bag")} 로그인 없이 연습하기 (기록 안 남아요)</button><button class="linkbtn" id="teacherBtn">${ICON("teacher")} 선생님</button></div></section>`);
   app.appendChild(el);
   const lb=el.querySelector("#lb");
-  el.querySelector("#guestBtn").onclick=()=>{ setUser({guest:true}); showHome(); };
+  el.querySelector("#guestBtn").onclick=()=>{ setUser({guest:true});
+    // 연습 모드는 들어올 때마다 처음부터 (모든 학습 초기화)
+    SAVE={best:{},done:{},server:0}; persist(); refreshTop(); try{ sessionStorage.removeItem(PLACE_KEY); }catch(e){} showHome(); };
   el.querySelector("#teacherBtn").onclick=showTeacherLogin;
   if(!SCRIPT_URL){ lb.innerHTML=`<div class="notice">${ICON("warn")}<div>아직 기록 저장(구글 시트)이 연결되지 않았어요.<br>지금은 아래 <b>연습하기</b>로 들어가세요.</div></div>`; return; }
   lb.innerHTML=`<div class="kong-load">${KK("sleepy")}</div><p class="sub">${ICON("loading")} 불러오는 중...</p>`;
@@ -1507,7 +1510,7 @@ function openSet(id,bookIdx){
   const el=$(`<section><div class="booktabs" id="tabs"></div>
     <div class="zone"><div class="zone-head"><h2>${ICON("school")} 학원에서 해요</h2><span class="cnt" id="cc"></span></div><div class="missions" id="msC"></div></div>
     <div class="zone"><div class="zone-head"><h2>${ICON("home")} 숙제</h2><span class="cnt" id="hc"></span></div><div class="missions" id="msH"></div></div>
-    <div class="plan">${ICON("clock")}<div><b>90분 수업 순서</b> : 1권 (단어 암기 → 풍선 → 스펠 학습 → TEST) → 쉬는 시간 → 2권 (같은 순서)<br>
+    <div class="plan">${ICON("clock")}<div><b>90분 수업 순서</b> : 1권 (단어 암기 → 풍선 → 스펠 학습 → TEST) → 2권 (같은 순서)<br>
       TEST는 ①②③을 끝내야 열려요 · 책 읽기는 자유롭게 · 문장 블록은 실력자 도전 코스 · 숙제는 집에서 해요</div></div></section>`);
   app.appendChild(el);
   const tabs=el.querySelector("#tabs");
@@ -1667,7 +1670,7 @@ function gFlash(title,key,ic){
    ========================================================= */
 function gListen(title,key,ic){
   const {body,setProg}=frame(title,ic);
-  const pool=bookWords(), targets=pick(pool,8); let r=0, score=0;
+  const pool=bookWords(), targets=shuffle(pool); let r=0, score=0;
   function round(){
     if(r>=targets.length) return finish(key,`${targets.length}문제 중 ${score}개 한 번에!`,GAME.pts,score,targets.length);
     setProg(r/targets.length,`남은 문제 ${targets.length-r}`);
@@ -1701,7 +1704,7 @@ function gTypePick(title,key,ic){
 }
 function gType(title,key,ic,sk){
   const {body,setProg}=frame(title,ic); const sp=TSPEEDS[sk];
-  const ws=shuffle(bookWords().filter(w=>w.en.replace(/ /g,"").length>1)); let r=0, okN=0, pos=0, miss=0, tLeft=0, tAll=0, tick=null, lock=false;
+  const ws=shuffle(bookWords()); let r=0, okN=0, pos=0, miss=0, tLeft=0, tAll=0, tick=null, lock=false;
   const rows=["qwertyuiop","asdfghjkl","zxcvbnm"];
   body.innerHTML=`<div class="typebox">
       <div class="tcard" id="tcard"><div class="mci"><div class="mcf tfront"><div class="tpic" id="tpic"></div><div class="tword en" id="tword"></div></div>
@@ -1772,7 +1775,7 @@ function gBalloonPick(title,key,ic){
 }
 function gBalloon(title,key,ic,speedKey,mode="listen"){
   const {body,setProg}=frame(title,ic); const sp=SPEEDS[speedKey], bm=BMODES[mode];
-  const pool=bookWords(), targets=pick(pool,8); let r=0, score=0, lives=3, over=false;
+  const pool=bookWords(), targets=shuffle(pool); let r=0, score=0, lives=3, over=false;
   const colors=["#FF6B9A","#4DA3FF","#38C47E","#FF9F43","#9B6BFF","#00B8D9"];
   const LIGHT={"#FF6B9A":"#FFB8CF","#4DA3FF":"#A9D3FF","#38C47E":"#9CE8BF","#FF9F43":"#FFD0A1","#9B6BFF":"#D2BDFF","#00B8D9":"#8FE6F5"};
   const DARK={"#FF6B9A":"#D63C70","#4DA3FF":"#2273C9","#38C47E":"#1F9157","#FF9F43":"#D9741A","#9B6BFF":"#6B3FD4","#00B8D9":"#0088A3"};
@@ -1828,7 +1831,7 @@ function gBalloon(title,key,ic,speedKey,mode="listen"){
     const pop=$(`<div class="poptxt" style="left:${cx}px;top:${cy}px">POP!</div>`); sky.appendChild(pop); setTimeout(()=>pop.remove(),700);
     const fall=$(`<div class="fallpic" style="left:${cx-34}px;top:${cy-34}px">${wrap.querySelector(".pvb").innerHTML}</div>`); sky.appendChild(fall); setTimeout(()=>fall.remove(),1300); };
   const loseLife=(msg)=>{ lives--; drawHearts(); catDo("shock"); if(msg) tip(msg);
-    if(lives<=0){ over=true; field.innerHTML=""; clearTimers(); speechSynthesis.cancel();
+    if(lives<=0){ over=true; field.innerHTML=""; sky.querySelectorAll(".popcard").forEach(e=>e.remove()); clearTimers(); speechSynthesis.cancel();
       const ov=$(`<div class="bover"><div class="bobox"><div class="kkcele" style="width:170px;margin:0 auto">${KK("home")}</div><h2 style="justify-content:center">괜찮아! 다시 도전!</h2>
         <p class="sub">하트가 모두 없어졌어요</p><div class="btnrow"><button class="big green" id="cont">${ICON("play")} 이어서 하기</button><button class="big alt" id="again">${ICON("refresh")} 처음부터</button></div></div></div>`);
       sky.appendChild(ov); speak("다시 도전!",{lang:"ko"});
@@ -2388,7 +2391,7 @@ function kkAvatar(eq,cls=""){
 }
 function showRoom(){
   resetScreen(); const st=kkState(); let cat="hair";
-  const el=$(`<section class="room"><h1>${ICON("sparkle")} 나만의 켈리콩</h1><div class="roomtop" id="rt"></div><div class="roomgrid"><div id="stage"></div><div class="shop"><div class="cats" id="cats"></div><div class="items" id="items"></div></div></div>
+  const el=$(`<section class="room"><h1>${ICON("sparkle")} 나만의 켈리콩 ${ICON("sparkle")}</h1><div class="roomtop" id="rt"></div><div class="roomgrid"><div id="stage"></div><div class="shop"><div class="cats" id="cats"></div><div class="items" id="items"></div></div></div>
     <p class="sub" style="text-align:center">책 1권 = 그 책의 TEST + 숙제 2개 끝내기 · 책 10권마다 선물 상자 1개!<br>반짝 아이템은 상자 2개가 필요해요. 모아 두었다가 받아도 돼요.</p></section>`);
   app.appendChild(el);
   const draw=()=>{
