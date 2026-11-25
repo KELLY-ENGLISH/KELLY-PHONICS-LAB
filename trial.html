@@ -4329,11 +4329,11 @@ const SOUND_GUIDE={
     pairs:[["cape","cap"],["tape","tap"],["made","mad"],["plane","plan"],["hate","hat"]]},
   "long-e":{name:"E", frames:["ii"], fingers:.5, words:["bee","seal","tree"], tip:"알파벳 이름 <b>E</b> 그대로!<br>입꼬리를 옆으로 쭉 당기고 길게", spell:"ee · ea · e", vs:"e",
     pairs:[["feet","fed"],["seat","set"],["beet","bet"],["meet","met"],["peel","pen"]]},
-  "long-i":{name:"I", frames:["a","ii"], fingers:2, words:["kite","pie","five"], tip:"알파벳 이름 <b>I</b> 그대로!<br>크게 벌렸다가 옆으로 당겨요", spell:"i_e · ie · igh", vs:"i",
+  "long-i":{name:"I", frames:["a","ii"], fingers:2, words:["kite","pie","five"], tip:"알파벳 이름 <b>I</b> 그대로!<br>크게 벌렸다가 옆으로 당겨요", spell:"i_e · ie", vs:"i",
     pairs:[["kite","kit"],["bite","bit"],["pine","pin"],["ride","rid"],["hide","hid"]]},
-  "long-o":{name:"O", frames:["oh","oo"], fingers:1, words:["goat","home","boat"], tip:"알파벳 이름 <b>O</b> 그대로!<br>입술을 동그랗게, 끝에 더 작게 오므려요", spell:"o_e · oa · ow", vs:"o",
+  "long-o":{name:"O", frames:["oh","oo"], fingers:1, words:["goat","home","boat"], tip:"알파벳 이름 <b>O</b> 그대로!<br>입술을 동그랗게, 끝에 더 작게 오므려요", spell:"o_e · oa", vs:"o",
     pairs:[["hope","hop"],["note","not"],["robe","rob"],["code","cod"],["cone","con"]]},
-  "long-u":{name:"U", frames:["ii","oo"], fingers:.5, words:["cube","mule","June"], tip:"알파벳 이름 <b>U</b> 그대로!<br>입꼬리를 당겼다가 입술을 앞으로 쭉", spell:"u_e · ue · ui", vs:"u",
+  "long-u":{name:"U", frames:["ii","oo"], fingers:.5, words:["cube","blue","June"], tip:"긴 u는 <b>두 가지</b>!<br>cube는 알파벳 이름 <b>U</b>, blue는 입술만 앞으로 쭉", spell:"u_e · ue · ui", vs:"u",
     pairs:[["cube","cub"],["cute","cut"],["tube","tub"],["huge","hug"],["mule","mud"]]}
 };
 /* 입 클로즈업 : 코 끝 · 입술 · 위아래 이 · 혀 · 턱 */
@@ -4385,7 +4385,7 @@ function saySound(svg,G,cb){
 /* 단어에서 목표 소리 글자에 색칠 */
 function markSound(en,sound){ const v=sound.split("-")[1], long=sound.startsWith("long"), lw=en.toLowerCase();
   const on=new Array(en.length).fill(0);
-  if(long){ const teams={a:["ai","ay"],e:["ee","ea"],i:["igh","ie"],o:["oa","ow","oe"],u:["ue","ui","ew"]}[v]||[]; let hit=false;
+  if(long){ const teams={a:["ai","ay"],e:["ee","ea"],i:["igh","ie"],o:["oa","oe"],u:["ue","ui","ew"]}[v]||[]; let hit=false;
     teams.forEach(t=>{ let i=lw.indexOf(t); while(i>=0){ for(let j=0;j<t.length;j++) on[i+j]=1; hit=true; i=lw.indexOf(t,i+1);} });
     if(!hit){ lw.split("").forEach((c,i)=>{ if(c===v && /[^aeiou\s]/.test(lw[i+1]||"") && lw[i+2]==="e" && !/[a-z]/.test(lw[i+3]||"")){ on[i]=1; on[i+2]=2; } }); }
     // 열린 음절 (u-ni-corn, mu-sic, go, he) 만 긴 소리로 봐요. plum, sit 같은 짧은 소리는 빼요
