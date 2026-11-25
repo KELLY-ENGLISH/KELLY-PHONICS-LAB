@@ -2536,18 +2536,18 @@ const BOOK_SETS = {
       {
         title: "Hot Dog", cover: "hotdogCover", sound: "short-o", vowel: "o", soundName: "짧은 o 소리",
         words: [
-          {en:"hot",    ko:"뜨거운", p:true},
-          {en:"got on", ko:"~에 탔다", p:true, note:"get on의 과거형"},
-          {en:"log",    ko:"통나무", p:true},
-          {en:"fog",    ko:"안개", p:true},
-          {en:"dog",    ko:"개", p:true},
-          {en:"sob",    ko:"흐느끼다", p:true},
-          {en:"flop",   ko:"털썩 주저앉다", p:true},
-          {en:"stop",   ko:"멈추다", p:true},
-          {en:"lost",   ko:"길을 잃은", p:true},
-          {en:"a",      ko:"한 개의", p:false}
+          {en:"hot", ko:"뜨거운", p:true},
+          {en:"got on", ko:"~에 탔다 (get on의 과거형)", p:false},
+          {en:"log", ko:"통나무", p:true},
+          {en:"fog", ko:"안개", p:true},
+          {en:"dog", ko:"개", p:true},
+          {en:"sob", ko:"흐느끼다", p:true},
+          {en:"flop", ko:"털썩 주저앉다", p:true},
+          {en:"stop", ko:"멈추다", p:true},
+          {en:"lost", ko:"길을 잃은", p:true},
+          {en:"a", ko:"한 개의", p:false}
         ],
-        blank: {before:"A hot", after:"got on a log.", answer:"dog", ko:"한 마리의 더운 개가 통나무에 탔다."},
+        blank: {before:"A hot", after:"got on a log.", answer:"dog", ko:"한 마리의 더운 개가 통나무에 탔다.", choices:["dog", "log", "fog"]},
         story: [
           {en:"A dog.",                                  ko:"개 한 마리.",                              art:"hd1"},
           {en:"A hot dog.",                              ko:"더운 개 한 마리.",                          art:"hd2"},
@@ -2565,18 +2565,18 @@ const BOOK_SETS = {
       {
         title: "Fat Cat", cover: "fatcatCover", sound: "short-a", vowel: "a", soundName: "짧은 a 소리",
         words: [
-          {en:"tan",  ko:"황갈색의", p:true},
-          {en:"ran",  ko:"달렸다", p:true, note:"run의 과거형"},
-          {en:"cat",  ko:"고양이", p:true},
-          {en:"fat",  ko:"뚱뚱한", p:true},
-          {en:"sad",  ko:"슬픈", p:true},
-          {en:"has",  ko:"가지고 있다", p:true},
-          {en:"pal",  ko:"친구", p:true},
+          {en:"tan", ko:"황갈색의", p:true},
+          {en:"ran", ko:"달렸다 (run의 과거형)", p:true},
+          {en:"cat", ko:"고양이", p:true},
+          {en:"fat", ko:"뚱뚱한", p:true},
+          {en:"sad", ko:"슬픈", p:true},
+          {en:"has", ko:"가지고 있다", p:true},
+          {en:"pal", ko:"친구", p:true},
           {en:"fast", ko:"빠르게", p:true},
           {en:"last", ko:"마지막", p:true},
           {en:"clap", ko:"박수 치다", p:true}
         ],
-        blank: {before:"Cats", after:".", answer:"clap", ko:"고양이는 박수 친다."},
+        blank: {before:"Cats", after:".", answer:"clap", ko:"고양이는 박수 친다.", choices:["fast", "glad", "clap"]},
         story: [
           {en:"A cat.",                    ko:"고양이 한 마리.",                      art:"fc1"},
           {en:"A tan cat.",                ko:"황갈색 고양이 한 마리.",                art:"fc2"},
@@ -4319,7 +4319,7 @@ const SOUND_GUIDE={
     pairs:[["pen","pan"],["bed","bad"],["men","man"],["set","sat"],["pet","pat"]]},
   "short-i":{frames:["i"], fingers:.5, words:["it","pig","sit"], tip:"입꼬리를 살짝 옆으로<br><b>아주 조금</b>만 열고 짧게!", vs:"e",
     pairs:[["pin","pen"],["bit","bet"],["sit","set"],["big","beg"],["lid","led"]]},
-  "short-o":{frames:["o"], fingers:2, words:["octopus","hot","mop"], tip:"입을 <b>위아래로</b> 크게!<br>살짝 동그랗게 벌려요", vs:"u",
+  "short-o":{frames:["o"], fingers:2, words:["hot","mop","dog"], tip:"입을 <b>위아래로</b> 크게!<br>살짝 동그랗게 벌려요", vs:"u",
     pairs:[["hot","hut"],["cop","cup"],["dog","dug"],["not","nut"],["rob","rub"]]},
   "short-u":{frames:["u"], fingers:1, words:["up","bus","cup"], tip:"입에 <b>힘을 빼고</b><br>살짝만 벌려 짧게!", vs:"o",
     pairs:[["hut","hot"],["cup","cop"],["dug","dog"],["nut","not"],["rub","rob"]]},
@@ -4375,7 +4375,7 @@ function fingerGauge(n){
 }
 /* 소리 들려주기 : 짧은 모음 = 대표 단어, 긴 모음 = 알파벳 이름 */
 function saySound(svg,G,cb){
-  const seq= G.name ? [G.name, ...G.words.slice(0,3)] : G.words.slice(0,3);
+  const seq= G.name ? [G.name, ...G.words.slice(0,2)] : G.words.slice(0,2);
   let i=0; const next=()=>{ if(i>=seq.length){ cb&&cb(); return; } const w=seq[i++];
     speak(w,{rate:G.name&&i===1?.7:.6,raw:G.name&&i===1}); playMouth(svg,G.frames,{hold:G.frames.length>1?420:640}).then(()=>later(next,260)); };
   next();
@@ -4386,8 +4386,13 @@ function markSound(en,sound){ const v=sound.split("-")[1], long=sound.startsWith
   if(long){ const teams={a:["ai","ay"],e:["ee","ea"],i:["igh","ie"],o:["oa","ow","oe"],u:["ue","ui","ew"]}[v]||[]; let hit=false;
     teams.forEach(t=>{ let i=lw.indexOf(t); while(i>=0){ for(let j=0;j<t.length;j++) on[i+j]=1; hit=true; i=lw.indexOf(t,i+1);} });
     if(!hit){ lw.split("").forEach((c,i)=>{ if(c===v && /[^aeiou\s]/.test(lw[i+1]||"") && lw[i+2]==="e" && !/[a-z]/.test(lw[i+3]||"")){ on[i]=1; on[i+2]=2; } }); }
-    if(!on.some(Boolean)) lw.split("").forEach((c,i)=>{ if(c===v) on[i]=1; });
-  } else lw.split("").forEach((c,i)=>{ if(c===v && !/[aeiou]/.test(lw[i+1]||"") && !/[aeiou]/.test(lw[i-1]||"")) on[i]=1; });
+    // 열린 음절 (u-ni-corn, mu-sic, go, he) 만 긴 소리로 봐요. plum, sit 같은 짧은 소리는 빼요
+    if(!on.some(Boolean)) lw.split("").forEach((c,i)=>{ if(c!==v||/[aeiou]/.test(lw[i-1]||"")) return; const n1=lw[i+1]||"", n2=lw[i+2]||"";
+      if(!/[a-z]/.test(n1) && i>0) on[i]=1; else if(/[b-df-hj-np-tv-z]/.test(n1) && /[aeiouy]/.test(n2)) on[i]=1; });
+  } else lw.split("").forEach((c,i)=>{ if(c!==v || /[aeiou]/.test(lw[i+1]||"") || /[aeiou]/.test(lw[i-1]||"")) return;
+      const after=lw.slice(i+1,i+3);
+      if(/^r/.test(after) || (v==="a"&&(/^l[lk]/.test(after)||lw[i-1]==="w"))) return;   // for, car, ball, walk, was 는 다른 소리
+      on[i]=1; });
   return {html:en.split("").map((c,i)=>on[i]===1?`<b class="sv">${esc(c)}</b>`:on[i]===2?`<b class="se">${esc(c)}</b>`:esc(c)).join(""), has:on.some(x=>x===1)};
 }
 /* 🎤 짧은 녹음 (소리 연습용) */
@@ -4422,7 +4427,7 @@ function gSound(title,key,ic){
     setProg(0,"1단계 · 소리 알기");
     body.innerHTML=`<div class="sndwrap">
       <div class="sndleft">${letterBox(G,v,esc(b.soundName))}
-        <div class="sndkeys en">${G.words.map(w=>`<button class="kw">${markSound(w,b.sound).html}</button>`).join("")}</div>${G.spell?`<p class="sndspell en">${G.spell}</p>`:""}</div>
+        <div class="sndkeys en">${G.words.slice(0,2).map(w=>`<button class="kw">${markSound(w,b.sound).html}</button>`).join("")}</div>${G.spell?`<p class="sndspell en">${G.spell}</p>`:""}</div>
       <div class="sndface"><div class="mrow"><div class="mwrap">${mouthFace("mf1")}</div><video id="mirror" playsinline muted autoplay></video></div><p class="sndtip">${G.tip}</p></div></div>
       <div class="reps">${STAR(reps>=1)}</div>
       <div class="btnrow"><button class="big" id="ls">${ICON("speaker")} 소리 듣기</button><button class="big pink" id="me">${ICON("mic")} 따라 녹음</button><button class="big alt" id="mr">${ICON("eye")} 거울 보기</button></div>
