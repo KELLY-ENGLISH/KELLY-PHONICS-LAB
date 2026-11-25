@@ -761,6 +761,36 @@ svg.bstr{width:14px;height:70px;background:none;margin-top:6px;animation:strw 1.
 .sndword .ko{font-size:22px;color:#6B5E57;font-weight:800}
 b.sv{color:#E8590C;background:#FFE8CC;border-radius:10px;padding:0 3px}
 b.se{color:#ADB5BD}
+/* 📖 책장 넘기기 */
+.turnstage{position:fixed;inset:0;z-index:70;pointer-events:none;perspective:1700px}
+.turnpage{box-sizing:border-box;backface-visibility:hidden;transform-style:preserve-3d;background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.turnpage .flash-inner{transition:none}
+.turnpage.tnext{transform-origin:left center;animation:tnext .68s cubic-bezier(.45,.05,.4,1) forwards}
+.turnpage.tprev{transform-origin:right center;animation:tprev .68s cubic-bezier(.45,.05,.4,1) forwards}
+@keyframes tnext{0%{transform:rotateY(0)}20%{transform:rotateY(-12deg) skewY(1deg)}80%{opacity:1}100%{transform:rotateY(-100deg);opacity:0}}
+@keyframes tprev{0%{transform:rotateY(0)}20%{transform:rotateY(12deg) skewY(-1deg)}80%{opacity:1}100%{transform:rotateY(100deg);opacity:0}}
+.turnshade{position:absolute;inset:0;pointer-events:none;border-radius:inherit}
+.tnext .turnshade{background:linear-gradient(to left,rgba(0,0,0,.28),rgba(0,0,0,0) 55%);animation:shade .68s forwards}
+.tprev .turnshade{background:linear-gradient(to right,rgba(0,0,0,.28),rgba(0,0,0,0) 55%);animation:shade .68s forwards}
+@keyframes shade{from{opacity:0}to{opacity:1}}
+.pagein{animation:pagein .68s ease-out}
+@keyframes pagein{0%{transform:scale(.965);filter:brightness(.86)}55%{transform:scale(.985);filter:brightness(.94)}100%{transform:none;filter:none}}
+/* 소리 연습 v2 */
+.mface{width:100%;height:100%;display:block}
+.mwrap{width:260px;height:250px}
+.mwrap.sm{width:150px;height:144px;animation:none}
+.sndface.small .mwrap{width:190px;height:182px}
+.sndkeys{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:230px}
+.kw{font-size:30px;font-weight:900;background:#fff;border-radius:16px;padding:4px 14px;box-shadow:var(--shadow)}
+.gauge{display:flex;flex-direction:column;align-items:center;background:#fff;border-radius:20px;padding:8px 10px;box-shadow:var(--shadow)}
+.gauge svg{width:62px;height:82px}.gauge b{font-size:16px;color:#E8590C}.gauge small{font-size:13px;color:#8A7A70}
+.sndletter.sm{width:96px;height:96px;border-radius:22px;border-width:4px}.sndletter.sm .en{font-size:58px}.sndletter.sm small{font-size:12px}
+.big2{font-size:24px!important;font-weight:900}
+.pairrow{display:flex;gap:14px;align-items:center;justify-content:center;font-size:44px;font-weight:900;margin:4px 0 10px}
+.pairrow .pw{background:#fff;border-radius:18px;padding:2px 18px;box-shadow:var(--shadow)}.pairrow .vsx{font-size:22px;color:#ADB5BD}
+.cmp{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+.cmpcard{display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;border-radius:26px;padding:14px 18px;box-shadow:var(--shadow);border:4px solid transparent}
+.cmpcard.right{border-color:#38C47E;background:#E6F7D8}.cmpcard.wrong{border-color:#FF6B6B;opacity:.6}
 
 </style>
 </head>
@@ -3929,7 +3959,7 @@ function speak(text,opt={}){
   if(!enF||(!koVoice&&opt.lang==="ko")) loadVoices();
   speechSynthesis.cancel();
   const ko=opt.lang==="ko";
-  if(!ko) text=sayText(text); else text=String(text).replace(/[~〜∼]/g,"").trim();   // 한국어: 물결표(~)는 읽지 않아요
+  if(!ko&&!opt.raw) text=sayText(text); else text=String(text).replace(/[~〜∼]/g,"").trim();   // 한국어: 물결표(~)는 읽지 않아요
   const u=new SpeechSynthesisUtterance(text);
   u.lang= ko ? "ko-KR" : "en-US";
   if(ko){ if(koVoice) u.voice=koVoice; u.rate=opt.rate||1; u.pitch=1; }
@@ -3951,6 +3981,21 @@ document.getElementById("soundBtn").onclick=()=>{ soundOn=!soundOn; document.get
 function drawVoiceBtn(){ document.getElementById("voiceBtn").innerHTML=`${ICON(VOICE_PREF==="male"?"boy":"girl")}<span class="lbl">${VOICE_PREF==="male"?"남자":"여자"}</span>`; }
 document.getElementById("voiceBtn").onclick=()=>{ VOICE_PREF=VOICE_PREF==="male"?"female":"male"; try{ localStorage.setItem("kelly_voice",VOICE_PREF); }catch(e){} drawVoiceBtn(); speak("Hello! Let's read."); };
 
+/* 📖 책장 넘기기 : 지금 화면을 복사해서 종이처럼 넘겨요 (dir 1 = 다음, -1 = 이전) */
+function turnPage(el,dir=1){ if(!el||!el.isConnected) return; const r=el.getBoundingClientRect(); if(!r.width) return;
+  const stage=document.createElement("div"); stage.className="turnstage";
+  const c=el.cloneNode(true); c.removeAttribute("id"); c.querySelectorAll("[id]").forEach(x=>x.removeAttribute("id")); c.querySelectorAll("video").forEach(x=>x.remove());
+  Object.assign(c.style,{position:"fixed",left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px",margin:"0"});
+  c.classList.remove("pagein","slideL","slideR","shake","pop"); c.classList.add("turnpage",dir>0?"tnext":"tprev"); const sh=document.createElement("i"); sh.className="turnshade"; c.appendChild(sh);
+  stage.appendChild(c); document.body.appendChild(stage);
+  el.classList.remove("pagein"); void el.offsetWidth; el.classList.add("pagein");
+  pageSound(); setTimeout(()=>stage.remove(),720);
+}
+function pageSound(){ if(!soundOn) return; try{ actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  const n=actx.sampleRate*.28, buf=actx.createBuffer(1,n,actx.sampleRate), d=buf.getChannelData(0);
+  for(let i=0;i<n;i++){ const t=i/n; d[i]=(Math.random()*2-1)*Math.sin(Math.PI*t)*Math.pow(1-t,1.5)*.5; }
+  const src=actx.createBufferSource(), f=actx.createBiquadFilter(), g=actx.createGain(); src.buffer=buf; f.type="bandpass"; f.frequency.value=2400; f.Q.value=.7; g.gain.value=.55;
+  src.connect(f).connect(g).connect(actx.destination); src.start(); }catch(e){} }
 /* 손가락으로 밀기 : 왼쪽으로 밀면 다음, 오른쪽으로 밀면 이전 */
 function onSwipe(el,next,prev){ let x0=null,y0=0,t0=0;
   el.addEventListener("touchstart",e=>{ if(e.touches.length!==1){ x0=null; return; } const t=e.touches[0]; x0=t.clientX; y0=t.clientY; t0=Date.now(); },{passive:true});
@@ -4231,47 +4276,80 @@ function startMission(id){
 
 /* =========================================================
    ⓪ 소리 연습 : 입 모양 보고 따라 하기 (NIR 1 · 2)
+   한국어 발음 표기 없이, 진짜 영어 소리(단어·알파벳 이름)로만 들려줘요
    ========================================================= */
-const MOUTH_REST={w:.5,h:.03,r:0};
-const MOUTH={a:{w:1,h:.95,r:0}, e:{w:.85,h:.5,r:0}, i:{w:1,h:.2,r:0}, ii:{w:1.05,h:.14,r:0}, o:{w:.62,h:1,r:.35}, u:{w:.66,h:.42,r:0},
-  oh:{w:.42,h:.6,r:1}, oo:{w:.3,h:.28,r:1}};
+const MOUTH_REST={w:.45,h:.02,r:0};
+/* w 옆으로 벌림, h 턱 내림, r 입술 동그랗게 */
+const MOUTH={a:{w:1.08,h:1.05,r:0}, e:{w:.74,h:.4,r:0}, i:{w:.9,h:.15,r:0}, ii:{w:1.05,h:.1,r:0}, o:{w:.6,h:1,r:.45}, u:{w:.62,h:.38,r:.05},
+  oh:{w:.42,h:.62,r:1}, oo:{w:.28,h:.26,r:1}};
 const SOUND_GUIDE={
-  "short-a":{ko:"애", frames:["a"], tip:"입을 옆으로 크게 벌리고<br>턱을 아래로 쭉!", hint:"a 소리는 '애'"},
-  "short-e":{ko:"에", frames:["e"], tip:"입을 옆으로 살짝 벌려요<br>반만 열어요", hint:"e 소리는 '에'"},
-  "short-i":{ko:"이", frames:["i"], tip:"입꼬리를 살짝 옆으로<br>조금만 벌리고 짧게!", hint:"i 소리는 짧은 '이'"},
-  "short-o":{ko:"아", frames:["o"], tip:"입을 위아래로 크게!<br>동그랗게 벌려요", hint:"o 소리는 '아'"},
-  "short-u":{ko:"어", frames:["u"], tip:"입에 힘을 빼고<br>살짝만 벌려 짧게!", hint:"u 소리는 '어'"},
-  "long-a":{ko:"에이", frames:["e","ii"], tip:"'에' 했다가<br>입을 옆으로 당겨 '이'", hint:"긴 a 소리는 '에이'", spell:"a_e · ai · ay"},
-  "long-e":{ko:"이", frames:["ii"], tip:"입꼬리를 옆으로 쭉 당기고<br>길게 '이-'", hint:"긴 e 소리는 길게 '이-'", spell:"ee · ea · e"},
-  "long-i":{ko:"아이", frames:["a","ii"], tip:"'아' 크게 벌렸다가<br>옆으로 당겨 '이'", hint:"긴 i 소리는 '아이'", spell:"i_e · ie · y"},
-  "long-o":{ko:"오우", frames:["oh","oo"], tip:"입술을 동그랗게 '오'<br>더 작게 오므려 '우'", hint:"긴 o 소리는 '오우'", spell:"o_e · oa · ow"},
-  "long-u":{ko:"유", frames:["ii","oo"], tip:"'이' 했다가 입술을<br>앞으로 쭉 내밀어 '우'", hint:"긴 u 소리는 '유'", spell:"u_e · ue · ui"}
+  "short-a":{frames:["a"], fingers:2, words:["apple","ant","cat"], tip:"턱을 아래로 <b>크게</b> 쭉!<br>입꼬리도 옆으로 벌려요", vs:"e",
+    pairs:[["pan","pen"],["bad","bed"],["man","men"],["sat","set"],["pat","pet"]]},
+  "short-e":{frames:["e"], fingers:1, words:["egg","bed","hen"], tip:"입을 <b>반만</b> 열어요<br>턱은 조금만 내려요", vs:"a",
+    pairs:[["pen","pan"],["bed","bad"],["men","man"],["set","sat"],["pet","pat"]]},
+  "short-i":{frames:["i"], fingers:.5, words:["it","pig","sit"], tip:"입꼬리를 살짝 옆으로<br><b>아주 조금</b>만 열고 짧게!", vs:"e",
+    pairs:[["pin","pen"],["bit","bet"],["sit","set"],["big","beg"],["lid","led"]]},
+  "short-o":{frames:["o"], fingers:2, words:["octopus","hot","mop"], tip:"입을 <b>위아래로</b> 크게!<br>살짝 동그랗게 벌려요", vs:"u",
+    pairs:[["hot","hut"],["cop","cup"],["dog","dug"],["not","nut"],["rob","rub"]]},
+  "short-u":{frames:["u"], fingers:1, words:["up","bus","cup"], tip:"입에 <b>힘을 빼고</b><br>살짝만 벌려 짧게!", vs:"o",
+    pairs:[["hut","hot"],["cup","cop"],["dug","dog"],["nut","not"],["rub","rob"]]},
+  "long-a":{name:"A", frames:["e","ii"], fingers:1, words:["cake","rain","day"], tip:"알파벳 이름 <b>A</b> 그대로!<br>입이 반쯤 열렸다가 옆으로 쭉", spell:"a_e · ai · ay", vs:"a",
+    pairs:[["cape","cap"],["tape","tap"],["made","mad"],["plane","plan"],["hate","hat"]]},
+  "long-e":{name:"E", frames:["ii"], fingers:.5, words:["bee","seal","tree"], tip:"알파벳 이름 <b>E</b> 그대로!<br>입꼬리를 옆으로 쭉 당기고 길게", spell:"ee · ea · e", vs:"e",
+    pairs:[["feet","fed"],["seat","set"],["beet","bet"],["meet","met"],["peel","pen"]]},
+  "long-i":{name:"I", frames:["a","ii"], fingers:2, words:["kite","pie","five"], tip:"알파벳 이름 <b>I</b> 그대로!<br>크게 벌렸다가 옆으로 당겨요", spell:"i_e · ie · igh", vs:"i",
+    pairs:[["kite","kit"],["bite","bit"],["pine","pin"],["ride","rid"],["hide","hid"]]},
+  "long-o":{name:"O", frames:["oh","oo"], fingers:1, words:["goat","home","boat"], tip:"알파벳 이름 <b>O</b> 그대로!<br>입술을 동그랗게, 끝에 더 작게 오므려요", spell:"o_e · oa · ow", vs:"o",
+    pairs:[["hope","hop"],["note","not"],["robe","rob"],["code","cod"],["cone","con"]]},
+  "long-u":{name:"U", frames:["ii","oo"], fingers:.5, words:["cube","mule","June"], tip:"알파벳 이름 <b>U</b> 그대로!<br>입꼬리를 당겼다가 입술을 앞으로 쭉", spell:"u_e · ue · ui", vs:"u",
+    pairs:[["cube","cub"],["cute","cut"],["tube","tub"],["huge","hug"],["mule","mud"]]}
 };
+/* 입 클로즈업 : 코 끝 · 입술 · 위아래 이 · 혀 · 턱 */
 function mouthGeo(p){
-  const cx=100, cy=142, W=18+30*p.w-4*p.r, H=2+28*p.h, t=5+7*p.r, k=1.15;
-  const ell=(w,h,top,bot)=>`M${cx-w} ${cy} C${cx-w} ${cy-h*k-top} ${cx+w} ${cy-h*k-top} ${cx+w} ${cy} C${cx+w} ${cy+h*k+bot} ${cx-w} ${cy+h*k+bot} ${cx-w} ${cy}Z`;
-  return {outer:ell(W+2,H,t,t+2), inner:ell(Math.max(W-t*.6,6),H,0,0), teeth:{x:cx-W, y:cy-H*1.1-2, w:2*W, h:Math.min(10,H*.55+1)}, tongue:{cx, cy:cy+H*.8, rx:Math.max(W*.55,4), ry:Math.max(H*.45,1)}};
+  const cx=120, cy=118, W=30+46*p.w-10*p.r, H=3+40*p.h, t=7+9*p.r, k=1.12;
+  const ell=(w,h,top,bot)=>`M${cx-w} ${cy} C${cx-w*.98} ${cy-h*k-top} ${cx+w*.98} ${cy-h*k-top} ${cx+w} ${cy} C${cx+w*.98} ${cy+h*k+bot} ${cx-w*.98} ${cy+h*k+bot} ${cx-w} ${cy}Z`;
+  const iw=Math.max(W-t*.7,6);
+  return {outer:ell(W+3,H,t+2,t+4), inner:ell(iw,H,0,0), cupid:`M${cx-W*.45} ${cy-H*k-t+3} Q${cx-8} ${cy-H*k-t-6} ${cx} ${cy-H*k-t+1} Q${cx+8} ${cy-H*k-t-6} ${cx+W*.45} ${cy-H*k-t+3}`,
+    top:{x:cx-iw, y:cy-H*1.15-2, w:2*iw, h:Math.min(13,H*.5+1)}, bot:{x:cx-iw*.8, y:cy+H*1.15-Math.min(9,H*.35)+1, w:1.6*iw, h:Math.min(9,H*.35)},
+    tongue:{cx, cy:cy+H*.85, rx:Math.max(iw*.62,4), ry:Math.max(H*.5,1)}, chin:cy+H*.55};
 }
 function mouthFace(id){
-  return `<svg class="mface" viewBox="0 0 200 200" id="${id}"><defs><clipPath id="${id}c"><path class="mi2"/></clipPath></defs>
-    <circle cx="100" cy="100" r="92" fill="#FFD9B8" stroke="#3A2E2A" stroke-width="4"/>
-    <path d="M10 92 Q8 4 100 6 Q192 4 190 92 Q170 40 130 46 Q100 26 64 46 Q30 46 10 92Z" fill="#5B3A22" stroke="#3A2E2A" stroke-width="4"/>
-    <ellipse cx="66" cy="88" rx="9" ry="12" fill="#3A2E2A"/><circle cx="69" cy="84" r="3.5" fill="#fff"/><ellipse cx="134" cy="88" rx="9" ry="12" fill="#3A2E2A"/><circle cx="137" cy="84" r="3.5" fill="#fff"/>
-    <path d="M96 100 q4 14 -2 18 q6 3 10 0" stroke="#C98A5E" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <ellipse cx="44" cy="124" rx="14" ry="8" fill="#FF9DB3" opacity=".6"/><ellipse cx="156" cy="124" rx="14" ry="8" fill="#FF9DB3" opacity=".6"/>
-    <path class="mo" fill="#E8607A" stroke="#3A2E2A" stroke-width="3.5"/><path class="mi" fill="#7A1F33"/>
-    <g clip-path="url(#${id}c)"><ellipse class="tg" fill="#FF8FA3"/><rect class="tt" fill="#fff"/></g></svg>`;
+  return `<svg class="mface" viewBox="0 0 240 230" id="${id}"><defs><clipPath id="${id}c"><path class="mi2"/></clipPath>
+      <radialGradient id="${id}s" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#FFE2C6"/><stop offset="1" stop-color="#F5C59E"/></radialGradient></defs>
+    <rect x="4" y="4" width="232" height="222" rx="40" fill="url(#${id}s)" stroke="#3A2E2A" stroke-width="4"/>
+    <path d="M100 4 Q102 26 92 34 Q100 44 120 44 Q140 44 148 34 Q138 26 140 4" fill="#F2B48C"/><path d="M92 34 Q100 44 120 44 Q140 44 148 34" stroke="#C98A5E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="108" cy="36" rx="6" ry="3.5" fill="#C98A5E"/><ellipse cx="132" cy="36" rx="6" ry="3.5" fill="#C98A5E"/>
+    <ellipse cx="34" cy="96" rx="18" ry="11" fill="#FF9DB3" opacity=".5"/><ellipse cx="206" cy="96" rx="18" ry="11" fill="#FF9DB3" opacity=".5"/>
+    <path class="jaw" d="M40 200 Q120 240 200 200" stroke="#D9A07A" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path class="mo" fill="#E0566F" stroke="#3A2E2A" stroke-width="4" stroke-linejoin="round"/><path class="cp" stroke="#B83A55" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path class="mi" fill="#5E1426"/>
+    <g clip-path="url(#${id}c)"><ellipse class="tg" fill="#FF7F96"/><path class="tgl" stroke="#E0566F" stroke-width="2.5" fill="none"/><rect class="tt" rx="4" fill="#fff" stroke="#E6E1DC" stroke-width="1.5"/><rect class="tb" rx="3" fill="#F8F6F3" stroke="#E6E1DC" stroke-width="1.5"/></g></svg>`;
 }
-function setMouth(svg,p){ if(!svg) return; const G=mouthGeo(p);
-  svg.querySelector(".mo").setAttribute("d",G.outer); svg.querySelector(".mi").setAttribute("d",G.inner); svg.querySelector(".mi2").setAttribute("d",G.inner);
-  const tt=svg.querySelector(".tt"); tt.setAttribute("x",G.teeth.x); tt.setAttribute("y",G.teeth.y); tt.setAttribute("width",G.teeth.w); tt.setAttribute("height",G.teeth.h); tt.style.display=p.h>.12&&p.r<.8?"":"none";
-  const tg=svg.querySelector(".tg"); tg.setAttribute("cx",G.tongue.cx); tg.setAttribute("cy",G.tongue.cy); tg.setAttribute("rx",G.tongue.rx); tg.setAttribute("ry",G.tongue.ry);
+function setMouth(svg,p){ if(!svg) return; const G=mouthGeo(p), q=s=>svg.querySelector(s);
+  q(".mo").setAttribute("d",G.outer); q(".mi").setAttribute("d",G.inner); q(".mi2").setAttribute("d",G.inner); q(".cp").setAttribute("d",G.cupid);
+  const tt=q(".tt"); tt.setAttribute("x",G.top.x); tt.setAttribute("y",G.top.y); tt.setAttribute("width",G.top.w); tt.setAttribute("height",G.top.h); tt.style.display=p.h>.08&&p.r<.85?"":"none";
+  const tb=q(".tb"); tb.setAttribute("x",G.bot.x); tb.setAttribute("y",G.bot.y); tb.setAttribute("width",G.bot.w); tb.setAttribute("height",G.bot.h); tb.style.display=p.h>.3&&p.r<.6?"":"none";
+  const tg=q(".tg"); tg.setAttribute("cx",G.tongue.cx); tg.setAttribute("cy",G.tongue.cy); tg.setAttribute("rx",G.tongue.rx); tg.setAttribute("ry",G.tongue.ry);
+  q(".tgl").setAttribute("d",`M${G.tongue.cx} ${G.tongue.cy-G.tongue.ry*.6} v${G.tongue.ry*.8}`);
+  q(".jaw").setAttribute("transform",`translate(0 ${(p.h*16).toFixed(1)})`);
   svg._p=p; }
 function tweenMouth(svg,to,ms=260){ return new Promise(res=>{ if(!svg){res();return;} const from=svg._p||MOUTH_REST, t0=performance.now();
   const step=now=>{ const k=Math.min(1,(now-t0)/ms), e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2, p={}; for(const q of ["w","h","r"]) p[q]=from[q]+(to[q]-from[q])*e;
     setMouth(svg,p); if(k<1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); }); }
 async function playMouth(svg,frames,{hold=700}={}){ for(let i=0;i<frames.length;i++){ await tweenMouth(svg,MOUTH[frames[i]],i?320:240); await new Promise(r=>setTimeout(r,i===frames.length-1?hold:380)); } await tweenMouth(svg,MOUTH_REST,300); }
-function sayVowel(svg,G,cb){ speak(G.ko,{lang:"ko",rate:.75}); playMouth(svg,G.frames,{hold:G.frames.length>1?520:820}).then(()=>cb&&cb()); }
+/* 손가락 게이지 : 입이 얼마나 열리는지 */
+function fingerGauge(n){
+  const f=(x)=>`<rect x="${x}" y="10" width="26" height="86" rx="13" fill="#FFD9B8" stroke="#3A2E2A" stroke-width="3.5"/><path d="M${x+6} 22 q7 -6 14 0" stroke="#E6C2A4" stroke-width="3" fill="none"/>`;
+  const cnt=n>=2?2:1, half=n<1;
+  return `<div class="gauge"><svg viewBox="0 0 80 106">${half?`<g transform="translate(0 30) scale(1 .45)">${f(27)}</g>`:cnt===2?f(12)+f(42):f(27)}</svg><b>${half?"아주 조금":cnt===2?"손가락 2개":"손가락 1개"}</b><small>입 크기</small></div>`;
+}
+/* 소리 들려주기 : 짧은 모음 = 대표 단어, 긴 모음 = 알파벳 이름 */
+function saySound(svg,G,cb){
+  const seq= G.name ? [G.name, G.words[0]] : G.words.slice(0,2);
+  let i=0; const next=()=>{ if(i>=seq.length){ cb&&cb(); return; } const w=seq[i++];
+    speak(w,{rate:G.name&&i===1?.7:.6,raw:G.name&&i===1}); playMouth(svg,G.frames,{hold:G.frames.length>1?420:640}).then(()=>later(next,260)); };
+  next();
+}
 /* 단어에서 목표 소리 글자에 색칠 */
 function markSound(en,sound){ const v=sound.split("-")[1], long=sound.startsWith("long"), lw=en.toLowerCase();
   const on=new Array(en.length).fill(0);
@@ -4285,43 +4363,67 @@ function markSound(en,sound){ const v=sound.split("-")[1], long=sound.startsWith
 function gSound(title,key,ic){
   const {body,setProg}=frame(title,ic), b=book(), G=SOUND_GUIDE[b.sound];
   if(!G){ body.innerHTML=`<p class="sub">이 책은 소리 연습이 없어요</p>`; later(()=>finish(key,title,3),800); return; }
-  const v=b.vowel, words=b.words.filter(w=>markSound(w.en,b.sound).has).slice(0,8), list=words.length?words:b.words.slice(0,5);
-  let reps=0, step=0, cam=null;
+  const v=b.vowel, long=b.sound.startsWith("long"), words=b.words.filter(w=>markSound(w.en,b.sound).has).slice(0,8), list=words.length?words:b.words.slice(0,5);
+  const otherKey=(long?"short-":"short-")+G.vs, O2=SOUND_GUIDE[otherKey];
+  let reps=0, cam=null;
   const stopCam=()=>{ try{ cam&&cam.getTracks().forEach(t=>t.stop()); }catch(e){} cam=null; };
   gSound._stop=stopCam;
+  const letterBox=(g,vv,lbl,cls="")=>`<div class="sndletter ${cls}"><span class="en">${vv}</span><small>${lbl}</small></div>`;
+  /* 1단계 : 소리 알기 */
   function intro(){
-    setProg(0,"소리 알기");
+    setProg(0,"1단계 · 소리 알기");
     body.innerHTML=`<div class="sndwrap">
-      <div class="sndleft"><div class="sndletter"><span class="en">${v}</span><small>${esc(b.soundName)}</small></div>
-        <div class="sndko">${ICON("speaker")} <b>${G.ko}</b></div><p class="sndhint">${G.hint}</p>${G.spell?`<p class="sndspell en">${G.spell}</p>`:""}</div>
-      <div class="sndface"><div class="mrow"><div class="mwrap">${mouthFace("mf1")}</div><video id="mirror" playsinline muted autoplay></video></div><p class="sndtip">${G.tip}</p></div></div>
+      <div class="sndleft">${letterBox(G,v,esc(b.soundName))}
+        <div class="sndkeys en">${G.words.map(w=>`<button class="kw">${markSound(w,b.sound).html}</button>`).join("")}</div>${G.spell?`<p class="sndspell en">${G.spell}</p>`:""}</div>
+      <div class="sndface"><div class="mrow"><div class="mwrap">${mouthFace("mf1")}</div>${fingerGauge(G.fingers)}<video id="mirror" playsinline muted autoplay></video></div><p class="sndtip">${G.tip}</p></div></div>
       <div class="reps">${[0,1,2].map(i=>STAR(i<reps)).join("")}</div>
       <div class="btnrow"><button class="big" id="ls">${ICON("speaker")} 소리 듣기</button><button class="big pink" id="me">${ICON("lips")} 따라 하기</button><button class="big alt" id="mr">${ICON("eye")} 거울 보기</button></div>
-      <div class="btnrow"><button class="big green ${reps<3?"dim":""}" id="nx">단어로 연습 ${ICON("right")}</button></div>`;
+      <div class="btnrow"><button class="big green ${reps<3?"dim":""}" id="nx">소리 구별하기 ${ICON("right")}</button></div>`;
     const svg=body.querySelector("#mf1"); setMouth(svg,MOUTH_REST);
-    body.querySelector("#ls").onclick=()=>sayVowel(svg,G);
-    body.querySelector("#me").onclick=()=>{ sayVowel(svg,G,()=>{ kkShow({img:"talk",say:`이제 너 차례!<br><b style="font-size:34px">${G.ko}</b>`,mode:"pop",fx:null,ms:1500});
+    body.querySelectorAll(".kw").forEach((k,j)=>k.onclick=()=>{ speak(G.words[j],{rate:.6}); playMouth(svg,G.frames,{hold:500}); });
+    body.querySelector("#ls").onclick=()=>saySound(svg,G);
+    body.querySelector("#me").onclick=()=>{ saySound(svg,G,()=>{ kkShow({img:"talk",say:`이제 너 차례!<br><small>입 모양을 똑같이!</small>`,mode:"pop",fx:null,ms:1500});
         later(()=>{ reps=Math.min(3,reps+1); beep("good"); body.querySelector(".reps").innerHTML=[0,1,2].map(i=>STAR(i<reps)).join(""); if(reps>=3){ body.querySelector("#nx").classList.remove("dim"); cheer(true); } },1700); }); };
     body.querySelector("#mr").onclick=async()=>{ const vd=body.querySelector("#mirror");
       if(cam){ stopCam(); vd.classList.remove("on"); return; }
       try{ cam=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false}); vd.srcObject=cam; vd.classList.add("on"); }
       catch(e){ kkShow({img:"talk",say:"카메라를 켤 수 없어요<br><small>설정에서 카메라를 허용해 주세요</small>",mode:"pop",fx:null,ms:2200}); } };
-    body.querySelector("#nx").onclick=()=>{ if(reps<3){ beep("bad"); kkShow({img:"must",say:"따라 하기 3번 먼저!",mode:"pop",fx:null,ms:1500}); speak("따라 하기 세 번 먼저!",{lang:"ko"}); return; } stopCam(); step=0; word(); };
-    later(()=>sayVowel(svg,G),500);
+    body.querySelector("#nx").onclick=()=>{ if(reps<3){ beep("bad"); kkShow({img:"must",say:"따라 하기 3번 먼저!",mode:"pop",fx:null,ms:1500}); speak("따라 하기 세 번 먼저!",{lang:"ko"}); return; } stopCam(); r=0; ok=0; contrast(); };
+    later(()=>saySound(svg,G),500);
   }
+  /* 2단계 : 비슷한 소리와 구별하기 (예: pan ↔ pen) */
+  let r=0, ok=0; const rounds=shuffle(G.pairs.map(p=>Math.random()<.5?{word:p[0],me:true,pair:p}:{word:p[1],me:false,pair:p}));
+  function contrast(){
+    if(r>=rounds.length){ step=0; return word(); }
+    setProg(.2+.3*r/rounds.length,`2단계 · 소리 구별 ${r+1} / ${rounds.length}`);
+    const R=rounds[r], ov=O2?((long?"":"")+G.vs):"", oLbl=`짧은 ${G.vs} 소리`;
+    const cards=shuffle([{me:true},{me:false}]);
+    body.innerHTML=`<p class="sub big2">${ICON("ear")} 잘 듣고, 어떤 소리였는지 골라요!</p>
+      <div class="pairrow en">${R.pair.map(w=>`<span class="pw">${esc(w)}</span>`).join(`<span class="vsx">vs</span>`)}</div>
+      <div class="cmp">${cards.map((c,j)=>`<button class="cmpcard" data-me="${c.me?1:0}"><div class="mwrap sm">${mouthFace("cm"+j)}</div>${letterBox(null,c.me?v:G.vs,c.me?esc(b.soundName):oLbl,"sm")}</button>`).join("")}</div>
+      <div class="btnrow"><button class="big" id="ag">${ICON("speaker")} 다시 듣기</button></div>`;
+    cards.forEach((c,j)=>{ const s=body.querySelector("#cm"+j); setMouth(s, c.me? MOUTH[G.frames[0]] : MOUTH[(SOUND_GUIDE["short-"+G.vs]||G).frames[0]]); });
+    const play=()=>speak(R.word,{rate:.6}); body.querySelector("#ag").onclick=play; later(play,350);
+    let tried=false;
+    body.querySelectorAll(".cmpcard").forEach(btn=>btn.onclick=()=>{ if(body.dataset.lock) return; const me=btn.dataset.me==="1";
+      if(me===R.me){ body.dataset.lock=1; btn.classList.add("right","pop"); if(!tried) ok++; right(!tried); later(()=>speak(R.word,{rate:.7}),100); r++; later(()=>{ delete body.dataset.lock; contrast(); },1300); }
+      else { tried=true; btn.classList.add("wrong","shake"); wrong(R.word); later(play,400); } });
+  }
+  /* 3단계 : 책 단어로 연습 */
+  let step=0;
   function word(){
-    const w=list[step]; setProg(step/list.length,`단어 ${step+1} / ${list.length}`);
+    const w=list[step]; setProg(.5+.5*step/list.length,`3단계 · 단어 ${step+1} / ${list.length}`);
     const m=markSound(w.en,b.sound);
-    body.innerHTML=`<div class="sndwrap"><div class="sndword"><div class="pic">${PIC(w.en)}</div><div class="en wbig">${m.html}</div><div class="ko">${esc(w.ko)}</div></div>
-      <div class="sndface small"><div class="mwrap">${mouthFace("mf2")}</div><div class="sndko">${ICON("speaker")} <b>${G.ko}</b></div></div></div>
-      <div class="btnrow"><button class="big" id="ls">${ICON("speaker")} 듣기</button><button class="big green" id="ok">${ICON("check")} 따라 했어요</button></div>${swipeHint()}`;
+    body.innerHTML=`<div class="sndwrap" id="swp"><div class="sndword"><div class="pic">${PIC(w.en)}</div><div class="en wbig">${m.html}</div><div class="ko">${esc(w.ko)}</div></div>
+      <div class="sndface small"><div class="mwrap">${mouthFace("mf2")}</div>${letterBox(G,v,esc(b.soundName),"sm")}</div></div>
+      <div class="btnrow"><button class="big" id="ls">${ICON("speaker")} 듣기</button><button class="big pink" id="sl">${ICON("turtle")} 천천히</button><button class="big green" id="ok">${ICON("check")} 따라 했어요</button></div>${swipeHint()}`;
     const svg=body.querySelector("#mf2"); setMouth(svg,MOUTH_REST);
-    const play=()=>sayVowel(svg,G,()=>later(()=>speak(w.en),150));
-    body.querySelector("#ls").onclick=play;
-    const next=()=>{ beep("good"); GAME.pts+=1; hudDraw(); step++; if(step>=list.length){ setProg(1,"완료!"); finish(key,title,3); } else word(); };
+    const play=(rate=.8)=>{ speak(w.en,{rate}); later(()=>playMouth(svg,G.frames,{hold:rate<.6?700:420}),rate<.6?250:120); };
+    body.querySelector("#ls").onclick=()=>play(); body.querySelector("#sl").onclick=()=>play(.45);
+    const next=()=>{ turnPage(body.querySelector("#swp"),1); beep("good"); GAME.pts+=1; hudDraw(); step++; if(step>=list.length){ setProg(1,"완료!"); finish(key,title,3); } else word(); };
     body.querySelector("#ok").onclick=next;
-    onSwipe(body.querySelector(".sndwrap"),next,()=>{ if(step>0){ step--; word(); } else intro(); });
-    later(play,400);
+    onSwipe(body.querySelector("#swp"),next,()=>{ if(step>0){ turnPage(body.querySelector("#swp"),-1); step--; word(); } });
+    later(()=>play(),400);
   }
   intro();
 }
@@ -4344,7 +4446,7 @@ function gFlash(title,key,ic){
       <button class="big pink" id="slow">${ICON("turtle")} 천천히</button><button class="big green" id="split">${ICON("letters")} 글자씩</button><button class="big alt" id="next">${ICON("right")}</button></div>
     <p class="sub">${ICON("mic")} 듣고 큰 소리로 3번 따라 말해 보세요!</p>${swipeHint()}`;
   const fc=body.querySelector("#fc"), dots=body.querySelector("#dots");
-  const slide=d=>{ fc.classList.remove("slideL","slideR"); void fc.offsetWidth; fc.classList.add(d<0?"slideL":"slideR"); };
+  const slide=d=>turnPage(fc,d<0?1:-1);
   const drawDots=()=>{ dots.innerHTML=""; L.forEach(()=>dots.appendChild(document.createElement("i"))); };
   const drawStar=()=>{ const st=starred(), on=L[i]&&st.has(L[i].en); const sb=body.querySelector("#star"); sb.innerHTML=STAR(on); sb.classList.toggle("on",!!on); body.querySelector("#sc").textContent=st.size?`(${st.size})`:""; };
   drawDots();
@@ -4373,9 +4475,9 @@ function gFlash(title,key,ic){
     let k=0; const myRun=++run;
     const lit=j=>{ spans.forEach(x=>x.classList.remove("lit")); if(j>=0){ const c=chunks[j]; for(let q=c.s;q<c.s+c.n;q++) spans[q]&&spans[q].classList.add("lit"); } };
     const step=()=>{ if(myRun!==run) return;
-      if(k<chunks.length){ const j=k++; lit(j); let moved=false; const go=()=>{ if(moved||myRun!==run) return; moved=true; later(step,250); };
-        if(!chunks[j].snd){ later(go,500); return; } speak(chunks[j].snd,{lang:"ko",rate:.9,onend:go}); later(go,1300); }
-      else later(()=>{ lit(-1); speak(L[i].en,{rate:.6}); },200); };
+      if(k<chunks.length){ const j=k++; lit(j); later(step, chunks[j].snd===""?260:520); }
+      else later(()=>{ lit(-1); speak(L[i].en,{rate:.8}); },250); };
+    speak(L[i].en,{rate:.4});
     step();
   };
   body.querySelector("#star").onclick=e=>{ e.stopPropagation(); const w=L[i]; if(!w) return; const st=starred();
@@ -4710,12 +4812,12 @@ function gRead(title,key,ic){
         onend:()=>{ later(()=>spans.forEach(s=>s.classList.remove("hl")),300);
           if(showKo) later(()=>speak(pg.ko,{lang:"ko",onend:()=>onDone&&later(onDone,700)}),500); else if(onDone) later(onDone,1200); }});
     };
-    const autoNext=()=>{ if(!auto) return; if(p<pages.length-1){ p++; render()(.85,autoNext); } else { auto=false; render(); } };
+    const autoNext=()=>{ if(!auto) return; if(p<pages.length-1){ turnPage(body.querySelector(".page"),1); p++; render()(.85,autoNext); } else { auto=false; render(); } };
     body.querySelector("#rd").onclick=()=>read(.85);
     body.querySelector("#rs").onclick=()=>read(.55);
     body.querySelector("#tr").onclick=()=>{ showKo=!showKo; render(); if(showKo) speak(pg.ko,{lang:"ko"}); };
-    body.querySelector("#pv").onclick=()=>{ auto=false; if(p>0){ p--; render()(.85); } };
-    body.querySelector("#nx").onclick=()=>{ auto=false; if(p<pages.length-1){ p++; const r=render(); later(()=>r(.85),300); } else { addPts(30); finish(key,`${b.title} 읽기 완료!`,GAME.pts); } };
+    body.querySelector("#pv").onclick=()=>{ auto=false; if(p>0){ turnPage(body.querySelector(".page"),-1); p--; render()(.85); } };
+    body.querySelector("#nx").onclick=()=>{ auto=false; if(p<pages.length-1){ turnPage(body.querySelector(".page"),1); p++; const r=render(); later(()=>r(.85),300); } else { addPts(30); finish(key,`${b.title} 읽기 완료!`,GAME.pts); } };
     const ab=body.querySelector("#auto"); if(ab) ab.onclick=()=>{ if(auto){ auto=false; clearTimers(); speechSynthesis.cancel(); render(); } else { auto=true; p=0; render()(.85,autoNext); } };
     return read;
   }
