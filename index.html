@@ -3880,7 +3880,7 @@ function soundChunks(en){
 
 /* 미션 : group class=학원 / home=숙제, req=TEST 전에 꼭, test=TEST */
 const MISSIONS = [
-  {id:"sound",  group:"class", req:true, ic:"lips",    name:"소리 연습",     desc:"입 모양 보고 따라 해요",  color:"#E39B00"},
+  {id:"sound",  group:"class", ic:"lips",    name:"소리 연습",     desc:"선택! 입 모양 보고 따라 해요",  color:"#E39B00"},
   {id:"flash",  group:"class", req:true, ic:"speaker", name:"단어 암기",     desc:"듣고 외우고 별표로 복습", color:"#2F6FD6"},
   {id:"balloon",group:"class", req:true, ic:"balloon", name:"풍선 터뜨리기", desc:"듣고 빨리 톡!",       color:"#1C9E74"},
   {id:"type",   group:"class", req:true, ic:"keyboard",name:"스펠 학습",     desc:"보고 빨리 따라 치기",   color:"#1A8BA3"},
@@ -4212,8 +4212,8 @@ function openSet(id,bookIdx){
   const el=$(`<section><div class="booktabs" id="tabs"></div>
     <div class="zone"><div class="zone-head"><h2>${ICON("school")} 학원에서 해요</h2><span class="cnt" id="cc"></span></div><div class="missions" id="msC"></div></div>
     <div class="zone"><div class="zone-head"><h2>${ICON("home")} 숙제</h2><span class="cnt" id="hc"></span></div><div class="missions" id="msH"></div></div>
-    <div class="plan">${ICON("clock")}<div><b>90분 수업 순서</b> : 1권 (소리 연습 → 단어 암기 → 풍선 → 스펠 학습 → TEST) → 2권 (같은 순서)<br>
-      TEST는 ①②③④을 끝내야 열려요 · 책 읽기는 자유롭게 · 문장 블록은 실력자 도전 코스 · 숙제는 집에서 해요</div></div></section>`);
+    <div class="plan">${ICON("clock")}<div><b>90분 수업 순서</b> : 1권 ((선택) 소리 연습 → 단어 암기 → 풍선 → 스펠 학습 → TEST) → 2권 (같은 순서)<br>
+      TEST는 ②③④를 끝내야 열려요 · 책 읽기는 자유롭게 · 문장 블록은 실력자 도전 코스 · 숙제는 집에서 해요</div></div></section>`);
   app.appendChild(el);
   const tabs=el.querySelector("#tabs");
   set.books.forEach((b,i)=>{ const n=MISSIONS.filter(m=>SAVE.done[`${id}-${i}-${m.id}`]).length;
@@ -4227,7 +4227,7 @@ function openSet(id,bookIdx){
     const ready=m.test&&!locked&&!done;
     const b=$(`<button class="mission ${done?'is-done':''} ${locked?'locked':''} ${ready?'ready':''}" style="background:${m.color}"><span class="num">${i+1}</span>
       ${done?`<span class="donebig">${ICON("check")}</span>`:''}${locked?`<span class="lockbig">${ICON("lock")}</span>`:''}
-      ${m.challenge?`<span class="chal">${ICON("crown")}<b>실력자 코스</b></span>`:""}<span class="mi">${ICON(m.ic)}</span>${m.name}<small>${locked?`①②③④을 끝내면 TEST가 열려요`:ready?`준비 완료! 도전!`:m.challenge&&!done?`자신 있는 사람만 도전!`:m.desc}</small>${ready?`<span class="readytag">GO!</span>`:''}${done?`<span class="donetag">완료!</span>`:''}${best?`<span class="best">최고 ${best}점</span>`:''}</button>`);
+      ${m.challenge?`<span class="chal">${ICON("crown")}<b>실력자 코스</b></span>`:""}<span class="mi">${ICON(m.ic)}</span>${m.name}<small>${locked?`②③④를 끝내면 TEST가 열려요`:ready?`준비 완료! 도전!`:m.challenge&&!done?`자신 있는 사람만 도전!`:m.desc}</small>${ready?`<span class="readytag">GO!</span>`:''}${done?`<span class="donetag">완료!</span>`:''}${best?`<span class="best">최고 ${best}점</span>`:''}</button>`);
     b.onclick=()=>{ if(locked){ beep("bad"); kkShow({img:"must",say:`앞에 것부터 하자!<br><small>${left.map(x=>x.name).join(" · ")}</small>`,mode:"pop",fx:null,ms:2400}); speak("앞에 것부터 하자!",{lang:"ko"}); b.classList.add("shake"); setTimeout(()=>b.classList.remove("shake"),400); return; } startMission(m.id); };
     box.appendChild(b);
   };
@@ -4281,7 +4281,7 @@ function finish(key,title,pts,score=null,total=null){
   if(mission==="quiz") kname= total&&score/total>=.9 ? "good" : total&&score/total>=.6 ? "testq" : "talk";
   else if(m.group==="home") kname= homeAll ? "nohw" : "thanks";
   else if(mission==="read") kname="read";
-  // ①②③④ 을 방금 다 끝냈으면 → "TEST 준비 완료!"
+  // ②③④ 을 방금 다 끝냈으면 → "TEST 준비 완료!"
   const reqAll=MISSIONS.filter(x=>x.req).every(x=>SAVE.done[`${setId}-${bi}-${x.id}`]);
   const ready= m.req && reqAll && !SAVE.done[`${setId}-${bi}-quiz`];
   if(ready) kname="flag";
@@ -4292,7 +4292,7 @@ function testReady(){
   beep("combo"); confetti(); speak("시험 준비 완료!",{lang:"ko"});
   const ov=$(`<div class="overlay kkready"><div class="cheer"><div class="rays"></div>
     <div class="tro kkcele">${KK("testq")}</div>
-    <div class="readyt">TEST 준비 완료!</div><p class="sub">퀘스트 ①②③④을 모두 깼어요. 이제 TEST에 도전!</p>
+    <div class="readyt">TEST 준비 완료!</div><p class="sub">퀘스트 ②③④를 모두 깼어요. 이제 TEST에 도전!</p>
     <div class="btnrow"><button class="big green" id="go">${ICON("pencil")} TEST 시작!</button><button class="big alt" id="later">조금 이따가</button></div></div></div>`);
   document.body.appendChild(ov);
   ov.querySelector("#go").onclick=()=>{ ov.remove(); startMission("quiz"); };
@@ -4375,7 +4375,7 @@ function fingerGauge(n){
 }
 /* 소리 들려주기 : 짧은 모음 = 대표 단어, 긴 모음 = 알파벳 이름 */
 function saySound(svg,G,cb){
-  const seq= G.name ? [G.name, G.words[0]] : G.words.slice(0,2);
+  const seq= G.name ? [G.name, ...G.words.slice(0,3)] : G.words.slice(0,3);
   let i=0; const next=()=>{ if(i>=seq.length){ cb&&cb(); return; } const w=seq[i++];
     speak(w,{rate:G.name&&i===1?.7:.6,raw:G.name&&i===1}); playMouth(svg,G.frames,{hold:G.frames.length>1?420:640}).then(()=>later(next,260)); };
   next();
@@ -4411,7 +4411,7 @@ function playUrl(url,onend){ try{ speechSynthesis.cancel(); const a=new Audio(ur
 function gSound(title,key,ic){
   const {body,setProg}=frame(title,ic), b=book(), G=SOUND_GUIDE[b.sound];
   if(!G){ body.innerHTML=`<p class="sub">이 책은 소리 연습이 없어요</p>`; later(()=>finish(key,title,3),800); return; }
-  const v=b.vowel, long=b.sound.startsWith("long"), words=b.words.filter(w=>markSound(w.en,b.sound).has).slice(0,8), list=words.length?words:b.words.slice(0,5);
+  const v=b.vowel, long=b.sound.startsWith("long"), words=b.words.filter(w=>markSound(w.en,b.sound).has).slice(0,5), list=words.length?words:b.words.slice(0,5);
   const otherKey=(long?"short-":"short-")+G.vs, O2=SOUND_GUIDE[otherKey];
   let reps=0, cam=null;
   const stopCam=()=>{ try{ cam&&cam.getTracks().forEach(t=>t.stop()); }catch(e){} cam=null; stopRecMic(); };
