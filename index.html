@@ -733,6 +733,34 @@ svg.bstr{width:14px;height:70px;background:none;margin-top:6px;animation:strw 1.
 .kbd .key svg{width:22px;height:22px}
 @media (max-width:900px){.qset{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:640px){.wbox{font-size:32px;min-height:56px}.wpic{width:80px;height:80px}}
+/* ⓪ 소리 연습 */
+.sndwrap{display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap;margin:6px 0 10px}
+.sndleft{display:flex;flex-direction:column;align-items:center;gap:8px}
+.sndletter{width:150px;height:150px;border-radius:32px;background:#FFF4CC;border:5px solid #F59F00;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:var(--shadow)}
+.sndletter .en{font-size:96px;line-height:1;color:#E8590C;font-weight:900}
+.sndletter small{font-size:16px;color:#8A5A00;font-weight:800}
+.sndko{display:flex;align-items:center;gap:8px;background:#fff;border-radius:22px;padding:6px 18px;box-shadow:var(--shadow)}
+.sndko .ic{width:30px;height:30px}.sndko b{font-size:44px;color:#E8590C}
+.sndhint{font-size:20px;font-weight:800;margin:0;color:#5A4A40}
+.sndspell{font-size:22px;margin:0;color:#7048E8;font-weight:800;background:#F1EBFF;border-radius:14px;padding:2px 14px}
+.sndface{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+.mwrap{width:250px;height:250px;animation:mbob 3s ease-in-out infinite}
+.sndface.small .mwrap{width:180px;height:180px}
+.mface{width:100%;height:100%;display:block}
+@keyframes mbob{50%{transform:translateY(-4px)}}
+.sndtip{font-size:20px;font-weight:800;text-align:center;background:#fff;border-radius:18px;padding:8px 16px;margin:0;box-shadow:var(--shadow);line-height:1.4}
+#mirror{display:none;width:230px;height:230px;object-fit:cover;border-radius:50%;border:6px solid #FF6B9A;transform:scaleX(-1);background:#000}
+.mrow{display:flex;gap:16px;align-items:center}
+#mirror.on{display:block}
+@media (max-width:760px){#mirror{width:160px;height:160px}.mwrap{width:190px;height:190px}}
+.reps{display:flex;gap:8px;justify-content:center;margin:4px 0}.reps .star{width:46px;height:46px}
+.big.dim{opacity:.45}
+.sndword{display:flex;flex-direction:column;align-items:center;gap:4px}
+.sndword .pic{width:190px;height:190px}.sndword .pic svg{width:100%;height:100%}
+.sndword .wbig{font-size:64px;font-weight:900;letter-spacing:2px}
+.sndword .ko{font-size:22px;color:#6B5E57;font-weight:800}
+b.sv{color:#E8590C;background:#FFE8CC;border-radius:10px;padding:0 3px}
+b.se{color:#ADB5BD}
 
 </style>
 </head>
@@ -825,6 +853,8 @@ const ICON=(()=>{
   const O="#3A2E2A";
   const star=(cx,cy,r,f="#FFC83D",s="#E89A00")=>{ let p=""; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, rr=i%2?r*.45:r; p+=`${i?"L":"M"}${(cx+rr*Math.cos(a)).toFixed(1)} ${(cy+rr*Math.sin(a)).toFixed(1)}`; } return `<path d="${p}Z" fill="${f}" stroke="${s}" stroke-width="2.2" stroke-linejoin="round"/>`; };
   const I={
+    lips: sv(`<path d="M4 24 Q14 10 21 14 Q24 12 27 14 Q34 10 44 24 Q34 40 24 40 Q14 40 4 24Z" fill="#E8607A" stroke="#8A1630" stroke-width="2.6" stroke-linejoin="round"/><path d="M4 24 Q24 28 44 24" stroke="#8A1630" stroke-width="2.6" fill="none"/><path d="M13 19 q5 -3 9 -1" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".7"/>`),
+    eye: sv(`<path d="M3 24 Q24 6 45 24 Q24 42 3 24Z" fill="#fff" stroke="${O}" stroke-width="2.6"/><circle cx="24" cy="24" r="9" fill="url(#gBlue)" stroke="${O}" stroke-width="2.2"/><circle cx="24" cy="24" r="4" fill="${O}"/><circle cx="27" cy="21" r="2" fill="#fff"/>`),
     speaker: sv(`<path d="M8 18h8l11-9v30l-11-9H8z" fill="url(#gBlue)" stroke="#1E5FA8" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 17q5 7 0 14M36 12q9 12 0 24" stroke="#1E5FA8" stroke-width="3.5" fill="none" stroke-linecap="round"/>`),
     mute: sv(`<path d="M8 18h8l11-9v30l-11-9H8z" fill="#C9CED6" stroke="#6B7280" stroke-width="2.5" stroke-linejoin="round"/><path d="M33 18l10 12M43 18L33 30" stroke="#E03131" stroke-width="4" stroke-linecap="round"/>`),
     turtle: sv(`<ellipse cx="22" cy="30" rx="16" ry="11" fill="url(#gGreen)" stroke="#1F7A4A" stroke-width="2.5"/><path d="M12 28h20M16 22l4 14M28 22l-4 14" stroke="#1F7A4A" stroke-width="2" opacity=".6"/><circle cx="40" cy="27" r="6" fill="#9BE7B4" stroke="#1F7A4A" stroke-width="2.5"/><circle cx="41.5" cy="25.5" r="1.4" fill="${O}"/><path d="M12 39l-2 5M30 39l2 5" stroke="#1F7A4A" stroke-width="4" stroke-linecap="round"/>`),
@@ -3750,7 +3780,7 @@ const BOOK_SETS = {
 /* 🔤 글자별 소리 (글자씩 듣기, 소리 합치기). 한국어 음성으로 소리 내요. */
 const LETTER_SOUNDS = {
   a:"애", b:"브", c:"크", d:"드", e:"에", f:"프", g:"그", h:"흐", i:"이", j:"쥬", k:"크", l:"르", m:"므",
-  n:"느", o:"어", p:"프", q:"크", r:"르", s:"스", t:"트", u:"어", v:"브", w:"우", x:"크스", y:"이", z:"즈"
+  n:"느", o:"아", p:"프", q:"크", r:"르", s:"스", t:"트", u:"어", v:"브", w:"우", x:"크스", y:"이", z:"즈"
 };
 
 /* 연속자음·이중자음은 한 덩어리로 소리 내요 (글자씩 듣기) */
@@ -3790,6 +3820,7 @@ function soundChunks(en){
 
 /* 미션 : group class=학원 / home=숙제, req=TEST 전에 꼭, test=TEST */
 const MISSIONS = [
+  {id:"sound",  group:"class", req:true, ic:"lips",    name:"소리 연습",     desc:"입 모양 보고 따라 해요",  color:"#F59F00"},
   {id:"flash",  group:"class", req:true, ic:"speaker", name:"단어 암기",     desc:"듣고 외우고 별표로 복습", color:"#4DA3FF"},
   {id:"balloon",group:"class", req:true, ic:"balloon", name:"풍선 터뜨리기", desc:"듣고 빨리 톡!",       color:"#38C47E"},
   {id:"type",   group:"class", req:true, ic:"keyboard",name:"스펠 학습",     desc:"보고 빨리 따라 치기",   color:"#14A3A8"},
@@ -4106,8 +4137,8 @@ function openSet(id,bookIdx){
   const el=$(`<section><div class="booktabs" id="tabs"></div>
     <div class="zone"><div class="zone-head"><h2>${ICON("school")} 학원에서 해요</h2><span class="cnt" id="cc"></span></div><div class="missions" id="msC"></div></div>
     <div class="zone"><div class="zone-head"><h2>${ICON("home")} 숙제</h2><span class="cnt" id="hc"></span></div><div class="missions" id="msH"></div></div>
-    <div class="plan">${ICON("clock")}<div><b>90분 수업 순서</b> : 1권 (단어 암기 → 풍선 → 스펠 학습 → TEST) → 2권 (같은 순서)<br>
-      TEST는 ①②③을 끝내야 열려요 · 책 읽기는 자유롭게 · 문장 블록은 실력자 도전 코스 · 숙제는 집에서 해요</div></div></section>`);
+    <div class="plan">${ICON("clock")}<div><b>90분 수업 순서</b> : 1권 (소리 연습 → 단어 암기 → 풍선 → 스펠 학습 → TEST) → 2권 (같은 순서)<br>
+      TEST는 ①②③④을 끝내야 열려요 · 책 읽기는 자유롭게 · 문장 블록은 실력자 도전 코스 · 숙제는 집에서 해요</div></div></section>`);
   app.appendChild(el);
   const tabs=el.querySelector("#tabs");
   set.books.forEach((b,i)=>{ const n=MISSIONS.filter(m=>SAVE.done[`${id}-${i}-${m.id}`]).length;
@@ -4121,7 +4152,7 @@ function openSet(id,bookIdx){
     const ready=m.test&&!locked&&!done;
     const b=$(`<button class="mission ${done?'is-done':''} ${locked?'locked':''} ${ready?'ready':''}" style="background:${m.color}"><span class="num">${i+1}</span>
       ${done?`<span class="donebig">${ICON("check")}</span>`:''}${locked?`<span class="lockbig">${ICON("lock")}</span>`:''}
-      ${m.challenge?`<span class="chal">${ICON("crown")}<b>실력자 코스</b></span>`:""}<span class="mi">${ICON(m.ic)}</span>${m.name}<small>${locked?`①②③을 끝내면 TEST가 열려요`:ready?`준비 완료! 도전!`:m.challenge&&!done?`자신 있는 사람만 도전!`:m.desc}</small>${ready?`<span class="readytag">GO!</span>`:''}${done?`<span class="donetag">완료!</span>`:''}${best?`<span class="best">최고 ${best}점</span>`:''}</button>`);
+      ${m.challenge?`<span class="chal">${ICON("crown")}<b>실력자 코스</b></span>`:""}<span class="mi">${ICON(m.ic)}</span>${m.name}<small>${locked?`①②③④을 끝내면 TEST가 열려요`:ready?`준비 완료! 도전!`:m.challenge&&!done?`자신 있는 사람만 도전!`:m.desc}</small>${ready?`<span class="readytag">GO!</span>`:''}${done?`<span class="donetag">완료!</span>`:''}${best?`<span class="best">최고 ${best}점</span>`:''}</button>`);
     b.onclick=()=>{ if(locked){ beep("bad"); kkShow({img:"must",say:`앞에 것부터 하자!<br><small>${left.map(x=>x.name).join(" · ")}</small>`,mode:"pop",fx:null,ms:2400}); speak("앞에 것부터 하자!",{lang:"ko"}); b.classList.add("shake"); setTimeout(()=>b.classList.remove("shake"),400); return; } startMission(m.id); };
     box.appendChild(b);
   };
@@ -4145,7 +4176,7 @@ function openSet(id,bookIdx){
 
 /* ---------- 활동 화면 틀 ---------- */
 let MIC=null;
-function stopMic(){ try{ if(MIC) MIC.getTracks().forEach(t=>t.stop()); }catch(e){} MIC=null; }
+function stopMic(){ try{ if(MIC) MIC.getTracks().forEach(t=>t.stop()); }catch(e){} MIC=null; try{ gSound._stop&&gSound._stop(); }catch(e){} }
 let CUR={start:Date.now(),wrong:new Set()};
 function noteWrong(w){ CUR.wrong.add(w); }
 function frame(title,icon){
@@ -4175,7 +4206,7 @@ function finish(key,title,pts,score=null,total=null){
   if(mission==="quiz") kname= total&&score/total>=.9 ? "good" : total&&score/total>=.6 ? "testq" : "talk";
   else if(m.group==="home") kname= homeAll ? "nohw" : "thanks";
   else if(mission==="read") kname="read";
-  // ①②③ 을 방금 다 끝냈으면 → "TEST 준비 완료!"
+  // ①②③④ 을 방금 다 끝냈으면 → "TEST 준비 완료!"
   const reqAll=MISSIONS.filter(x=>x.req).every(x=>SAVE.done[`${setId}-${bi}-${x.id}`]);
   const ready= m.req && reqAll && !SAVE.done[`${setId}-${bi}-quiz`];
   if(ready) kname="flag";
@@ -4186,7 +4217,7 @@ function testReady(){
   beep("combo"); confetti(); speak("시험 준비 완료!",{lang:"ko"});
   const ov=$(`<div class="overlay kkready"><div class="cheer"><div class="rays"></div>
     <div class="tro kkcele">${KK("testq")}</div>
-    <div class="readyt">TEST 준비 완료!</div><p class="sub">퀘스트 ①②③을 모두 깼어요. 이제 TEST에 도전!</p>
+    <div class="readyt">TEST 준비 완료!</div><p class="sub">퀘스트 ①②③④을 모두 깼어요. 이제 TEST에 도전!</p>
     <div class="btnrow"><button class="big green" id="go">${ICON("pencil")} TEST 시작!</button><button class="big alt" id="later">조금 이따가</button></div></div></div>`);
   document.body.appendChild(ov);
   ov.querySelector("#go").onclick=()=>{ ov.remove(); startMission("quiz"); };
@@ -4194,8 +4225,105 @@ function testReady(){
 }
 function startMission(id){
   const k=`${curSetId}-${curBook}-${id}`, m=MISSIONS.find(x=>x.id===id), t=`${m.name} · ${book().title}`;
-  ({flash:()=>gFlash(t,k,m.ic), type:()=>gTypePick(t,k,m.ic), balloon:()=>gBalloonPick(t,k,m.ic), quiz:()=>gQuiz(t,k,m.ic), read:()=>gRead(t,k,m.ic),
+  ({sound:()=>gSound(t,k,m.ic), flash:()=>gFlash(t,k,m.ic), type:()=>gTypePick(t,k,m.ic), balloon:()=>gBalloonPick(t,k,m.ic), quiz:()=>gQuiz(t,k,m.ic), read:()=>gRead(t,k,m.ic),
     recread:()=>gRecord(t,k,m.ic), spell:()=>gSpell(t,k,m.ic), build:()=>gBuild(t,k,m.ic)})[id]();
+}
+
+/* =========================================================
+   ⓪ 소리 연습 : 입 모양 보고 따라 하기 (NIR 1 · 2)
+   ========================================================= */
+const MOUTH_REST={w:.5,h:.03,r:0};
+const MOUTH={a:{w:1,h:.95,r:0}, e:{w:.85,h:.5,r:0}, i:{w:1,h:.2,r:0}, ii:{w:1.05,h:.14,r:0}, o:{w:.62,h:1,r:.35}, u:{w:.66,h:.42,r:0},
+  oh:{w:.42,h:.6,r:1}, oo:{w:.3,h:.28,r:1}};
+const SOUND_GUIDE={
+  "short-a":{ko:"애", frames:["a"], tip:"입을 옆으로 크게 벌리고<br>턱을 아래로 쭉!", hint:"a 소리는 '애'"},
+  "short-e":{ko:"에", frames:["e"], tip:"입을 옆으로 살짝 벌려요<br>반만 열어요", hint:"e 소리는 '에'"},
+  "short-i":{ko:"이", frames:["i"], tip:"입꼬리를 살짝 옆으로<br>조금만 벌리고 짧게!", hint:"i 소리는 짧은 '이'"},
+  "short-o":{ko:"아", frames:["o"], tip:"입을 위아래로 크게!<br>동그랗게 벌려요", hint:"o 소리는 '아'"},
+  "short-u":{ko:"어", frames:["u"], tip:"입에 힘을 빼고<br>살짝만 벌려 짧게!", hint:"u 소리는 '어'"},
+  "long-a":{ko:"에이", frames:["e","ii"], tip:"'에' 했다가<br>입을 옆으로 당겨 '이'", hint:"긴 a 소리는 '에이'", spell:"a_e · ai · ay"},
+  "long-e":{ko:"이", frames:["ii"], tip:"입꼬리를 옆으로 쭉 당기고<br>길게 '이-'", hint:"긴 e 소리는 길게 '이-'", spell:"ee · ea · e"},
+  "long-i":{ko:"아이", frames:["a","ii"], tip:"'아' 크게 벌렸다가<br>옆으로 당겨 '이'", hint:"긴 i 소리는 '아이'", spell:"i_e · ie · y"},
+  "long-o":{ko:"오우", frames:["oh","oo"], tip:"입술을 동그랗게 '오'<br>더 작게 오므려 '우'", hint:"긴 o 소리는 '오우'", spell:"o_e · oa · ow"},
+  "long-u":{ko:"유", frames:["ii","oo"], tip:"'이' 했다가 입술을<br>앞으로 쭉 내밀어 '우'", hint:"긴 u 소리는 '유'", spell:"u_e · ue · ui"}
+};
+function mouthGeo(p){
+  const cx=100, cy=142, W=18+30*p.w-4*p.r, H=2+28*p.h, t=5+7*p.r, k=1.15;
+  const ell=(w,h,top,bot)=>`M${cx-w} ${cy} C${cx-w} ${cy-h*k-top} ${cx+w} ${cy-h*k-top} ${cx+w} ${cy} C${cx+w} ${cy+h*k+bot} ${cx-w} ${cy+h*k+bot} ${cx-w} ${cy}Z`;
+  return {outer:ell(W+2,H,t,t+2), inner:ell(Math.max(W-t*.6,6),H,0,0), teeth:{x:cx-W, y:cy-H*1.1-2, w:2*W, h:Math.min(10,H*.55+1)}, tongue:{cx, cy:cy+H*.8, rx:Math.max(W*.55,4), ry:Math.max(H*.45,1)}};
+}
+function mouthFace(id){
+  return `<svg class="mface" viewBox="0 0 200 200" id="${id}"><defs><clipPath id="${id}c"><path class="mi2"/></clipPath></defs>
+    <circle cx="100" cy="100" r="92" fill="#FFD9B8" stroke="#3A2E2A" stroke-width="4"/>
+    <path d="M10 92 Q8 4 100 6 Q192 4 190 92 Q170 40 130 46 Q100 26 64 46 Q30 46 10 92Z" fill="#5B3A22" stroke="#3A2E2A" stroke-width="4"/>
+    <ellipse cx="66" cy="88" rx="9" ry="12" fill="#3A2E2A"/><circle cx="69" cy="84" r="3.5" fill="#fff"/><ellipse cx="134" cy="88" rx="9" ry="12" fill="#3A2E2A"/><circle cx="137" cy="84" r="3.5" fill="#fff"/>
+    <path d="M96 100 q4 14 -2 18 q6 3 10 0" stroke="#C98A5E" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="44" cy="124" rx="14" ry="8" fill="#FF9DB3" opacity=".6"/><ellipse cx="156" cy="124" rx="14" ry="8" fill="#FF9DB3" opacity=".6"/>
+    <path class="mo" fill="#E8607A" stroke="#3A2E2A" stroke-width="3.5"/><path class="mi" fill="#7A1F33"/>
+    <g clip-path="url(#${id}c)"><ellipse class="tg" fill="#FF8FA3"/><rect class="tt" fill="#fff"/></g></svg>`;
+}
+function setMouth(svg,p){ if(!svg) return; const G=mouthGeo(p);
+  svg.querySelector(".mo").setAttribute("d",G.outer); svg.querySelector(".mi").setAttribute("d",G.inner); svg.querySelector(".mi2").setAttribute("d",G.inner);
+  const tt=svg.querySelector(".tt"); tt.setAttribute("x",G.teeth.x); tt.setAttribute("y",G.teeth.y); tt.setAttribute("width",G.teeth.w); tt.setAttribute("height",G.teeth.h); tt.style.display=p.h>.12&&p.r<.8?"":"none";
+  const tg=svg.querySelector(".tg"); tg.setAttribute("cx",G.tongue.cx); tg.setAttribute("cy",G.tongue.cy); tg.setAttribute("rx",G.tongue.rx); tg.setAttribute("ry",G.tongue.ry);
+  svg._p=p; }
+function tweenMouth(svg,to,ms=260){ return new Promise(res=>{ if(!svg){res();return;} const from=svg._p||MOUTH_REST, t0=performance.now();
+  const step=now=>{ const k=Math.min(1,(now-t0)/ms), e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2, p={}; for(const q of ["w","h","r"]) p[q]=from[q]+(to[q]-from[q])*e;
+    setMouth(svg,p); if(k<1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); }); }
+async function playMouth(svg,frames,{hold=700}={}){ for(let i=0;i<frames.length;i++){ await tweenMouth(svg,MOUTH[frames[i]],i?320:240); await new Promise(r=>setTimeout(r,i===frames.length-1?hold:380)); } await tweenMouth(svg,MOUTH_REST,300); }
+function sayVowel(svg,G,cb){ speak(G.ko,{lang:"ko",rate:.75}); playMouth(svg,G.frames,{hold:G.frames.length>1?520:820}).then(()=>cb&&cb()); }
+/* 단어에서 목표 소리 글자에 색칠 */
+function markSound(en,sound){ const v=sound.split("-")[1], long=sound.startsWith("long"), lw=en.toLowerCase();
+  const on=new Array(en.length).fill(0);
+  if(long){ const teams={a:["ai","ay"],e:["ee","ea"],i:["igh","ie"],o:["oa","ow","oe"],u:["ue","ui","ew"]}[v]||[]; let hit=false;
+    teams.forEach(t=>{ let i=lw.indexOf(t); while(i>=0){ for(let j=0;j<t.length;j++) on[i+j]=1; hit=true; i=lw.indexOf(t,i+1);} });
+    if(!hit){ lw.split("").forEach((c,i)=>{ if(c===v && /[^aeiou\s]/.test(lw[i+1]||"") && lw[i+2]==="e" && !/[a-z]/.test(lw[i+3]||"")){ on[i]=1; on[i+2]=2; } }); }
+    if(!on.some(Boolean)) lw.split("").forEach((c,i)=>{ if(c===v) on[i]=1; });
+  } else lw.split("").forEach((c,i)=>{ if(c===v && !/[aeiou]/.test(lw[i+1]||"") && !/[aeiou]/.test(lw[i-1]||"")) on[i]=1; });
+  return {html:en.split("").map((c,i)=>on[i]===1?`<b class="sv">${esc(c)}</b>`:on[i]===2?`<b class="se">${esc(c)}</b>`:esc(c)).join(""), has:on.some(x=>x===1)};
+}
+function gSound(title,key,ic){
+  const {body,setProg}=frame(title,ic), b=book(), G=SOUND_GUIDE[b.sound];
+  if(!G){ body.innerHTML=`<p class="sub">이 책은 소리 연습이 없어요</p>`; later(()=>finish(key,title,3),800); return; }
+  const v=b.vowel, words=b.words.filter(w=>markSound(w.en,b.sound).has).slice(0,8), list=words.length?words:b.words.slice(0,5);
+  let reps=0, step=0, cam=null;
+  const stopCam=()=>{ try{ cam&&cam.getTracks().forEach(t=>t.stop()); }catch(e){} cam=null; };
+  gSound._stop=stopCam;
+  function intro(){
+    setProg(0,"소리 알기");
+    body.innerHTML=`<div class="sndwrap">
+      <div class="sndleft"><div class="sndletter"><span class="en">${v}</span><small>${esc(b.soundName)}</small></div>
+        <div class="sndko">${ICON("speaker")} <b>${G.ko}</b></div><p class="sndhint">${G.hint}</p>${G.spell?`<p class="sndspell en">${G.spell}</p>`:""}</div>
+      <div class="sndface"><div class="mrow"><div class="mwrap">${mouthFace("mf1")}</div><video id="mirror" playsinline muted autoplay></video></div><p class="sndtip">${G.tip}</p></div></div>
+      <div class="reps">${[0,1,2].map(i=>STAR(i<reps)).join("")}</div>
+      <div class="btnrow"><button class="big" id="ls">${ICON("speaker")} 소리 듣기</button><button class="big pink" id="me">${ICON("lips")} 따라 하기</button><button class="big alt" id="mr">${ICON("eye")} 거울 보기</button></div>
+      <div class="btnrow"><button class="big green ${reps<3?"dim":""}" id="nx">단어로 연습 ${ICON("right")}</button></div>`;
+    const svg=body.querySelector("#mf1"); setMouth(svg,MOUTH_REST);
+    body.querySelector("#ls").onclick=()=>sayVowel(svg,G);
+    body.querySelector("#me").onclick=()=>{ sayVowel(svg,G,()=>{ kkShow({img:"talk",say:`이제 너 차례!<br><b style="font-size:34px">${G.ko}</b>`,mode:"pop",fx:null,ms:1500});
+        later(()=>{ reps=Math.min(3,reps+1); beep("good"); body.querySelector(".reps").innerHTML=[0,1,2].map(i=>STAR(i<reps)).join(""); if(reps>=3){ body.querySelector("#nx").classList.remove("dim"); cheer(true); } },1700); }); };
+    body.querySelector("#mr").onclick=async()=>{ const vd=body.querySelector("#mirror");
+      if(cam){ stopCam(); vd.classList.remove("on"); return; }
+      try{ cam=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"},audio:false}); vd.srcObject=cam; vd.classList.add("on"); }
+      catch(e){ kkShow({img:"talk",say:"카메라를 켤 수 없어요<br><small>설정에서 카메라를 허용해 주세요</small>",mode:"pop",fx:null,ms:2200}); } };
+    body.querySelector("#nx").onclick=()=>{ if(reps<3){ beep("bad"); kkShow({img:"must",say:"따라 하기 3번 먼저!",mode:"pop",fx:null,ms:1500}); speak("따라 하기 세 번 먼저!",{lang:"ko"}); return; } stopCam(); step=0; word(); };
+    later(()=>sayVowel(svg,G),500);
+  }
+  function word(){
+    const w=list[step]; setProg(step/list.length,`단어 ${step+1} / ${list.length}`);
+    const m=markSound(w.en,b.sound);
+    body.innerHTML=`<div class="sndwrap"><div class="sndword"><div class="pic">${PIC(w.en)}</div><div class="en wbig">${m.html}</div><div class="ko">${esc(w.ko)}</div></div>
+      <div class="sndface small"><div class="mwrap">${mouthFace("mf2")}</div><div class="sndko">${ICON("speaker")} <b>${G.ko}</b></div></div></div>
+      <div class="btnrow"><button class="big" id="ls">${ICON("speaker")} 듣기</button><button class="big green" id="ok">${ICON("check")} 따라 했어요</button></div>${swipeHint()}`;
+    const svg=body.querySelector("#mf2"); setMouth(svg,MOUTH_REST);
+    const play=()=>sayVowel(svg,G,()=>later(()=>speak(w.en),150));
+    body.querySelector("#ls").onclick=play;
+    const next=()=>{ beep("good"); GAME.pts+=1; hudDraw(); step++; if(step>=list.length){ setProg(1,"완료!"); finish(key,title,3); } else word(); };
+    body.querySelector("#ok").onclick=next;
+    onSwipe(body.querySelector(".sndwrap"),next,()=>{ if(step>0){ step--; word(); } else intro(); });
+    later(play,400);
+  }
+  intro();
 }
 
 /* =========================================================
