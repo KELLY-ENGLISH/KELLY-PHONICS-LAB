@@ -4233,7 +4233,7 @@ function openSet(id,bookIdx){
   const cls=MISSIONS.filter(m=>m.group==="class"), home=MISSIONS.filter(m=>m.group==="home");
   const left=cls.filter(m=>m.req&&!isDone(m));
   const card=(m,i,box)=>{
-    const done=isDone(m), locked=m.test&&left.length>0&&!done&&!(USER&&USER.guest), best=SAVE.best[`${id}-${curBook}-${m.id}`];
+    const done=isDone(m), locked=m.test&&left.length>0&&!done, best=SAVE.best[`${id}-${curBook}-${m.id}`];
     const ready=m.test&&!locked&&!done;
     const b=$(`<button class="mission ${done?'is-done':''} ${locked?'locked':''} ${ready?'ready':''}" style="background:${m.color}"><span class="num">${i+1}</span>
       ${done?`<span class="donebig">${ICON("check")}</span>`:''}${locked?`<span class="lockbig">${ICON("lock")}</span>`:''}
