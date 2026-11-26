@@ -2507,10 +2507,429 @@ const ART=(()=>{
     glide:()=>picC("#DDF3FF",`${cloudP(50,150,.45)}${cloudP(160,170,.35)}${g("translate(100 96) rotate(10)",`<path d="M-90 0 Q0 -30 90 0 Q0 -10 -90 0Z" fill="#FFC83D" stroke="${O}" stroke-width="4" stroke-linejoin="round"/><path d="M-20 -6 Q0 30 20 -6Z" fill="#4DA3FF" stroke="${O}" stroke-width="4"/>${g("translate(0 18) scale(.28)",kidHead({mood:"joy"}))}`)}<path d="M20 50 Q50 70 40 100" stroke="#fff" stroke-width="5" fill="none" stroke-dasharray="6 8" stroke-linecap="round"/>`),
     grand:()=>picC("#E3F3FF",g("translate(100 170) scale(.82)",`<rect x="-70" y="-90" width="140" height="90" fill="#F2E6D8" stroke="${O}" stroke-width="4"/>${[-90,50].map(a=>`<rect x="${a}" y="-120" width="40" height="120" fill="#E9DCCB" stroke="${O}" stroke-width="4"/><path d="M${a-4} -120 L${a+20} -150 L${a+44} -120Z" fill="#4DA3FF" stroke="${O}" stroke-width="4" stroke-linejoin="round"/><path d="M${a+20} -150 v-14 l12 5 l-12 5" fill="#E8333A" stroke="${O}" stroke-width="2"/>`).join("")}<path d="M-30 -90 L0 -130 L30 -90Z" fill="#4DA3FF" stroke="${O}" stroke-width="4" stroke-linejoin="round"/>${[-60,-40,-20,0,20,40].map(a=>`<rect x="${a}" y="-104" width="12" height="14" fill="#F2E6D8" stroke="${O}" stroke-width="3"/>`).join("")}<path d="M-18 0 V-34 Q0 -52 18 -34 V0Z" fill="#8A5A2B" stroke="${O}" stroke-width="4"/>${[-50,40].map(a=>`<rect x="${a}" y="-64" width="12" height="20" rx="6" fill="#4DA3FF" stroke="${O}" stroke-width="3"/>`).join("")}`)),
   });
+  /* ===== 2237 Rat Naps · Fox Hops ===== */
+  const efan=(x,y,s=1,rot=0,spin=true)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<path d="M-10 0 Q-40 30 -60 60" stroke="${O}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M-44 70 Q0 52 44 70 L36 82 L-36 82Z" fill="#FFC21E" stroke="#B88400" stroke-width="4" stroke-linejoin="round"/><path d="M-6 70 L-8 10 L8 10 L6 70Z" fill="#FFD43B" stroke="#B88400" stroke-width="4"/>
+    <ellipse cx="0" cy="-30" rx="34" ry="30" fill="#FFD43B" stroke="#B88400" stroke-width="4"/>
+    <circle cx="0" cy="-70" r="70" fill="#EAF6FF" stroke="#5A7A99" stroke-width="5"/>${spin?`<circle cx="0" cy="-70" r="52" fill="none" stroke="#9BD3FF" stroke-width="16" opacity=".7"/><circle cx="0" cy="-70" r="30" fill="none" stroke="#BDE3FF" stroke-width="10" opacity=".7"/>`:[0,120,240].map(a=>`<ellipse cx="0" cy="-104" rx="14" ry="30" fill="#9BD3FF" stroke="#5A7A99" stroke-width="3" transform="rotate(${a} 0 -70)"/>`).join("")}
+    ${[-70,-35,0,35,70].map(a=>`<path d="M${a} ${-70-Math.sqrt(4900-a*a)} L${a} ${-70+Math.sqrt(4900-a*a)}" stroke="#5A7A99" stroke-width="2" opacity=".6"/>`).join("")}<path d="M-70 -70 H70" stroke="#5A7A99" stroke-width="2" opacity=".6"/>
+    <circle cx="0" cy="-70" r="14" fill="#FFD43B" stroke="#B88400" stroke-width="4"/>`);
+  const wind=(x,y,s=1,flip=false)=>g(`translate(${x} ${y}) scale(${flip?-s:s} ${s})`,[0,26,52].map((d,i)=>`<path d="M0 ${d} Q-60 ${d-14} -120 ${d} q-24 6 -18 -14 q8 -14 20 -4" stroke="#7FC8EE" stroke-width="7" fill="none" stroke-linecap="round" opacity="${1-i*.2}"/>`).join(""));
+  const zzz=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,[[0,0,1],[34,-40,.75],[60,-74,.55]].map(([a,b,k])=>`<path d="M${a} ${b} h${30*k} l${-30*k} ${30*k} h${30*k}" stroke="#7048E8" stroke-width="${8*k}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`).join(""));
+  const bonk=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M0 -30 L8 -10 L30 -14 L14 2 L26 22 L4 12 L-8 32 L-10 10 L-32 8 L-14 -4 L-22 -26Z" fill="#FFE066" stroke="#E8590C" stroke-width="4" stroke-linejoin="round"/>`);
+  const ratHome=(inner)=>scene(`<rect width="800" height="520" fill="#FFF6E5"/><rect y="0" width="800" height="300" fill="#FDEBD3"/>${[...Array(9)].map((_,i)=>`<rect x="${i*92+20}" y="0" width="46" height="300" fill="#FBE0BF" opacity=".55"/>`).join("")}<rect y="300" width="800" height="220" fill="#E8C79C"/><path d="M0 300 H800" stroke="#C9A06E" stroke-width="6"/>${[340,390,440,490].map(y=>`<path d="M0 ${y} H800" stroke="#D9B585" stroke-width="3"/>`).join("")}${inner}`);
+  const plainBg=(inner,c="#FFF8EE")=>scene(`<rect width="800" height="520" fill="${c}"/>${[[120,90],[680,110],[90,400],[700,420],[400,60]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="6" fill="#FFC9A8" opacity=".7"/>`).join("")}${inner}`);
+  const ratHat=(o)=>{ const s=o.s||1; return rat(o)+tanHat(o.x+(o.hx||0)*s,o.y-268*s+(o.hy||0)*s,.5*s,o.hr||0); };
+  const cotS=(x,y,s=1,bend=0,broke=false)=>g(`translate(${x} ${y}) scale(${s})`,`${broke?`<path d="M-170 40 L-110 -10 L-40 30 L30 -16 L110 30 L170 -6" stroke="#5A8AB0" stroke-width="10" fill="none" stroke-linejoin="round"/><path d="M-110 -10 L-130 50 M110 30 L130 60" stroke="#5A8AB0" stroke-width="8"/><circle cx="-130" cy="56" r="10" fill="#E8333A"/><circle cx="132" cy="66" r="10" fill="#E8333A"/>`:
+    `<path d="M-150 0 L-130 60 M150 0 L130 60 M-60 0 L-80 60 M60 0 L80 60" stroke="#5A8AB0" stroke-width="9" stroke-linecap="round"/>${[[-130,60],[130,60],[-80,60],[80,60]].map(([a,b])=>`<circle cx="${a}" cy="${b+6}" r="10" fill="#E8333A" stroke="${O}" stroke-width="3"/>`).join("")}<rect x="-170" y="-8" width="340" height="16" rx="6" fill="#9BC7E8" stroke="#5A8AB0" stroke-width="5"/>`}
+    <path d="M-160 ${-14+bend*.2} Q-80 ${-30-bend} 0 ${-20+bend} Q80 ${-30-bend} 160 ${-14+bend*.2} L160 ${-2+bend*.2} Q80 ${-16-bend} 0 ${-6+bend} Q-80 ${-16-bend} -160 ${-2+bend*.2}Z" fill="#F2D27A" stroke="#B88A2E" stroke-width="5" stroke-linejoin="round"/>
+    ${[-100,-30,40,110].map(a=>`<circle cx="${a}" cy="${-18+(Math.abs(a)<60?bend:-bend*.6)}" r="4" fill="#B88A2E"/>`).join("")}`);
+  const puff=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-30 0 a14 14 0 0 1 10 -24 a16 16 0 0 1 28 -6 a14 14 0 0 1 24 10 a12 12 0 0 1 -2 22 a14 14 0 0 1 -26 6 a14 14 0 0 1 -24 0 a12 12 0 0 1 -10 -8Z" fill="#fff" stroke="#7FC8EE" stroke-width="4"/>`);
+  Object.assign(S,{
+    /* Rat Naps */
+    rn1:()=>plainBg(`${tanHat(400,300,1.3,-8)}${sparkle(230,170,.9)}${sparkle(590,190,.7)}`),
+    rn2:()=>plainBg(`${tanHat(400,280,1.25,-24)}${motion(200,180,3,60,-20)}${motion(600,330,3,60,160)}${sparkle(610,150,.7)}`),
+    rn3:()=>ratHome(`${shadow(400,470,130).replace("#2E6B25","#8A5A2B")}${ratHat({x:400,y:470,s:1.1,mood:"happy",hr:-4})}${motion(560,140,3,30,40)}`),
+    rn4:()=>ratHome(`${shadow(400,468,120).replace("#2E6B25","#8A5A2B")}${ratHat({x:400,y:466,s:.95,mood:"joy",hr:-6})}${sparkle(600,160,.7)}`),
+    rn5:()=>ratHome(`${shadow(330,468,120).replace("#2E6B25","#8A5A2B")}${ratHat({x:320,y:466,s:.82,mood:"happy",hr:-6})}${efan(640,410,.95)}${wind(540,230,.9)}`),
+    rn6:()=>ratHome(`${rat({x:360,y:470,s:.95,mood:"happy",pose:"flat"})}${tanHat(250,410,.42,-70)}${efan(660,410,.9)}${wind(560,280,.8)}${zzz(470,250,1)}`),
+    rn7:()=>ratHome(`${efan(470,420,1.05,-10)}${motion(330,420,3,40,0)}${[[360,470],[580,470]].map(([a,b])=>bonk(a,b,.45)).join("")}<path d="M120 470 Q200 420 280 460 Q320 480 360 460" stroke="#C98A7E" stroke-width="10" fill="none" stroke-linecap="round"/>`),
+    rn8:()=>ratHome(`${rat({x:330,y:470,s:.9,mood:"ouch",pose:"flat",rot:-6})}${tanHat(220,400,.42,-70)}${efan(600,400,.85,-24)}${bonk(470,300,1)}${motion(520,240,3,40,200)}`),
+    rn9:()=>ratHome(`${shadow(400,470,120).replace("#2E6B25","#8A5A2B")}${rat({x:400,y:468,s:.95,mood:"yell"})}${tanHat(430,110,.6,-28)}${motion(380,160,3,40,-90)}${drop(250,170,1)}${drop(560,190,.9)}`),
+    rn10:()=>ratHome(`${cat({x:300,y:470,s:.85,c:"ora",mood:"worried"})}${tanHat(300,262,.46,10)}${motion(300,180,3,36,90)}${rat({x:620,y:480,s:.55,mood:"worried",rot:12})}${dust(520,470)}${speed(440,380,3,60)}`),
+    /* Fox Hops */
+    fh1:()=>day(`${shadow(400,456,110)}${fox({x:400,y:452,mood:"happy"})}`),
+    fh2:()=>day(`${shadow(400,456,80)}${fox({x:400,y:350,mood:"joy",rot:-8})}${motion(400,380,3,40,90)}${puff(400,450,1)}`),
+    fh3:()=>day(`${hill(400,260,350)}${fox({x:400,y:330,s:.72,mood:"joy",rot:-10})}${puff(400,348,1)}${motion(400,300,3,36,90)}`),
+    fh4:()=>day(`${cotS(400,410,1.1,14)}${fox({x:410,y:330,s:.66,mood:"joy",rot:-12})}${motion(410,350,3,30,90)}${puff(320,380,.8)}`),
+    fh5:()=>day(`${cotS(400,420,1.1,24)}${fox({x:400,y:330,s:.66,mood:"joy",rot:14})}${[300,500].map(x=>`<path d="M${x} 360 q-30 -40 0 -80 q30 -40 0 -80" stroke="#7FC8EE" stroke-width="7" fill="none" stroke-linecap="round"/>`).join("")}${puff(260,300,.8)}${puff(560,330,.8)}`),
+    fh6:()=>day(`${cotS(400,420,1.1,30)}${fox({x:400,y:330,s:.66,mood:"worried",pose:"fall",rot:-14})}${drop(280,90,1)}${drop(520,80,.9)}${puff(300,330,.8)}${puff(520,340,.9)}`),
+    fh7:()=>day(`${cotS(400,430,1.1,-40)}${fox({x:430,y:270,s:.58,mood:"worried",rot:8})}${motion(300,300,3,40,90)}${puff(250,330,.8)}${bonk(560,380,.6)}`),
+    fh8:()=>day(`${cotS(400,440,1.1,0,true)}${fox({x:400,y:250,s:.75,mood:"ouch",pose:"fall",rot:70})}${puff(520,240,.8)}${puff(300,340,.7)}`),
+    fh9:()=>day(`${cotS(400,450,1.1,0,true)}${fox({x:400,y:420,s:.7,mood:"ouch",pose:"fall",rot:90})}${bonk(330,280,.8)}${bonk(500,300,.6)}${puff(560,180,.8)}${puff(250,190,.7)}${stars(400,250,1.6)}`),
+    fh10:()=>day(`${cotS(560,450,.9,0,true)}${g("translate(420 330) rotate(-30)",`<path d="M-120 0 Q0 -40 120 0 L120 16 Q0 -24 -120 16Z" fill="#F2D27A" stroke="#B88A2E" stroke-width="5"/>`)}${fox({x:300,y:460,s:.7,mood:"tired",pose:"fall",rot:-20})}${stars(300,180,1.2)}`)
+  });
+  Object.assign(P,{
+    efan:()=>picC("#E3F3FF",efan(100,150,.62)),
+    ratNapsCover:()=>picC("#FFF1D6",`${g("translate(100 196) scale(.5)",rat({x:0,y:0,mood:"happy"}))}${tanHat(100,196-134,.25,-6)}`),
+    foxHopsCover:()=>picC("#E6F7D8",`${g("translate(100 176) scale(.5) rotate(-8)",fox({x:0,y:0,mood:"joy"}))}${puff(100,188,.5)}`)
+  });
+  /* ===== 2235 Pig Sits ===== */
+  const bibS=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<defs><pattern id="chk" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#fff"/><rect width="12" height="12" fill="#E8333A"/><rect x="12" y="12" width="12" height="12" fill="#E8333A"/></pattern></defs>
+    <path d="M-60 -60 Q-90 40 0 80 Q90 40 60 -60 Q0 -30 -60 -60Z" fill="url(#chk)" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M-60 -60 q-30 -20 -50 -6 M60 -60 q30 -20 50 -6" stroke="#C2252A" stroke-width="7" fill="none" stroke-linecap="round"/>`);
+  const hook=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-16" y="-60" width="32" height="56" rx="4" fill="#FFC21E" stroke="#B88400" stroke-width="4"/><circle cx="0" cy="-44" r="4" fill="#B88400"/><circle cx="0" cy="-22" r="4" fill="#B88400"/><path d="M0 -6 v16 q0 14 -14 14 q-12 0 -12 -12" stroke="#B88400" stroke-width="7" fill="none" stroke-linecap="round"/>`);
+  const picnic=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-150" y="-20" width="300" height="30" rx="6" fill="#FFD43B" stroke="#B88400" stroke-width="5"/><rect x="-130" y="10" width="26" height="70" rx="6" fill="#FFC21E" stroke="#B88400" stroke-width="4"/><rect x="104" y="10" width="26" height="70" rx="6" fill="#FFC21E" stroke="#B88400" stroke-width="4"/>
+    <ellipse cx="-20" cy="-24" rx="70" ry="18" fill="#fff" stroke="#9AA4AE" stroke-width="4"/><ellipse cx="-20" cy="-24" rx="48" ry="11" fill="#EAF6FF"/>`);
+  const blueBin=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-80" y="-70" width="160" height="70" rx="8" fill="#2F8FC9" stroke="${O}" stroke-width="5"/><rect x="-88" y="-84" width="176" height="20" rx="6" fill="#4DA8DD" stroke="${O}" stroke-width="5"/><rect x="58" y="-72" width="16" height="30" rx="4" fill="#FFD43B" stroke="#B88400" stroke-width="3"/>`);
+  const pinS=(x,y,s=1,rot=-30)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<path d="M0 0 V-54" stroke="#9AA4AE" stroke-width="5" stroke-linecap="round"/><circle cx="0" cy="-60" r="11" fill="#E8333A" stroke="${O}" stroke-width="3"/><circle cx="-3" cy="-63" r="3" fill="#fff"/>`);
+  const grassBg=(inner)=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><ellipse cx="400" cy="440" rx="360" ry="90" fill="#8BD16A"/>${[[140,430],[260,470],[520,470],[650,430],[400,490]].map(([a,b])=>`<path d="M${a} ${b} l-8 -18 M${a} ${b} l0 -22 M${a} ${b} l8 -18" stroke="#3F8F3A" stroke-width="4" stroke-linecap="round"/>`).join("")}${inner}`);
+  const pigBib=(o)=>{ const s=o.s||1; return pig(o)+bibS(o.x,o.y-150*s,.62*s,o.rot||0); };
+  Object.assign(S,{
+    ps1:()=>plainBg(`${hook(400,120,1.3)}${bibS(400,250,1.35)}${motion(250,250,3,30,90)}${motion(560,250,3,30,90)}`),
+    ps2:()=>plainBg(`${hook(460,110,1.2)}${bibS(460,260,1.7)}${hand({x:170,y:270,s:1.3,type:"open",skin:"#F7B7A3",sleeve:"#F7B7A3",rot:-90})}`),
+    ps3:()=>grassBg(`${pigBib({x:400,y:450,s:1,mood:"happy",pose:"hold"})}${sparkle(560,180,.9)}`),
+    ps4:()=>grassBg(`${pigBib({x:400,y:450,s:1.05,mood:"joy"})}${sparkle(240,180,.8)}${sparkle(580,200,.7)}`),
+    ps5:()=>grassBg(`${blueBin(560,440,.9)}${pigBib({x:470,y:400,s:.9,mood:"happy",pose:"sit"})}${picnic(230,400,.9)}`),
+    ps6:()=>grassBg(`${blueBin(520,450,1.1)}${pigBib({x:450,y:400,s:.9,mood:"happy",pose:"sit"})}${picnic(200,410,.8)}`),
+    ps7:()=>grassBg(`${blueBin(400,450,1.6)}${pinS(440,330,1.4,0)}${[0,45,90,135,180,225,270,315].map(a=>`<path d="M440 270 l${(40*Math.cos(a*Math.PI/180)).toFixed(0)} ${(40*Math.sin(a*Math.PI/180)).toFixed(0)}" stroke="#FFD43B" stroke-width="5" stroke-linecap="round"/>`).join("")}`),
+    ps8:()=>plainBg(`${g("translate(400 330) scale(2.4)",pigHead("ouch"))}${drop(200,140,1.2)}${drop(610,150,1)}${motion(400,60,3,40,90)}`),
+    ps9:()=>grassBg(`${blueBin(400,450,1)}${boom(400,350,1)}${pigBib({x:400,y:330,s:.85,mood:"ouch",pose:"up",rot:-10})}${stars(400,80,1.6)}`),
+    ps10:()=>grassBg(`${pigBib({x:400,y:450,s:1,mood:"cry",pose:"hold"})}${drop(260,170,1)}${drop(540,160,1)}${stars(250,300,1.2)}`)
+  });
+  Object.assign(P,{
+    bib:()=>picC("#E3F3FF",bibS(100,104,.95)),
+    pigSitsCover:()=>picC("#E6F7D8",`${g("translate(100 196) scale(.5)",pig({x:0,y:0,mood:"happy"}))}${bibS(100,122,.32)}`)
+  });
+  /* ===== 2235 Bug on a Rug ===== */
+  const rugR=(x,y,s=1,rot=0,wave=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`${[-1,1].map(d=>[...Array(7)].map((_,i)=>`<path d="M${d*160} ${-30+i*10} l${d*26} ${wave?(i%2?-6:6):0}" stroke="#E8D3B0" stroke-width="5" stroke-linecap="round"/>`).join("")).join("")}
+    <path d="M-160 -36 Q-80 ${-36-wave} 0 -36 Q80 ${-36+wave} 160 -36 L160 36 Q80 ${36+wave} 0 36 Q-80 ${36-wave} -160 36Z" fill="#C2302A" stroke="#7A1A14" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M-140 -22 Q-70 ${-22-wave} 0 -22 Q70 ${-22+wave} 140 -22 L140 22 Q70 ${22+wave} 0 22 Q-70 ${22-wave} -140 22Z" fill="none" stroke="#FFD43B" stroke-width="5"/>
+    ${[-100,-50,0,50,100].map((a,i)=>`<circle cx="${a}" cy="${(i%2?wave:-wave)*.3}" r="9" fill="${["#4DA3FF","#38C47E","#FFD43B","#4DA3FF","#38C47E"][i]}"/>`).join("")}`);
+  const mudPit=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<ellipse rx="230" ry="50" fill="#7A4A22" stroke="#4A2A10" stroke-width="5"/><ellipse rx="180" ry="32" fill="#8E5A2C"/>${[[-150,-40],[-60,-70],[40,-64],[140,-44],[-200,-10],[200,-16]].map(([a,b],i)=>`<ellipse cx="${a}" cy="${b}" rx="${10+i%3*4}" ry="${7+i%2*3}" fill="#8E5A2C" stroke="#4A2A10" stroke-width="3"/>`).join("")}`);
+  const field=(inner)=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><ellipse cx="400" cy="450" rx="370" ry="80" fill="#8BD16A"/>${[[140,440],[300,480],[520,480],[660,440]].map(([a,b])=>`<path d="M${a} ${b} l-8 -18 M${a} ${b} l0 -22 M${a} ${b} l8 -18" stroke="#3F8F3A" stroke-width="4" stroke-linecap="round"/>`).join("")}${inner}`);
+  Object.assign(S,{
+    br1:()=>field(`${bug({x:400,y:300,s:1.3,mood:"joy",pose:"run",rot:-6})}${puff(250,420,1)}${puff(560,430,.9)}`),
+    br2:()=>field(`${rugR(400,450,1.1)}${bug({x:400,y:230,s:1.1,mood:"joy",pose:"run"})}${motion(400,330,3,36,90)}`),
+    br3:()=>field(`${rugR(400,450,1.15)}${bug({x:400,y:330,s:1.2,mood:"happy",pose:"up"})}`),
+    br4:()=>plainBg(`${bug({x:400,y:280,s:1.5,mood:"happy",pose:"up"})}${musicN(200,140,1.6)}${musicN(600,120,1.4,"#FF6B9A")}${musicN(620,320,1.2,"#38C47E")}${musicN(180,340,1.2,"#FFC21E")}`),
+    br5:()=>field(`${rugR(400,450,1.15)}${bug({x:400,y:330,s:1.2,mood:"joy",pose:"up"})}${musicN(190,180,1.4)}${musicN(620,170,1.3,"#FF6B9A")}`),
+    br6:()=>field(`${rugR(400,390,1.1,0,22)}${bug({x:420,y:220,s:1,mood:"worried",pose:"run",rot:12})}${motion(400,420,3,40,-90)}`),
+    br7:()=>scene(`<rect width="800" height="520" fill="#DDF3FF"/>${cloudP(140,120,1.1)}${cloudP(650,400,1)}${cloudP(200,430,.8)}${rugR(400,300,1.1,-20,24)}${bug({x:400,y:230,s:.95,mood:"worried",pose:"up",rot:-30})}${motion(580,330,3,50,160)}`),
+    br8:()=>scene(`<rect width="800" height="520" fill="#DDF3FF"/>${cloudP(140,420,1)}${cloudP(660,120,.9)}${rugR(470,210,.75,30,30)}${bug({x:350,y:330,s:1,mood:"yell",pose:"run",rot:-25})}${motion(200,200,3,60,0)}`),
+    br9:()=>scene(`<rect width="800" height="520" fill="#DDF3FF"/>${cloudP(150,430,1)}${cloudP(670,420,.9)}${rugR(470,200,.75,-30,30)}${bug({x:360,y:320,s:1,mood:"yell",pose:"run",rot:20})}${motion(220,180,3,60,0)}${motion(620,300,3,50,180)}`),
+    br10:()=>field(`${mudPit(400,440,1.1)}${bug({x:400,y:330,s:1,mood:"ouch",pose:"up",rot:160})}${rugR(560,140,.6,-35,30)}${[[260,380],[540,370],[330,330],[480,320]].map(([a,b])=>`<ellipse cx="${a}" cy="${b}" rx="12" ry="9" fill="#7A4A22" stroke="#4A2A10" stroke-width="3"/>`).join("")}`)
+  });
+  Object.assign(P,{
+    bugRugCover:()=>picC("#E6F7D8",`${rugR(100,176,.42)}${g("translate(100 100) scale(.52)",bug({x:0,y:0,mood:"joy",pose:"run"}))}`)
+  });
+  /* ===== 2201 A Bed for Pets ===== */
+  const petBed=(x,y,s=1,o={})=>{ const {pillows=false,blanket=false,messy=false}=o;
+    return g(`translate(${x} ${y}) scale(${s})`,`<path d="M-220 -10 L-220 -220 Q-220 -280 -150 -280 Q-80 -280 -80 -220 L-80 -110 Z" fill="#D9473A" stroke="#7A1E14" stroke-width="6" stroke-linejoin="round"/>
+    <rect x="-230" y="-60" width="460" height="70" rx="10" fill="#D9473A" stroke="#7A1E14" stroke-width="6"/>${[-190,190].map(a=>`<circle cx="${a}" cy="24" r="20" fill="#C23A2E" stroke="#7A1E14" stroke-width="5"/>`).join("")}
+    <rect x="-200" y="-110" width="410" height="56" rx="14" fill="#DDF0FF" stroke="#5A7A99" stroke-width="5"/>
+    ${pillows?[[-160,-150],[-90,-160]].map(([a,b])=>`<ellipse cx="${a}" cy="${b}" rx="64" ry="40" fill="#fff" stroke="#9AA4AE" stroke-width="5"/>${[[-20,-10],[10,8],[24,-14],[-30,14]].map(([c,d])=>`<circle cx="${a+c}" cy="${b+d}" r="4" fill="#E8333A"/>`).join("")}`).join(""):""}
+    ${blanket?`<path d="M-120 -120 Q20 ${messy?-170:-130} 210 -120 L210 -50 Q60 ${messy?-20:-44} -120 -50Z" fill="#9B2A3A" stroke="#5A1020" stroke-width="5" stroke-linejoin="round"/>${[[-60,-100],[20,-80],[100,-104],[160,-76],[-10,-110]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="4" fill="#FFB3C1"/>`).join("")}`:""}`); };
+  const tvS=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-60" y="0" width="120" height="30" rx="6" fill="#D9473A" stroke="#7A1E14" stroke-width="4"/><rect x="-80" y="-120" width="160" height="120" rx="14" fill="#9AA4AE" stroke="${O}" stroke-width="5"/><rect x="-64" y="-104" width="128" height="88" rx="8" fill="#BDE3FF"/><path d="M-50 -90 l30 0" stroke="#fff" stroke-width="6" stroke-linecap="round"/>`);
+  const denRoom=(inner)=>scene(`<rect width="800" height="520" fill="#FFF3DE"/><rect y="380" width="800" height="140" fill="#E8C79C"/><path d="M0 380 H800" stroke="#C9A06E" stroke-width="5"/>
+    <rect x="560" y="60" width="160" height="150" fill="#CFEAFF" stroke="#8A6A4A" stroke-width="6"/><path d="M640 60 V210 M560 135 H720" stroke="#8A6A4A" stroke-width="5"/><path d="M548 60 h184" stroke="#C98A3E" stroke-width="10" stroke-linecap="round"/><path d="M556 66 Q560 140 584 220 L556 220Z M724 66 Q720 140 696 220 L724 220Z" fill="#7CC36A" stroke="#3F8F3A" stroke-width="4"/>
+    <g transform="translate(560 440)"><rect x="-80" y="-24" width="160" height="48" fill="#FFD43B" stroke="#B88400" stroke-width="4"/><path d="M-70 0 l20 -14 l20 14 l20 -14 l20 14 l20 -14 l20 14 l20 -14 l20 14" stroke="#2F8FC9" stroke-width="8" fill="none"/></g>${inner}`);
+  const tray=(x,y,s=1,food="bone")=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-50" y="-14" width="100" height="28" rx="6" fill="#C9CED6" stroke="#5A6470" stroke-width="4"/>${food==="bone"?`<g transform="translate(0 -18)"><rect x="-26" y="-5" width="52" height="10" fill="#fff" stroke="#9AA4AE" stroke-width="2"/>${[-26,26].map(a=>`<circle cx="${a}" cy="-6" r="7" fill="#fff" stroke="#9AA4AE" stroke-width="2"/><circle cx="${a}" cy="6" r="7" fill="#fff" stroke="#9AA4AE" stroke-width="2"/>`).join("")}</g>`:food==="fish"?`<g transform="translate(0 -18)"><ellipse rx="24" ry="12" fill="#8E7CF0" stroke="#4A3AA0" stroke-width="3"/><path d="M22 0 l16 -12 v24z" fill="#8E7CF0" stroke="#4A3AA0" stroke-width="3"/><circle cx="-12" cy="-3" r="3" fill="${O}"/></g>`:[[-24,-20],[-8,-24],[8,-20],[24,-24],[0,-30]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="7" fill="#FFD43B" stroke="#B88400" stroke-width="2"/>`).join("")}`);
+  const pets=(o={})=>{ const {dx=0,dy=0,s=.6,mood="happy",dogX=0,dogY=0,duckX=0,duckY=0,catX=0,catY=0,rot=0}=o;
+    return dog({x:250+dx+dogX,y:430+dy+dogY,s,mood,rot})+duck({x:400+dx+duckX,y:430+dy+duckY,s,mood,rot:-rot})+cat({x:550+dx+catX,y:430+dy+catY,s:s*.9,c:"ora",mood,rot}); };
+  Object.assign(S,{
+    bp1:()=>denRoom(`${petBed(400,430,.9)}`),
+    bp2:()=>denRoom(`${petBed(400,430,.9,{pillows:true,blanket:true})}${sparkle(160,120,.9)}${sparkle(650,280,.7)}`),
+    bp3:()=>denRoom(`${petBed(330,430,.8,{pillows:true,blanket:true})}${dog({x:610,y:480,s:.5,mood:"joy"})}${cat({x:700,y:490,s:.42,c:"ora",mood:"joy"})}${duck({x:690,y:330,s:.45,mood:"joy",rot:-10})}${motion(560,300,3,40,180)}`),
+    bp4:()=>denRoom(`${petBed(360,430,.85,{pillows:true,blanket:true})}${duck({x:580,y:300,s:.5,mood:"joy",rot:-20})}${dog({x:470,y:330,s:.45,mood:"joy",rot:20})}${cat({x:660,y:330,s:.42,c:"ora",mood:"joy",rot:-15})}${motion(620,420,3,40,-90)}`),
+    bp5:()=>denRoom(`${petBed(400,470,.85,{pillows:true,blanket:true,messy:true})}${dog({x:230,y:260,s:.48,mood:"joy",rot:-20})}${duck({x:400,y:230,s:.5,mood:"joy"})}${cat({x:580,y:260,s:.44,c:"ora",mood:"joy",rot:20})}${stars(400,70,1.4)}`),
+    bp6:()=>denRoom(`${tvS(620,400,1)}${petBed(290,450,.75,{pillows:true,blanket:true,messy:true})}${dog({x:170,y:250,s:.42,mood:"joy",rot:-15})}${duck({x:330,y:240,s:.44,mood:"joy",rot:10})}${cat({x:450,y:260,s:.38,c:"ora",mood:"joy"})}`),
+    bp7:()=>denRoom(`${petBed(400,470,.85,{pillows:true})}${dog({x:240,y:400,s:.5,mood:"happy"})}${duck({x:400,y:390,s:.52,mood:"happy"})}${cat({x:560,y:400,s:.46,c:"ora",mood:"happy"})}${petBed(400,470,.85,{blanket:true}).replace(/<path d="M-220 -10[^>]*>/,"").replace(/<rect x="-230"[^>]*>/,"").replace(/<rect x="-200"[^>]*>/,"")}`),
+    bp8:()=>denRoom(`${petBed(400,470,.85,{pillows:true})}${dog({x:240,y:400,s:.5,mood:"joy"})}${duck({x:400,y:390,s:.52,mood:"joy"})}${cat({x:560,y:400,s:.46,c:"ora",mood:"joy"})}${tray(240,360,.9,"bone")}${tray(400,350,.9,"seed")}${tray(560,360,.9,"fish")}`),
+    bp9:()=>denRoom(`${tvS(640,400,.9)}${petBed(300,460,.75,{pillows:true,blanket:true})}${dog({x:200,y:380,s:.45,mood:"joy"})}${duck({x:330,y:360,s:.46,mood:"joy"})}${cat({x:460,y:300,s:.4,c:"ora",mood:"joy",rot:-10})}${tray(200,340,.8,"bone")}${tray(330,320,.8,"seed")}${tray(480,200,.8,"fish")}`),
+    bp10:()=>denRoom(`${petBed(400,480,.85,{pillows:true,blanket:true,messy:true})}${dog({x:200,y:260,s:.44,mood:"yell",rot:-25})}${duck({x:400,y:250,s:.46,mood:"yell",rot:15})}${cat({x:600,y:260,s:.4,c:"ora",mood:"yell",rot:25})}${tray(300,120,.7,"seed")}${tray(520,140,.7,"fish")}${[[160,140],[460,90],[650,120],[260,320],[540,330]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="8" fill="#FFD43B" stroke="#B88400" stroke-width="2"/>`).join("")}`)
+  });
+  Object.assign(P,{
+    bedPetsCover:()=>picC("#FFF3DE",`${petBed(100,160,.32,{pillows:true,blanket:true})}${g("translate(70 120) scale(.22)",dog({x:0,y:0,mood:"joy"}))}${g("translate(130 120) scale(.2)",cat({x:0,y:0,c:"ora",mood:"joy"}))}`)
+  });
+  /* ===== 2201 The Plant ===== */
+  const trapHead=(x,y,s=1,rot=0,open=1,inner="")=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`${inner?g(`translate(0 ${-10*open})`,inner):""}
+    <path d="M-50 0 Q-50 ${-40-30*open} 0 ${-44-30*open} Q50 ${-40-30*open} 50 0 Z" fill="#5DBB63" stroke="#2F7A35" stroke-width="5"/>
+    <path d="M-44 0 ${[...Array(9)].map((_,i)=>`L${-40+i*10} ${i%2?-10:0}`).join(" ")} L44 0" stroke="#fff" stroke-width="4" fill="${open>.2?"#C2302A":"none"}"/>
+    <path d="M-50 0 Q-50 ${34+16*open} 0 ${38+16*open} Q50 ${34+16*open} 50 0 Z" fill="#4CAF50" stroke="#2F7A35" stroke-width="5"/>
+    ${[...Array(5)].map((_,i)=>`<path d="M${-52+i*26} ${i%2?-34:-40} l-8 -14 l14 6z" fill="#FFD43B" stroke="#B88400" stroke-width="2"/>`).join("")}`);
+  const flowerFace=(x,y,s=1,mood="happy",rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`${[...Array(10)].map((_,i)=>{const a=i*36*Math.PI/180;return `<circle cx="${(52*Math.cos(a)).toFixed(0)}" cy="${(52*Math.sin(a)).toFixed(0)}" r="26" fill="#FFD43B" stroke="#C99A00" stroke-width="4"/>`;}).join("")}<circle r="52" fill="#FFE066"/>${eyes(mood,-18,18,-8,.9)}${mouth(mood,0,18,.9)}`);
+  const stem=(x1,y1,x2,y2,c=40)=>`<path d="M${x1} ${y1} Q${(x1+x2)/2+c} ${(y1+y2)/2} ${x2} ${y2}" stroke="#2F7A35" stroke-width="18" fill="none" stroke-linecap="round"/><path d="M${x1} ${y1} Q${(x1+x2)/2+c} ${(y1+y2)/2} ${x2} ${y2}" stroke="#5DBB63" stroke-width="11" fill="none" stroke-linecap="round"/>`;
+  const leaves=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,[-70,-40,-15,15,40,70].map(a=>`<path d="M0 0 Q${a*1.4} -40 ${a*2.4} ${-30+Math.abs(a)*.4} Q${a*1.2} -10 0 0Z" fill="#5DBB63" stroke="#2F7A35" stroke-width="4"/>`).join(""));
+  const monster=(o={})=>{ const {x=400,y=440,s=1,mood="happy",open=1,heads=[[-170,-150,-25],[170,-160,25],[-200,-40,-60],[200,-50,60]],items=[]}=o;
+    return g(`translate(${x} ${y}) scale(${s})`,`${leaves(0,0,1)}${heads.map(([a,b])=>stem(0,-20,a,b,a>0?-30:30)).join("")}${stem(0,-20,0,-220,0)}
+      ${heads.map(([a,b,r],i)=>trapHead(a,b,.9,r,open,items[i]||"")).join("")}${flowerFace(0,-250,.9,mood)}`); };
+  const garden=(inner)=>scene(`<rect width="800" height="520" fill="#FFFDE9"/><ellipse cx="400" cy="470" rx="380" ry="70" fill="#C8E66A"/>${[[120,470],[300,500],[520,500],[690,470]].map(([a,b])=>`<path d="M${a} ${b} l-8 -18 M${a} ${b} l0 -22 M${a} ${b} l8 -18" stroke="#3F8F3A" stroke-width="4" stroke-linecap="round"/>`).join("")}${inner}`);
+  const blueAnt=(x,y,s=1,rot=0,mood="happy")=>antB(x,y,s,rot).replace(/#8A3B2A/g,"#2E7D8C").replace(/#A54A34/g,"#3FA2B3");
+  const carry=(x,y,item,s=1)=>`${item}${[-60,0,60].map(dx=>blueAnt(x+dx,y,s*.6,-10)).join("")}`;
+  const jarP=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-60" y="-40" width="120" height="90" rx="18" fill="#C2302A" stroke="#6B1410" stroke-width="5"/><rect x="-64" y="-58" width="128" height="22" rx="6" fill="#8A1A14" stroke="#4A0A08" stroke-width="4"/><rect x="-36" y="-6" width="72" height="34" rx="6" fill="#fff" stroke="#9AA4AE" stroke-width="3"/>${[-16,0,16].map(a=>`<circle cx="${a}" cy="11" r="8" fill="#E8333A"/>`).join("")}<path d="M-44 -24 v40" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".5"/>`);
+  const hamP=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<path d="M-70 -40 Q-20 -70 60 -40 Q100 -10 70 30 Q20 60 -60 40 Q-90 0 -70 -40Z" fill="#B5652E" stroke="#5A2A10" stroke-width="5"/><ellipse cx="-62" cy="0" rx="22" ry="40" fill="#F4A7A0" stroke="#5A2A10" stroke-width="4"/><ellipse cx="-62" cy="0" rx="8" ry="14" fill="#fff" stroke="#C98A7E" stroke-width="3"/><path d="M-20 -40 Q20 -50 50 -30" stroke="#D98A4E" stroke-width="7" fill="none" stroke-linecap="round"/>`);
+  const clamP=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<path d="M-80 0 Q-70 -60 0 -64 Q70 -60 80 0Z" fill="#E8D3A0" stroke="#8A6A3A" stroke-width="5"/><path d="M-80 0 Q-70 40 0 44 Q70 40 80 0Z" fill="#D9BF84" stroke="#8A6A3A" stroke-width="5"/>${[-50,-25,0,25,50].map(a=>`<path d="M0 -2 L${a} -56" stroke="#B59A64" stroke-width="3"/>`).join("")}`);
+  Object.assign(S,{
+    tp1:()=>garden(monster({x:400,y:470,s:.85,mood:"happy",open:.1})),
+    tp2:()=>garden(`${monster({x:400,y:400,s:.7,mood:"sly",open:1})}${[260,400,540].map((x,i)=>blueAnt(x,470,.7,0)).join("")}${motion(160,450,3,40,180)}`),
+    tp3:()=>garden(`${monster({x:330,y:470,s:.8,mood:"sly",open:.1,items:[blueAnt(0,-40,.5,30),"",blueAnt(0,-40,.5,-30),""]})}${blueAnt(620,440,.8,-10)}${drop(560,330,1)}`),
+    tp4:()=>garden(`${monster({x:400,y:220,s:.5,mood:"angry",open:.6,heads:[[-170,-150,-25],[170,-160,25]]})}<ellipse cx="400" cy="420" rx="150" ry="70" fill="#9AA4AE" stroke="#5A6470" stroke-width="5"/><rect x="330" y="330" width="140" height="90" rx="6" fill="#fff" stroke="#9AA4AE" stroke-width="4"/>${jarP(400,382,.4)}${[[220,460],[300,480],[500,480],[580,460]].map(([a,b])=>blueAnt(a,b,.6,0)).join("")}`),
+    tp5:()=>garden(`${hamP(400,250,1.6,-6)}${[300,400,500].map(x=>blueAnt(x,440,.7,-10)).join("")}${[300,400,500].map(x=>`<path d="M${x+20} 400 L${x+10} 320" stroke="#2E7D8C" stroke-width="6" stroke-linecap="round"/>`).join("")}${motion(180,420,3,40,180)}`),
+    tp6:()=>garden(`${clamP(400,260,1.7,-6)}${[300,400,500].map(x=>blueAnt(x,440,.7,-10)).join("")}${[300,400,500].map(x=>`<path d="M${x+20} 400 L${x+10} 320" stroke="#2E7D8C" stroke-width="6" stroke-linecap="round"/>`).join("")}${motion(180,420,3,40,180)}`),
+    tp7:()=>garden(`${jarP(400,240,1.6,-80)}${[300,400,500].map(x=>blueAnt(x,440,.7,-10)).join("")}${[300,400,500].map(x=>`<path d="M${x+20} 400 L${x+10} 320" stroke="#2E7D8C" stroke-width="6" stroke-linecap="round"/>`).join("")}${motion(180,420,3,40,180)}`),
+    tp8:()=>garden(`${monster({x:400,y:480,s:.8,mood:"joy",open:.2,heads:[[-230,-180,-20],[230,-180,20],[-110,-330,-10]]})}${hamP(216,300,.55,40)}${jarP(584,300,.5,25)}${clamP(312,180,.5,-10)}${blueAnt(150,120,.6,-40)}${blueAnt(680,120,.6,40)}${blueAnt(640,440,.6,10)}`),
+    tp9:()=>garden(`${[[180,330,-20],[330,230,15],[480,330,-10],[620,240,20],[400,420,0]].map(([a,b,r])=>blueAnt(a,b,.8,r)).join("")}${stars(400,90,1.6)}${sparkle(160,140,1)}${sparkle(650,400,.9)}`),
+    tp10:()=>garden(`${monster({x:220,y:300,s:.45,mood:"angry",open:1,heads:[[-170,-150,-25],[170,-160,25]]})}${[[420,430],[560,410],[690,440]].map(([a,b])=>blueAnt(a,b,.7,-8)).join("")}${speed(320,380,3,80)}${dust(380,460)}`)
+  });
+  Object.assign(P,{
+    plantCover:()=>picC("#FFFDE9",g("translate(100 196) scale(.36)",monster({x:0,y:0,mood:"happy",open:.6})))
+  });
+  /* ===== 2222 Hop, Frog, Hop ===== */
+  const sockS=(x,y,s=1,rot=0,lump=false)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`${sockP(0,0,1,"#F28A3A").replace(/#fff/g,"#FFC94D")}${lump?`<ellipse cx="-4" cy="10" rx="30" ry="26" fill="#E8742A" opacity=".6"/>${motion(0,-110,3,30,90)}`:""}`);
+  const clockM=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-120 60 L-120 -10 Q-120 -100 0 -100 Q120 -100 120 -10 L120 60Z" fill="#4CAF7A" stroke="#2A6A44" stroke-width="6"/><circle cx="0" cy="0" r="62" fill="#fff" stroke="#2A6A44" stroke-width="6"/>${[...Array(12)].map((_,i)=>{const a=i*Math.PI/6;return `<path d="M${(50*Math.cos(a)).toFixed(0)} ${(50*Math.sin(a)).toFixed(0)} L${(58*Math.cos(a)).toFixed(0)} ${(58*Math.sin(a)).toFixed(0)}" stroke="${O}" stroke-width="4"/>`;}).join("")}<path d="M0 0 L-22 -18 M0 0 L10 -40" stroke="#FFC21E" stroke-width="8" stroke-linecap="round"/><circle r="8" fill="#E8333A"/>${[-90,90].map(a=>`<ellipse cx="${a}" cy="66" rx="20" ry="8" fill="#A0643A"/>`).join("")}`);
+  const starBlock=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-90 -60 L-50 -100 L110 -100 L70 -60Z" fill="#EAD8A8" stroke="${O}" stroke-width="5" stroke-linejoin="round"/><path d="M70 -60 L110 -100 L110 60 L70 100Z" fill="#7FC8EE" stroke="${O}" stroke-width="5" stroke-linejoin="round"/>${[-70,-40,-10,20,50].map(a=>`<path d="M${a} -60 V100" stroke="#7FC8EE" stroke-width="10"/>`).join("")}<rect x="-90" y="-60" width="160" height="160" fill="none" stroke="${O}" stroke-width="5"/><rect x="-90" y="-60" width="160" height="160" fill="#4DA3FF" stroke="${O}" stroke-width="5"/><rect x="-74" y="-44" width="128" height="128" fill="#FFD43B" stroke="${O}" stroke-width="4"/><rect x="-62" y="-32" width="104" height="104" fill="#2F8FC9"/><path d="M-10 -18 L4 12 L36 14 L12 34 L20 64 L-10 46 L-40 64 L-32 34 L-56 14 L-24 12Z" fill="#FFE066" stroke="#B88400" stroke-width="4" stroke-linejoin="round"/>`);
+  const mopBig=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-10" y="-300" width="20" height="240" rx="8" fill="#38A169" stroke="#1E6B42" stroke-width="4"/><rect x="-16" y="-70" width="32" height="16" rx="4" fill="#FFC21E" stroke="#B88400" stroke-width="3"/><ellipse cx="0" cy="-30" rx="44" ry="34" fill="#A9A49C" stroke="#5A564E" stroke-width="5"/>${[-110,-80,-50,-20,10,40,70,100].map((a,i)=>`<path d="M0 -10 Q${a*.5} 20 ${a} ${50+(i%2)*14}" stroke="#5A564E" stroke-width="18" fill="none" stroke-linecap="round"/><path d="M0 -10 Q${a*.5} 20 ${a} ${50+(i%2)*14}" stroke="#BDB8AF" stroke-width="11" fill="none" stroke-linecap="round"/>`).join("")}`);
+  const hotPot=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<ellipse cx="0" cy="70" rx="170" ry="34" fill="#E8333A" stroke="#8A1620" stroke-width="5"/><ellipse cx="0" cy="70" rx="120" ry="22" fill="none" stroke="#FF8A80" stroke-width="5"/><rect x="-170" y="-20" width="40" height="26" rx="10" fill="#5A6470" stroke="${O}" stroke-width="4"/><rect x="130" y="-20" width="40" height="26" rx="10" fill="#5A6470" stroke="${O}" stroke-width="4"/><path d="M-140 -40 L140 -40 L130 60 Q0 80 -130 60Z" fill="#E9ECEF" stroke="${O}" stroke-width="5"/><ellipse cx="0" cy="-40" rx="150" ry="34" fill="#DDE3E8" stroke="${O}" stroke-width="5"/><ellipse cx="0" cy="-66" rx="26" ry="12" fill="#5A6470" stroke="${O}" stroke-width="4"/>${[-150,150].map(a=>[0,1,2].map(i=>`<circle cx="${a+(a<0?-1:1)*i*14}" cy="${-46-i*10}" r="${10-i*2}" fill="#fff" stroke="#9AA4AE" stroke-width="2"/>`).join("")).join("")}${steam(0,-100,1.6)}`);
+  const kitchen=(inner)=>scene(`<rect width="800" height="520" fill="#FFF8EE"/>${[[120,90],[680,110],[90,400],[700,420],[400,60],[250,250],[560,230]].map(([a,b],i)=>`<circle cx="${a}" cy="${b}" r="6" fill="${["#FF8A80","#7FC8EE","#FFD43B"][i%3]}" opacity=".8"/>`).join("")}${inner}`);
+  const puddle2=(x,y,s=1)=>`<ellipse cx="${x}" cy="${y}" rx="${210*s}" ry="${44*s}" fill="#CFEAFF" stroke="#7FB5D9" stroke-width="4"/>`;
+  Object.assign(S,{
+    hf1:()=>kitchen(sockS(400,280,1.5,30)),
+    hf2:()=>kitchen(`${sockS(470,200,1.3,-150,true)}${puff(240,420,1.2)}${motion(300,330,3,50,-50)}`),
+    hf3:()=>kitchen(`${clockM(400,360,1.3)}${sockS(400,150,1,100,true)}`),
+    hf4:()=>kitchen(`${starBlock(440,350,1.2)}${sockS(380,150,1,110,true)}${puff(170,250,1)}`),
+    hf5:()=>kitchen(`${puddle2(400,440,1.1)}${mopBig(520,420,.95,20)}${sockS(270,170,1,150,true)}${puff(160,330,.9)}`),
+    hf6:()=>kitchen(`${puddle2(400,450,1.1)}${mopBig(430,420,1,15)}${sockS(400,300,1,100,true)}`),
+    hf7:()=>kitchen(`${puddle2(440,450,1)}${mopBig(450,440,.8,-5)}${sockS(220,260,.85,-40)}${frog({x:560,y:240,s:.55,mood:"wow",pose:"up"})}${motion(470,260,3,40,-20)}`),
+    hf8:()=>kitchen(`${hotPot(400,380,1.1)}${frog({x:400,y:220,s:.6,mood:"wow",pose:"up"})}`),
+    hf9:()=>kitchen(`${g("translate(400 330) scale(2.6)",`<ellipse cx="0" cy="20" rx="70" ry="40" fill="#6CC04A" stroke="#2F7A35" stroke-width="3"/><circle cx="-22" cy="-16" r="26" fill="#FFE066" stroke="${O}" stroke-width="3"/><circle cx="22" cy="-16" r="26" fill="#FFE066" stroke="${O}" stroke-width="3"/><circle cx="-18" cy="-14" r="3" fill="${O}"/><circle cx="26" cy="-14" r="3" fill="#E8333A"/><ellipse cx="0" cy="34" rx="26" ry="18" fill="#3A1A10"/><ellipse cx="0" cy="42" rx="14" ry="8" fill="#E8333A"/>`)}${[-1,1].map(d=>`<path d="M${400+d*190} 300 L${400+d*240} 120" stroke="#2F7A35" stroke-width="30" stroke-linecap="round"/><path d="M${400+d*190} 300 L${400+d*240} 120" stroke="#6CC04A" stroke-width="22" stroke-linecap="round"/>${[-30,0,30].map(a=>`<path d="M${400+d*240} 120 l${a} -50" stroke="#C2302A" stroke-width="18" stroke-linecap="round"/>`).join("")}`).join("")}${drop(300,90,1)}${drop(500,90,1)}`),
+    hf10:()=>kitchen(`${mopBig(330,420,1,80)}${frog({x:320,y:400,s:.6,mood:"joy"})}`)
+  });
+  Object.assign(P,{
+    hopFrogCover:()=>picC("#E6F7D8",`${g("translate(100 150) scale(.3)",hotPot(0,0,1))}${g("translate(100 130) scale(.32)",frog({x:0,y:0,mood:"joy",pose:"up"}))}`)
+  });
+  /* ===== 2222 Drips and Spills ===== */
+  const bottle=(x,y,s=1,rot=0,lvl=.7)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-34" y="-50" width="68" height="110" rx="12" fill="#fff" stroke="#6C8EA8" stroke-width="5"/><rect x="-30" y="${60-106*lvl}" width="60" height="${106*lvl-4}" rx="8" fill="#F8FBFF"/>${[-20,0,20].map(a=>`<path d="M22 ${a} h10" stroke="#9BC7E8" stroke-width="3"/>`).join("")}<path d="M-42 -50 Q-42 -96 0 -98 Q42 -96 42 -50Z" fill="#E8333A" stroke="#8A1620" stroke-width="5"/><rect x="-10" y="-120" width="20" height="26" rx="8" fill="#C2252A" stroke="#8A1620" stroke-width="4"/><path d="M-26 -70 q8 -12 20 -14" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>`);
+  const cribS=(x,y,s=1,front=true)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-230" y="-200" width="22" height="240" rx="8" fill="#F2D3A0" stroke="#8A6A3A" stroke-width="4"/><rect x="208" y="-200" width="22" height="240" rx="8" fill="#F2D3A0" stroke="#8A6A3A" stroke-width="4"/>
+    <rect x="-210" y="-150" width="420" height="120" rx="20" fill="#5DBB63" stroke="#2F7A35" stroke-width="4"/><rect x="-210" y="-60" width="420" height="40" rx="12" fill="#A8DC6A" stroke="#5A9A2A" stroke-width="4"/>
+    <rect x="-220" y="-180" width="440" height="16" rx="6" fill="#F2D3A0" stroke="#8A6A3A" stroke-width="4"/><path d="M200 -210 h40" stroke="${O}" stroke-width="3"/>${[214,234].map(a=>`<circle cx="${a}" cy="-210" r="10" fill="#E8333A" stroke="#8A1620" stroke-width="3"/>`).join("")}
+    ${front?`<rect x="-220" y="-24" width="440" height="16" rx="6" fill="#F2D3A0" stroke="#8A6A3A" stroke-width="4"/>${[-170,-110,-50,10,70,130,190].map(a=>`<rect x="${a-6}" y="-170" width="12" height="150" rx="5" fill="#F2D3A0" stroke="#8A6A3A" stroke-width="3"/>`).join("")}`:""}`);
+  const chickC=(x,y,s=1,mood="happy",rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,chickB(0,0,1).replace(eyes("neutral",-12,12,-38,.7),eyes(mood,-12,12,-38,.7)));
+  const nursery=(inner)=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><rect y="400" width="800" height="120" fill="#F2E3C8"/>${inner}`);
+  const milkPool=(x,y,s=1)=>`<ellipse cx="${x}" cy="${y}" rx="${150*s}" ry="${36*s}" fill="#fff" stroke="#BFD9EE" stroke-width="4"/><ellipse cx="${x-30*s}" cy="${y-6*s}" rx="${50*s}" ry="${10*s}" fill="none" stroke="#DCEBF7" stroke-width="3"/>`;
+  const bulb=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`${cloudP(0,10,.9)}<circle cx="0" cy="-6" r="26" fill="#FFE066" stroke="#B88400" stroke-width="4"/><rect x="-12" y="18" width="24" height="18" rx="4" fill="#9AA4AE" stroke="${O}" stroke-width="3"/>${[0,45,90,135,180].map(a=>`<path d="M${(36*Math.cos((a+180)*Math.PI/180)).toFixed(0)} ${(-6+36*Math.sin((a+180)*Math.PI/180)).toFixed(0)} l${(10*Math.cos((a+180)*Math.PI/180)).toFixed(0)} ${(10*Math.sin((a+180)*Math.PI/180)).toFixed(0)}" stroke="#FFC21E" stroke-width="5" stroke-linecap="round"/>`).join("")}`);
+  Object.assign(S,{
+    ds1:()=>nursery(cribS(400,410,1)),
+    ds2:()=>nursery(`${cribS(460,410,.85)}${chickC(120,380,.9,"neutral")}`),
+    ds3:()=>nursery(`${cribS(400,440,.95,false)}${hen({x:250,y:330,s:.6,mood:"happy"})}${chickC(450,300,.8,"happy",-10)}${bottle(530,300,.55,30)}${cribS(400,440,.95).replace(/<rect x="-230"[^>]*>|<rect x="208"[^>]*>|<rect x="-210"[^>]*>|<rect x="-220" y="-180"[^>]*>/g,"")}`),
+    ds4:()=>nursery(`${chickC(370,330,2,"happy")}${bottle(520,320,1.1,-60)}${drop(220,120,1)}${drop(600,140,.9)}`),
+    ds5:()=>nursery(`${cribS(400,440,.95,false)}${chickC(330,330,1.3,"happy")}${bottle(470,320,.9,-50)}`),
+    ds6:()=>nursery(`${cribS(400,440,.95,false)}${chickC(360,330,1.3,"happy")}${drop(370,330,.9)}${bottle(520,350,.75,0,.5)}`),
+    ds7:()=>nursery(`${cribS(400,440,.95,false)}${chickC(340,330,1.3,"worried")}${drop(260,320,.9)}${bottle(520,320,.75,40,.4)}${motion(560,220,3,30,-60)}`),
+    ds8:()=>nursery(`${cribS(400,440,.95,false)}${milkPool(480,390,.9)}${chickC(300,320,1.2,"worried")}${bottle(500,350,.8,-95,.2)}`),
+    ds9:()=>plainBg(`${bulb(220,120,1.3)}${chickC(430,330,1.6,"joy",8)}${sparkle(620,180,.8)}`),
+    ds10:()=>nursery(`${cribS(400,450,.95,false)}${milkPool(400,380,1.4)}${chickC(420,380,.7,"joy",-30)}${hen({x:180,y:330,s:.55,mood:"worried"})}${bottle(190,390,.5,-100,0)}${[[330,330],[500,320],[560,350]].map(([a,b])=>drop(a,b,.8)).join("")}`)
+  });
+  Object.assign(P,{
+    dripsCover:()=>picC("#FFF8EE",`${g("translate(90 150) scale(.75)",chickB(0,0,1))}${bottle(146,150,.4,30)}${drop(70,170,.4)}`)
+  });
+  /* ===== 2204 A Trunk for Buck ===== */
+  const blueTrunk=(x,y,s=1,o={})=>{ const {rust=false,dust=false,shine=false,lid=0}=o;
+    return g(`translate(${x} ${y}) scale(${s})`,`<path d="M-170 0 L-170 -110 L170 -110 L170 0Z" fill="#3FA7C9" stroke="${O}" stroke-width="6" stroke-linejoin="round"/>
+    <g transform="rotate(${-lid} -170 -110)"><path d="M-180 -110 L-170 -170 L170 -170 L180 -110Z" fill="#4DB8DB" stroke="${O}" stroke-width="6" stroke-linejoin="round"/></g>
+    ${[[-170,-170],[170,-170],[-170,0],[170,0],[-180,-110],[180,-110]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="13" fill="#F2B632" stroke="#8A6000" stroke-width="4"/>`).join("")}
+    <path d="M-30 -130 h60 v24 q16 30 -4 52 h-52 q-20 -22 -4 -52Z" fill="${rust?"#C9722E":"#FFD43B"}" stroke="#8A6000" stroke-width="5"/><circle cx="0" cy="-80" r="8" fill="${O}"/><path d="M0 -80 v18" stroke="${O}" stroke-width="7"/>
+    <path d="M-150 -70 q20 26 50 0" stroke="#8A5A2B" stroke-width="12" fill="none" stroke-linecap="round"/>
+    ${rust?[[-26,-120],[20,-100],[-10,-66],[24,-74]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="7" fill="#9B4A1A"/>`).join(""):""}
+    ${dust?[[-120,-180,26],[-60,-196,20],[60,-190,24],[120,-178,18],[0,-206,16]].map(([a,b,r])=>`<circle cx="${a}" cy="${b}" r="${r}" fill="#CED4DA" stroke="#9AA4AE" stroke-width="3"/>`).join("")+[[-90,-40],[60,-50],[120,-30],[-40,-30]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="6" fill="#7A8A92" opacity=".7"/>`).join(""):""}
+    ${shine?[[-110,-60],[80,-50],[140,-140],[-140,-150]].map(([a,b])=>`<path d="M${a} ${b} l30 -30 M${a+14} ${b+6} l30 -30" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".8"/>`).join(""):""}`); };
+  const buck=(o={})=>{ const {x=400,y=440,s=1,mood="happy",arms="up",rot=0,flip=false,hold=""}=o;
+    const arm=(d,ex,ey)=>`<path d="M${d*34} -170 Q${d*60} -150 ${ex} ${ey}" stroke="#6B3F17" stroke-width="20" fill="none" stroke-linecap="round"/><path d="M${d*34} -170 Q${d*60} -150 ${ex} ${ey}" stroke="#B5733A" stroke-width="13" fill="none" stroke-linecap="round"/><ellipse cx="${ex}" cy="${ey}" rx="14" ry="11" fill="#C9CED6" stroke="${O}" stroke-width="3"/>`;
+    const A={up:[[-1,-110,-250],[1,110,-250]],down:[[-1,-70,-90],[1,70,-90]],front:[[-1,-60,-110],[1,90,-120]],eat:[[-1,-40,-100],[1,60,-250]]}[arms]||[[-1,-70,-90],[1,70,-90]];
+    return g(`translate(${x} ${y}) scale(${flip?-s:s} ${s}) rotate(${rot})`,`<path d="M-30 -10 v-70 M30 -10 v-70" stroke="#6B3F17" stroke-width="22" stroke-linecap="round"/><path d="M-30 -10 v-70 M30 -10 v-70" stroke="#B5733A" stroke-width="15" stroke-linecap="round"/>${[-30,30].map(a=>`<ellipse cx="${a}" cy="-6" rx="18" ry="10" fill="#C9CED6" stroke="${O}" stroke-width="3"/>`).join("")}
+      <path d="M-50 -60 q-40 -6 -36 -40 q20 10 30 20Z" fill="#B5733A" stroke="#6B3F17" stroke-width="4"/><ellipse cx="0" cy="-120" rx="56" ry="80" fill="#B5733A" stroke="#6B3F17" stroke-width="5"/><ellipse cx="6" cy="-110" rx="32" ry="58" fill="#F2D3A0"/>
+      ${hold}${A.map(a=>arm(...a)).join("")}${g("translate(0 -230) scale(.9)",deerHead(0,0,1).replace(eyes("neutral",-14,14,-12,.75),eyes(mood,-14,14,-12,.75)))}${mood==="yell"?`<ellipse cx="0" cy="-200" rx="14" ry="10" fill="#8A1620"/>`:""}`); };
+  const basketB=(x,y,s=1,full=false)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-50 -30 Q0 -110 50 -30" stroke="#B88400" stroke-width="8" fill="none"/>${full?[[-24,-40],[0,-48],[24,-40],[-12,-30],[12,-30]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="16" fill="#7B3FA0" stroke="#4A1E66" stroke-width="3"/>`).join(""):""}<path d="M-56 -30 L56 -30 L44 30 L-44 30Z" fill="#FFD43B" stroke="#B88400" stroke-width="5" stroke-linejoin="round"/>${[-36,-12,12,36].map(a=>`<path d="M${a} -30 L${a*.8} 30" stroke="#B88400" stroke-width="3"/>`).join("")}<path d="M-52 0 H52" stroke="#B88400" stroke-width="3"/>`);
+  const bucket=(x,y,s=1)=>g(`translate(${x} ${y}) rotate(-30) scale(${s})`,`<path d="M-40 -40 L40 -40 L30 40 L-30 40Z" fill="#9AA4AE" stroke="${O}" stroke-width="5" stroke-linejoin="round"/><ellipse cx="0" cy="-40" rx="40" ry="10" fill="#7FC8EE" stroke="${O}" stroke-width="4"/><path d="M-40 -36 Q0 -100 40 -36" stroke="${O}" stroke-width="4" fill="none"/>${[[-50,-60],[-70,-30],[-60,-80]].map(([a,b])=>drop(a,b,.7)).join("")}`);
+  const meadow=(inner)=>scene(`<rect width="800" height="520" fill="#FFFCEC"/><ellipse cx="400" cy="450" rx="370" ry="80" fill="#C8E66A"/>${[[140,440],[300,480],[520,480],[660,440]].map(([a,b])=>`<path d="M${a} ${b} l-8 -18 M${a} ${b} l0 -22 M${a} ${b} l8 -18" stroke="#3F8F3A" stroke-width="4" stroke-linecap="round"/>`).join("")}${inner}`);
+  const sponge=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-50" y="-26" width="100" height="52" rx="14" fill="#FFD43B" stroke="#B88400" stroke-width="5"/>${[[-26,-6],[0,8],[24,-8],[30,12],[-10,-12]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="5" fill="#E8A800"/>`).join("")}`);
+  const cloth=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-60 -10 Q-20 -40 30 -20 Q60 -10 60 20 Q10 40 -50 20Z" fill="#fff" stroke="#9AA4AE" stroke-width="4"/>`);
+  const duster=(x,y,s=1,rot=30)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-6" y="0" width="12" height="80" rx="5" fill="#C2302A" stroke="${O}" stroke-width="3"/>${[-30,-15,0,15,30].map(a=>`<path d="M0 0 Q${a} -30 ${a*1.4} -60" stroke="#4DA3FF" stroke-width="10" fill="none" stroke-linecap="round"/>`).join("")}`);
+  Object.assign(S,{
+    tb1:()=>meadow(blueTrunk(400,440,1.25)),
+    tb2:()=>meadow(`${buck({x:400,y:400,s:.95,mood:"joy",arms:"up"})}${blueTrunk(400,460,1.1)}`),
+    tb3:()=>meadow(`${buck({x:520,y:330,s:.8,mood:"worried",arms:"front",rot:-20})}${blueTrunk(380,460,1.1,{rust:true})}${drop(640,120,1)}`),
+    tb4:()=>meadow(`${buck({x:300,y:330,s:.8,mood:"worried",arms:"front",rot:10})}${blueTrunk(400,460,1.1,{dust:true})}${duster(520,250,1,40)}${drop(200,110,1)}`),
+    tb5:()=>plainBg(`${buck({x:400,y:560,s:1.1,mood:"yell",arms:"down"})}${g("translate(170 120)",`${cloudP(0,10,1)}<path d="M-26 -16 h52 v20 q14 24 -4 42 h-44 q-18 -18 -4 -42Z" fill="#C9722E" stroke="#8A4A10" stroke-width="4"/>`)}${g("translate(630 120)",`${cloudP(0,10,1)}${[[-20,0,20],[14,-10,18],[10,16,14]].map(([a,b,r])=>`<circle cx="${a}" cy="${b}" r="${r}" fill="#CED4DA" stroke="#9AA4AE" stroke-width="3"/>`).join("")}`)}`),
+    tb6:()=>meadow(`${buck({x:480,y:300,s:.75,mood:"happy",arms:"front",rot:-10})}${blueTrunk(400,460,1.1)}${sponge(470,310,1)}${bucket(220,180,.8)}${[[300,280],[540,260],[600,300]].map(([a,b])=>drop(a,b,.9)).join("")}`),
+    tb7:()=>meadow(`${buck({x:400,y:300,s:.75,mood:"happy",arms:"front"})}${blueTrunk(400,460,1.1,{shine:true})}${cloth(420,310,1)}${sparkle(200,160,.9)}`),
+    tb8:()=>meadow(`${blueTrunk(200,250,.5,{shine:true})}${buck({x:470,y:470,s:.9,mood:"joy",arms:"front",rot:8})}${basketB(380,320,.9)}${speed(220,380,3,70)}`),
+    tb9:()=>plainBg(`${buck({x:400,y:560,s:1.1,mood:"joy",arms:"eat"})}${basketB(370,440,1,true)}${plumP(470,270,.5)}${[[520,200],[560,240],[540,170]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="5" fill="#4A1E66"/>`).join("")}`),
+    tb10:()=>meadow(`${blueTrunk(400,460,1.1,{shine:true})}${buck({x:330,y:300,s:.65,mood:"joy",arms:"eat"})}${[[470,260],[510,264],[550,258],[590,262]].map(([a,b])=>plumP(a,b,.32)).join("")}${basketB(640,450,.7)}`)
+  });
+  Object.assign(P,{
+    trunkBuckCover:()=>picC("#FFFCEC",`${g("translate(100 172) scale(.32)",buck({x:0,y:0,mood:"joy",arms:"up"}))}${blueTrunk(100,186,.28)}`)
+  });
+  /* ===== 2204 Egg Legs ===== */
+  const footE=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<path d="M0 -50 V0" stroke="#C97A10" stroke-width="12" stroke-linecap="round"/><path d="M0 -50 V0" stroke="#FFB020" stroke-width="7" stroke-linecap="round"/>${[-36,0,36].map(a=>`<path d="M0 0 L${a} 22" stroke="#C97A10" stroke-width="16" stroke-linecap="round"/><path d="M0 0 L${a} 22" stroke="#FFC94D" stroke-width="10" stroke-linecap="round"/>`).join("")}`);
+  const eggL=(x,y,s=1,o={})=>{ const {legs=true,rot=0,feet="down",chick=false,mood="neutral"}=o;
+    const F= feet==="up"?footE(-30,-150,1,180)+footE(30,-150,1,160):feet==="kick"?footE(-30,10,1,-30)+footE(40,-20,1,-70):feet==="hide"?footE(-20,-40,.7,0)+footE(20,-40,.7,0):footE(-30,30,1,0)+footE(30,30,1,0);
+    return g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`${legs?F:""}${legs?`<path d="M0 -190 C-90 -190 -100 -40 -84 -10 L-60 0 L-40 -18 L-20 0 L0 -18 L20 0 L40 -18 L60 0 L84 -10 C100 -40 90 -190 0 -190Z" fill="#fff" stroke="${O}" stroke-width="6" stroke-linejoin="round"/>`:`<path d="M0 -190 C-95 -190 -100 10 0 10 C100 10 95 -190 0 -190Z" fill="#fff" stroke="${O}" stroke-width="6"/>`}<path d="M-56 -150 Q-76 -90 -60 -40" stroke="#BFD9EE" stroke-width="12" fill="none" stroke-linecap="round"/>
+    ${chick?`<path d="M-40 -170 L-20 -150 L0 -172 L20 -150 L40 -172 L50 -186 Q0 -200 -50 -186Z" fill="#CFE9F2"/><g transform="translate(0 -190) scale(.75)">${chickB(0,0,1)}</g><path d="M-50 -176 L-30 -156 L-10 -176 L10 -156 L30 -176 L50 -160" stroke="${O}" stroke-width="5" fill="none"/>`:""}`); };
+  const nestBox=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-230" y="0" width="460" height="40" fill="#9AA4AE" stroke="${O}" stroke-width="5"/>${[-150,-50,50,150].map(a=>`<path d="M${a} 0 v40" stroke="${O}" stroke-width="3"/>`).join("")}<path d="M-200 0 Q-210 -90 -120 -100 Q0 -130 120 -100 Q210 -90 200 0Z" fill="#E8C06A" stroke="#8A6A1A" stroke-width="5"/>${[-160,-100,-40,20,80,140].map(a=>`<path d="M${a} -10 q20 -50 40 -60 M${a+10} -20 q-10 -40 6 -70" stroke="#B8902E" stroke-width="5" fill="none" stroke-linecap="round"/>`).join("")}`);
+  const blueBg=(inner)=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><rect x="60" y="40" width="680" height="440" rx="60" fill="#CFE9F2"/>${[[150,120],[620,140],[120,380],[680,400],[400,80]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="6" fill="#E8333A" opacity=".6"/>`).join("")}${inner}`);
+  const farm=(inner)=>scene(`<rect width="800" height="520" fill="#DDF3FF"/>${cloudP(560,90,.7)}<path d="M0 260 Q200 220 400 250 T800 240 V520 H0Z" fill="#C8E66A"/>${tree(80,270,.4)}${inner}`);
+  Object.assign(S,{
+    el1:()=>blueBg(eggL(400,470,1.3,{legs:false})),
+    el2:()=>blueBg(`<rect x="60" y="390" width="680" height="90" fill="#D8D2C8"/>${eggL(400,400,1.2)}${[[260,440],[540,450]].map(([a,b])=>`<path d="M${a} ${b} l16 -10 l6 14z" fill="#fff" stroke="${O}" stroke-width="3"/>`).join("")}`),
+    el3:()=>farm(`${nestBox(460,420,1)}${eggL(400,360,.9,{rot:-20,feet:"kick"})}${motion(240,260,3,40,0)}`),
+    el4:()=>farm(`${nestBox(480,430,1)}${eggL(380,330,.95,{rot:-25,feet:"kick"})}${drop(240,140,1)}${drop(320,110,.8)}`),
+    el5:()=>blueBg(`${eggL(400,400,1.15,{rot:-60,feet:"kick"})}<path d="M560 200 q40 -40 80 0" stroke="#E8C06A" stroke-width="20" fill="none"/>${drop(180,150,1)}${drop(220,330,1)}`),
+    el6:()=>blueBg(`${eggL(400,260,1.1,{rot:160,feet:"down"})}${[[260,450],[380,470],[520,450]].map(([a,b])=>drop(a,b,1)).join("")}${motion(400,60,3,40,90)}`),
+    el7:()=>farm(`${eggL(460,250,.8,{rot:150})}${hen({x:250,y:450,s:.6,mood:"yell",pose:"run"})}${motion(460,90,3,40,90)}`),
+    el8:()=>farm(`${hen({x:380,y:300,s:.7,mood:"yell",pose:"fly",rot:-10})}${eggL(560,380,.6,{rot:30,feet:"up"})}${motion(560,240,3,40,90)}`),
+    el9:()=>farm(`${nestBox(420,440,1)}${hen({x:320,y:400,s:.65,mood:"happy",pose:"sit"})}${eggL(470,410,.55,{feet:"down"})}`),
+    el10:()=>plainBg(`${hen({x:260,y:480,s:.85,mood:"wow"})}${eggL(500,470,1.05,{legs:false,chick:true})}${[[560,140],[620,200],[520,120]].map(([a,b])=>`<path d="M${a} ${b} l14 -8 l4 14z" fill="#fff" stroke="${O}" stroke-width="3"/>`).join("")}${motion(600,250,3,30,-40)}`)
+  });
+  Object.assign(P,{
+    eggLegsCover:()=>picC("#CFE9F2",eggL(100,170,.55,{rot:-10,feet:"kick"}))
+  });
+  /* ===== 2207 Ape Date ===== */
+  const grayApe=(o)=>chimp(o).replace(/#6B3F17/g,"#5A5650").replace(/#4A2E14/g,"#3E3A36").replace(/#8A5A2E/g,"#6E6A64");
+  const blondeApe=(o)=>chimp(o).replace(/#6B3F17/g,"#7A4A22")+g(`translate(${o.x} ${o.y-(o.s||1)*180}) scale(${o.s||1})`,`<path d="M-70 -40 Q-80 -110 0 -110 Q80 -110 70 -40 Q60 -80 30 -70 Q0 -96 -30 -70 Q-60 -80 -70 -40Z" fill="#FFD43B" stroke="#B88400" stroke-width="5"/>`);
+  const wallClock=(x,y,s=1,h=12,m=0)=>{ const ah=(h%12+m/60)*30-90, am=m*6-90, r=Math.PI/180;
+    return g(`translate(${x} ${y}) scale(${s})`,`<circle r="58" fill="#E8333A" stroke="#8A1620" stroke-width="5"/><circle r="46" fill="#fff"/>${[...Array(12)].map((_,i)=>`<path d="M${(38*Math.cos(i*30*r)).toFixed(0)} ${(38*Math.sin(i*30*r)).toFixed(0)} L${(44*Math.cos(i*30*r)).toFixed(0)} ${(44*Math.sin(i*30*r)).toFixed(0)}" stroke="${O}" stroke-width="4"/>`).join("")}<path d="M0 0 L${(24*Math.cos(ah*r)).toFixed(1)} ${(24*Math.sin(ah*r)).toFixed(1)}" stroke="${O}" stroke-width="6" stroke-linecap="round"/><path d="M0 0 L${(36*Math.cos(am*r)).toFixed(1)} ${(36*Math.sin(am*r)).toFixed(1)}" stroke="${O}" stroke-width="4" stroke-linecap="round"/><circle r="5" fill="${O}"/>`); };
+  const cakeR=(x,y,s=1,icing=false,crumbs=false)=>g(`translate(${x} ${y}) scale(${s})`,`<ellipse cx="0" cy="10" rx="90" ry="22" fill="#fff" stroke="#9AA4AE" stroke-width="4"/>${crumbs?[[-20,4],[10,8],[30,0]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="6" fill="#E0A458"/>`).join(""):`<rect x="-60" y="-50" width="120" height="56" rx="8" fill="#F2C24A" stroke="#B88400" stroke-width="5"/><ellipse cx="0" cy="-50" rx="60" ry="16" fill="${icing?"#E8333A":"#F6D47A"}" stroke="${icing?"#8A1620":"#B88400"}" stroke-width="5"/>${icing?`<path d="M-60 -46 q10 26 20 0 q10 26 20 0 q10 26 20 0 q10 26 20 0 q10 26 20 0 q10 26 20 0" fill="#E8333A" stroke="#8A1620" stroke-width="4"/>`:""}`}`);
+  const panTray=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-90" y="0" width="180" height="14" rx="4" fill="#9BC7C7" stroke="#3A6A6A" stroke-width="4"/><path d="M-56 0 L-56 -30 L56 -30 L56 0Z" fill="#7FB5B5" stroke="#3A6A6A" stroke-width="4"/><ellipse cx="0" cy="-30" rx="56" ry="10" fill="#F2C24A" stroke="#3A6A6A" stroke-width="4"/>`);
+  const bowlMix=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-60 -20 L60 -20 Q56 40 0 44 Q-56 40 -60 -20Z" fill="#FFC21E" stroke="#B88400" stroke-width="5"/><ellipse cx="0" cy="-20" rx="60" ry="14" fill="#F6E3B0" stroke="#B88400" stroke-width="5"/><path d="M10 -20 L40 -110" stroke="#9AA4AE" stroke-width="10" stroke-linecap="round"/>${[[-70,-50],[70,-40],[50,-70]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="6" fill="#F6D47A"/>`).join("")}`);
+  const chair=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-70 0 L70 0 L60 20 L-60 20Z" fill="#3FA7E0" stroke="${O}" stroke-width="5"/><path d="M-70 0 L-90 -110 L-60 -110 L-40 0Z" fill="#3FA7E0" stroke="${O}" stroke-width="5"/>${[-50,50].map(a=>`<path d="M${a} 20 L${a*1.1} 70" stroke="#FFC21E" stroke-width="10" stroke-linecap="round"/>`).join("")}`);
+  const greenTable=(y=420)=>`<path d="M120 ${y} L680 ${y} L740 ${y+90} L60 ${y+90}Z" fill="#5DBB63" stroke="#2F7A35" stroke-width="5" stroke-linejoin="round"/>${[90,710].map(x=>`<rect x="${x-26}" y="${y-30}" width="52" height="70" rx="6" fill="#3F8F3A" stroke="#2A5A26" stroke-width="4" transform="rotate(${x<400?-20:20} ${x} ${y})"/>`).join("")}`;
+  const forkP=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-4" y="0" width="8" height="60" rx="3" fill="#C9CED6" stroke="#5A6470" stroke-width="2"/><path d="M-12 0 v-26 M-4 0 v-26 M4 0 v-26 M12 0 v-26 M-12 0 h24" stroke="#5A6470" stroke-width="4" stroke-linecap="round"/>`);
+  const kitchenA=(inner,h=12,m=0)=>scene(`<rect width="800" height="520" fill="#FFF8EE"/>${wallClock(650,110,1,h,m)}${inner}`);
+  Object.assign(S,{
+    ad1:()=>kitchenA(grayApe({x:380,y:470,s:.95,mood:"worried",pose:"up"}),12,5),
+    ad2:()=>kitchenA(`${grayApe({x:380,y:470,s:.95,mood:"happy"})}${bowlMix(230,370,.8)}`,12,10),
+    ad3:()=>kitchenA(`${grayApe({x:360,y:470,s:.95,mood:"happy"})}${bowlMix(420,330,1)}${motion(500,240,3,30,0)}`,12,20),
+    ad4:()=>kitchenA(`${grayApe({x:320,y:470,s:.95,mood:"neutral"})}${panTray(470,320,1.1)}`,3,40),
+    ad5:()=>kitchenA(`${chair(380,400,1.2)}${grayApe({x:370,y:410,s:.85,mood:"tired",pose:"sit"})}`,4,35),
+    ad6:()=>kitchenA(`${grayApe({x:330,y:470,s:.95,mood:"joy"})}${panTray(470,330,1.1)}${steam(470,250,1)}<ellipse cx="420" cy="350" rx="50" ry="30" fill="#5DBB63" stroke="#2F7A35" stroke-width="4"/>`,5,0),
+    ad7:()=>kitchenA(`${grayApe({x:400,y:380,s:.85,mood:"happy"})}${greenTable(420)}${cakeR(400,440,1)}`,5,20),
+    ad8:()=>kitchenA(`${grayApe({x:300,y:380,s:.85,mood:"worried",hold:"fork"})}${greenTable(420)}${cakeR(420,440,1,true)}${plateP(250,450,.6)}${plateP(580,450,.6)}${forkP(530,470,1,-70)}`,6,5),
+    ad9:()=>kitchenA(`${grayApe({x:400,y:380,s:.85,mood:"joy"})}${greenTable(420)}${cakeR(400,450,1,false,true)}${plateP(230,450,.6)}${plateP(570,450,.6)}${forkP(260,480,1,-70)}${forkP(560,480,1,-70)}`,7,0),
+    ad10:()=>kitchenA(`${grayApe({x:270,y:380,s:.85,mood:"yell",pose:"up"})}${blondeApe({x:560,y:400,s:.75,mood:"sad"})}${greenTable(420)}${cakeR(400,450,.9,false,true)}${forkP(300,490,1,-70)}${forkP(470,490,1,-70)}`,7,0)
+  });
+  Object.assign(P,{
+    apeDateCover:()=>picC("#FFF8EE",`${wallClock(160,50,.4,5,0)}${g("translate(100 190) scale(.42)",grayApe({x:0,y:0,mood:"happy"}))}${cakeR(100,176,.45,true)}`)
+  });
+  /* ===== 2207 Floating Goat ===== */
+  const goatHead=(x,y,s=1,mood="tired",rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<path d="M-30 -60 Q-50 -130 -20 -150 Q-26 -110 -10 -66Z M30 -60 Q50 -130 20 -150 Q26 -110 10 -66Z" fill="#FFC21E" stroke="#B88400" stroke-width="4"/>
+    <ellipse cx="-66" cy="-36" rx="34" ry="14" fill="#fff" stroke="${O}" stroke-width="4" transform="rotate(-20 -66 -36)"/><ellipse cx="66" cy="-36" rx="34" ry="14" fill="#fff" stroke="${O}" stroke-width="4" transform="rotate(20 66 -36)"/><ellipse cx="66" cy="-36" rx="22" ry="7" fill="#7FC8C8" transform="rotate(20 66 -36)"/>
+    <path d="M-44 -50 Q0 -90 44 -50 Q56 20 30 50 Q0 70 -30 50 Q-56 20 -44 -50Z" fill="#fff" stroke="${O}" stroke-width="5"/>${eyes(mood,-18,18,-16,.8)}<ellipse cx="0" cy="34" rx="16" ry="12" fill="#D98A5E" stroke="#8A4A22" stroke-width="3"/><path d="M-8 58 L0 84 L8 58" fill="#fff" stroke="${O}" stroke-width="3"/>${mood==="wow"?`<ellipse cx="0" cy="52" rx="10" ry="8" fill="#8A1620"/>`:""}`);
+  const robeBody=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<path d="M-70 -80 Q0 -110 70 -80 L80 60 Q0 80 -80 60Z" fill="#D63C3C" stroke="#7A1A14" stroke-width="5" stroke-linejoin="round"/><path d="M-30 -90 L0 -20 L30 -90" fill="none" stroke="#7A1A14" stroke-width="5"/><path d="M-70 0 H70" stroke="#B82A2A" stroke-width="10"/><path d="M0 0 l-24 24 M0 0 l24 24" stroke="#B82A2A" stroke-width="8" stroke-linecap="round"/>${[-50,50].map(a=>`<ellipse cx="${a}" cy="70" rx="18" ry="10" fill="#E9ECEF" stroke="${O}" stroke-width="3"/>`).join("")}`);
+  const goatR=(x,y,s=1,mood="tired",rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`${robeBody(0,0,1)}${goatHead(0,-150,.9,mood)}`);
+  const armchair=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<rect x="-150" y="-140" width="300" height="160" rx="40" fill="#7CCB4A" stroke="#3F7A1A" stroke-width="5"/><rect x="-190" y="-60" width="80" height="120" rx="34" fill="#8ED85A" stroke="#3F7A1A" stroke-width="5"/><rect x="110" y="-60" width="80" height="120" rx="34" fill="#8ED85A" stroke="#3F7A1A" stroke-width="5"/>`);
+  const ring=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<circle r="50" fill="none" stroke="${O}" stroke-width="36"/><circle r="50" fill="none" stroke="#F28A3A" stroke-width="28"/>${[0,90,180,270].map(a=>`<path d="M${(50*Math.cos(a*Math.PI/180)).toFixed(0)} ${(50*Math.sin(a*Math.PI/180)).toFixed(0)}" stroke="#E9ECEF" stroke-width="30" stroke-dasharray="1 0" transform="rotate(0)"/>`).join("")}`);
+  const woodBoat=(x,y,s=1,rot=0,holes=false,sink=false)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-6" y="-260" width="12" height="260" fill="#8A5A2B" stroke="${O}" stroke-width="3"/><path d="M6 -250 L150 -40 L6 -40Z" fill="#D8CDB8" stroke="${O}" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M-220 -40 L220 -40 L170 50 L-170 50Z" fill="#B5733A" stroke="#6B3F17" stroke-width="6" stroke-linejoin="round"/><path d="M-200 -10 H200" stroke="#8A5A2B" stroke-width="4"/>${holes?[-120,0,120].map(a=>`<ellipse cx="${a}" cy="20" rx="14" ry="10" fill="#3A2416"/>`).join(""):""}`);
+  const seaG=(y=380)=>`<rect y="${y}" width="800" height="${520-y}" fill="#9BD3FF"/><path d="M0 ${y} q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0" stroke="#4DA3FF" stroke-width="6" fill="none"/>`;
+  const night=(inner)=>scene(`<rect width="800" height="520" fill="#1F2A5A"/><path d="M110 60 a46 46 0 1 0 40 76 a36 36 0 1 1 -40 -76z" fill="#FFD43B"/>${[[260,70],[520,50],[680,110],[400,130],[720,40]].map(([a,b])=>`<path d="M${a} ${b-14} l4 10 l11 1 l-8 7 l3 11 l-10 -6 l-10 6 l3 -11 l-8 -7 l11 -1z" fill="#FFE066"/>`).join("")}${inner}`);
+  const scooter=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`${[-110,110].map(a=>`<circle cx="${a}" cy="30" r="34" fill="#3A2E2A"/><circle cx="${a}" cy="30" r="14" fill="#C9CED6"/>`).join("")}<path d="M-150 10 Q-150 -50 -80 -50 L40 -50 L80 -150 L110 -150 L100 -40 Q160 -30 150 20 L-150 20Z" fill="#7CCB4A" stroke="#3F7A1A" stroke-width="5" stroke-linejoin="round"/><path d="M70 -150 h60" stroke="${O}" stroke-width="10" stroke-linecap="round"/><circle cx="140" cy="-30" r="14" fill="#FFE066" stroke="${O}" stroke-width="3"/>`);
+  Object.assign(S,{
+    fg1:()=>plainBg(`${goatHead(400,320,1.8,"tired")}${zzz(600,170,1)}`),
+    fg2:()=>plainBg(`${armchair(400,440,1)}${goatR(400,400,1,"tired",-8)}${zzz(560,140,1)}`),
+    fg3:()=>scene(`<rect width="800" height="520" fill="#F2D49A"/><rect y="0" width="800" height="220" fill="#C9A06E"/>${[260,330,400].map(y=>`<path d="M0 ${y} H800" stroke="#C9A06E" stroke-width="3"/>`).join("")}${drop(120,110,1.4)}${drop(170,80,1)}${armchair(420,440,1)}${goatR(420,400,1,"tired",-8)}${zzz(580,140,1)}`),
+    fg4:()=>night(`${seaG(400)}${woodBoat(400,420,1)}${ring(270,370,.6)}${goatR(470,330,.6,"tired",-10)}${zzz(560,160,.8)}`),
+    fg5:()=>night(`${seaG(400)}${woodBoat(400,420,1,-10,true)}${goatR(470,330,.6,"tired",-20)}${[[280,260],[380,240]].map(([a,b])=>`<path d="M${a} 400 Q${a-10} ${b+60} ${a} ${b}" stroke="#7FC8EE" stroke-width="12" fill="none" stroke-linecap="round"/>`).join("")}${zzz(560,150,.8)}`),
+    fg6:()=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><path d="M80 470 Q100 300 400 290 Q700 300 720 470Z" fill="#E0A458" stroke="#8A5A22" stroke-width="5"/>${[[230,420],[400,380],[570,420]].map(([a,b])=>`<ellipse cx="${a}" cy="${b}" rx="34" ry="16" fill="#3A2416"/><path d="M${a} ${b} Q${a-40} ${b-140} ${a-20} ${b-260} M${a} ${b} Q${a} ${b-180} ${a} ${b-300} M${a} ${b} Q${a+40} ${b-140} ${a+20} ${b-260}" stroke="#7FC8EE" stroke-width="14" fill="none" stroke-linecap="round"/>`).join("")}`),
+    fg7:()=>night(`${seaG(380)}${woodBoat(400,430,1,-35,true)}${goatR(430,330,.6,"tired",-30)}${ring(200,400,.6)}${zzz(320,140,.8)}`),
+    fg8:()=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><ellipse cx="400" cy="400" rx="300" ry="90" fill="#9BD3FF" stroke="#4DA3FF" stroke-width="6"/><ellipse cx="400" cy="400" rx="200" ry="56" fill="none" stroke="#4DA3FF" stroke-width="5"/><path d="M300 420 Q400 380 500 420" fill="#D63C3C" stroke="#7A1A14" stroke-width="5"/>${goatHead(400,300,1.5,"wow")}${[[220,140],[600,150],[260,240],[560,250]].map(([a,b])=>drop(a,b,1)).join("")}`),
+    fg9:()=>night(`${seaG(330)}${ring(400,360,1.6)}${goatHead(400,330,1.1,"worried")}<path d="M500 300 Q580 220 620 120" stroke="#B88400" stroke-width="14" fill="none" stroke-linecap="round"/><path d="M500 300 Q580 220 620 120" stroke="#F2D27A" stroke-width="8" fill="none" stroke-dasharray="6 6"/>`),
+    fg10:()=>plainBg(`<path d="M100 470 H700" stroke="#3A2E2A" stroke-width="12" stroke-linecap="round"/>${ring(230,280,.6)}${scooter(430,400,1)}${goatR(410,330,.7,"joy",0)}${[[200,180],[300,140],[580,150]].map(([a,b])=>drop(a,b,.9)).join("")}${puff(170,400,.8)}${speed(100,320,3,60)}`)
+  });
+  Object.assign(P,{
+    goatCover:()=>picC("#1F2A5A",`${seaG(130).replace(/800/g,"200")}${ring(100,130,.6)}${goatHead(100,126,.42,"worried")}`)
+  });
+  /* ===== 2202 A Pike Glides ===== */
+  const pikeS=(x,y,s=1,rot=0,mood="happy")=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,pikeB(0,0,1).replace(/<circle cx="62" cy="-10" r="7"[^>]*>|<circle cx="64" cy="-10" r="3.5"[^>]*>/g,"")+`<circle cx="70" cy="-18" r="13" fill="#FFD43B" stroke="${O}" stroke-width="3"/><circle cx="80" cy="-10" r="13" fill="#FFD43B" stroke="${O}" stroke-width="3"/><circle cx="${mood==="wow"?70:74}" cy="-18" r="3.5" fill="${O}"/><circle cx="${mood==="wow"?80:84}" cy="-10" r="3.5" fill="${O}"/>`);
+  const tigerFish=(x,y,s=1,flip=false)=>g(`translate(${x} ${y}) scale(${flip?-s:s} ${s})`,`<path d="M-40 0 L-66 -22 L-62 0 L-66 22Z" fill="#F28A3A" stroke="${O}" stroke-width="4" stroke-linejoin="round"/><ellipse cx="0" cy="0" rx="46" ry="36" fill="#F28A3A" stroke="${O}" stroke-width="4"/>${[-20,0].map(a=>`<path d="M${a} -34 Q${a+6} 0 ${a} 34" stroke="#3A2E2A" stroke-width="7" fill="none"/>`).join("")}<circle cx="28" cy="-6" r="14" fill="#fff" stroke="${O}" stroke-width="3"/><circle cx="32" cy="-4" r="5" fill="${O}"/>`);
+  const minnowsP=(x,y,n=4,c="#FFC21E")=>[...Array(n)].map((_,i)=>g(`translate(${x+(i%2)*40} ${y+i*30})`,`<path d="M-20 0 L-32 -10 L-32 10Z" fill="${c}" stroke="${O}" stroke-width="2"/><ellipse rx="22" ry="9" fill="${c}" stroke="${O}" stroke-width="2.5"/><path d="M-6 -8 v16 M4 -8 v16" stroke="#C2302A" stroke-width="3"/><circle cx="12" cy="-2" r="2" fill="${O}"/>`)).join("");
+  const riverP=(inner,sand=true)=>scene(`<rect width="800" height="520" fill="#BFE6FF"/>${sand?`<path d="M0 450 Q200 430 400 448 T800 440 V520 H0Z" fill="#E8C27A"/><path d="M80 450 q-6 -40 6 -60 M90 450 q10 -30 0 -54 M640 446 q-8 -40 6 -60 M650 446 q12 -30 0 -50" stroke="#3F8F3A" stroke-width="6" fill="none" stroke-linecap="round"/>`:""}${[[150,120],[620,90],[700,300],[300,380],[480,200]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="10" fill="none" stroke="#fff" stroke-width="3"/>`).join("")}${inner}`);
+  const swirlP=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-120 0 Q-120 -80 0 -80 Q120 -80 120 0 Q120 60 0 60 Q-80 60 -80 0 Q-80 -40 0 -40" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round" opacity=".8"/>`);
+  const bigWaveP=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-260 140 Q-280 -60 -60 -160 Q120 -220 220 -100 Q120 -120 60 -60 Q140 -40 120 20 Q40 -20 0 40 Q-40 100 40 140Z" fill="#4DA3FF" stroke="#1F4E8A" stroke-width="6"/><path d="M-200 100 Q-200 -40 -40 -120 M-140 120 Q-120 0 -10 -70" stroke="#BDE3FF" stroke-width="8" fill="none" stroke-linecap="round"/>`);
+  const vineP=(x1,y1,x2,y2)=>`<path d="M${x1} ${y1} Q${(x1+x2)/2} ${(y1+y2)/2-120} ${x2} ${y2}" stroke="#7A4A22" stroke-width="10" fill="none" stroke-linecap="round"/>${[.2,.4,.6,.8].map(t=>{const x=x1+(x2-x1)*t, y=y1+(y2-y1)*t-120*4*t*(1-t);return `<path d="M${x} ${y} q20 -30 40 -10 q-20 24 -40 10z" fill="#5DBB63" stroke="#2F7A35" stroke-width="3"/>`;}).join("")}`;
+  Object.assign(S,{
+    pg1:()=>riverP(`${pikeS(400,280,2)}${minnowsP(620,140,2,"#9BD36A")}`),
+    pg2:()=>riverP(`${swirlP(400,280,1.6)}${pikeS(400,280,1.8,-6)}${motion(150,280,3,50,0)}`),
+    pg3:()=>riverP(`${swirlP(380,300,1.8)}${pikeS(420,260,1.6,-20)}`),
+    pg4:()=>riverP(`${pikeS(400,250,1.6,-25)}${tigerFish(180,380,1)}${puff(650,120,.8)}${motion(560,180,3,40,-30)}`,false),
+    pg5:()=>riverP(`${pikeS(450,220,1.5,-35)}${tigerFish(180,380,1)}${[[600,330],[650,280],[560,260]].map(([a,b])=>`<path d="M${a} ${b} q30 -30 60 0" stroke="#4DA3FF" stroke-width="8" fill="none" stroke-linecap="round"/>`).join("")}`,false),
+    pg6:()=>scene(`<rect width="800" height="520" fill="#FFF8EE"/>${bigWaveP(400,320,1.2)}${pikeS(560,200,.8,60,"wow")}${[[640,300],[660,120],[700,220]].map(([a,b])=>drop(a,b,1)).join("")}`),
+    pg7:()=>scene(`<rect width="800" height="520" fill="#DDF3FF"/>${cloudP(160,110,.9)}${bigWaveP(250,360,.9)}${pikeS(560,200,1.3,-40,"wow")}${[[420,220],[460,300],[680,140]].map(([a,b])=>drop(a,b,1)).join("")}`),
+    pg8:()=>scene(`<rect width="800" height="520" fill="#DDF3FF"/>${vineP(100,180,700,140)}${pikeS(400,260,1.3,-50,"wow")}${[[260,320],[560,320]].map(([a,b])=>drop(a,b,1)).join("")}${motion(300,170,3,30,-50)}`),
+    pg9:()=>scene(`<rect width="800" height="520" fill="#DDF3FF"/><rect y="430" width="800" height="90" fill="#9BD3FF"/>${vineP(80,120,720,160)}${pikeS(400,250,1.3,25,"wow")}${speed(150,300,3,60)}`),
+    pg10:()=>riverP(`${pikeS(380,280,1.8)}${minnowsP(600,170,5)}${cloudP(150,90,.6)}`)
+  });
+  Object.assign(P,{
+    pikeCover:()=>picC("#BFE6FF",`${swirlP(100,110,.5)}${pikeS(100,106,.58,-20)}`)
+  });
+  /* ===== 2202 Mule Music ===== */
+  const muleB=(o={})=>{ const {x=400,y=450,s=1,mood="happy",arms="down",rot=0,flip=false,hold=""}=o, c="#7FB5EE", st="#2F5A99";
+    const arm=(d,ex,ey)=>`<path d="M${d*40} -150 Q${d*70} -130 ${ex} ${ey}" stroke="${st}" stroke-width="24" fill="none" stroke-linecap="round"/><path d="M${d*40} -150 Q${d*70} -130 ${ex} ${ey}" stroke="${c}" stroke-width="16" fill="none" stroke-linecap="round"/><ellipse cx="${ex}" cy="${ey}" rx="16" ry="13" fill="#D6CEC4" stroke="${O}" stroke-width="3"/>`;
+    const A={down:[[-1,-80,-70],[1,80,-70]],up:[[-1,-120,-260],[1,120,-260]],hold:[[-1,-30,-150],[1,60,-120]],out:[[-1,-130,-140],[1,130,-140]]}[arms];
+    return g(`translate(${x} ${y}) scale(${flip?-s:s} ${s}) rotate(${rot})`,`<path d="M-60 -90 q-60 0 -70 50" stroke="${st}" stroke-width="10" fill="none"/><path d="M-130 -40 l-10 30 l20 -10 l10 20 l6 -24" fill="${c}" stroke="${st}" stroke-width="3"/>${[-34,34].map(a=>`<rect x="${a-14}" y="-70" width="28" height="70" rx="12" fill="${c}" stroke="${st}" stroke-width="4"/><ellipse cx="${a}" cy="-2" rx="20" ry="11" fill="#D6CEC4" stroke="${O}" stroke-width="3"/>`).join("")}<ellipse cx="0" cy="-120" rx="70" ry="80" fill="${c}" stroke="${st}" stroke-width="5"/>${[[-30,-150],[20,-90],[30,-170],[-20,-80]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="4" fill="#E8333A"/>`).join("")}
+      ${A.map(a=>arm(...a)).join("")}${hold}${g("translate(0 -250) scale(1.2)",mule(0,0,1).replace(/#8E8579/g,c).replace(eyes("neutral",-16,16,4,.8),eyes(mood,-16,16,4,.8)))}${mood==="yell"?`<ellipse cx="0" cy="-185" rx="16" ry="12" fill="#8A1620"/>`:""}`); };
+  const dukeB=(o={})=>{ const {x=400,y=460,s=1,mood="happy",face="#B5733A",hold=""}=o;
+    return g(`translate(${x} ${y}) scale(${s})`,`${[-40,40].map(a=>`<rect x="${a-22}" y="-60" width="44" height="60" rx="14" fill="${face}" stroke="${O}" stroke-width="4"/>`).join("")}<path d="M-120 -40 L-110 -240 Q0 -270 110 -240 L120 -40Z" fill="#7048E8" stroke="${O}" stroke-width="5" stroke-linejoin="round"/><path d="M-120 -40 L-110 -240 M120 -40 L110 -240" stroke="#fff" stroke-width="14" stroke-dasharray="6 8"/><path d="M-70 -50 L-70 -230 Q0 -250 70 -230 L70 -50Z" fill="#D63C3C" stroke="${O}" stroke-width="5"/><path d="M-60 -200 Q0 -150 60 -200" stroke="#FFD43B" stroke-width="7" fill="none"/><circle cx="0" cy="-150" r="14" fill="#5DBB63" stroke="#B88400" stroke-width="5"/>${hold}${g("translate(0 -300) scale(1)",bearHead(mood).replace(/url\(#gBear\)/g,face))}${crown(0,-380,1.3)}`); };
+  const notesM=(x,y,s=1)=>`${musicN(x,y,s)}${musicN(x+50,y-40,s*.8,"#FF6B9A")}${musicN(x+90,y+10,s*.7,"#38C47E")}`;
+  Object.assign(S,{
+    mm1:()=>plainBg(`${muleB({x:400,y:470,s:.95,mood:"happy"})}`),
+    mm2:()=>plainBg(`${muleB({x:400,y:470,s:.95,mood:"joy",arms:"out",hold:fluteP(130,-140,.45,-40)})}`),
+    mm3:()=>plainBg(`${muleB({x:380,y:470,s:.95,mood:"happy",arms:"hold",hold:fluteP(40,-200,.6,30)})}${notesM(560,160,1.2)}`),
+    mm4:()=>plainBg(`${muleB({x:360,y:470,s:.95,mood:"joy",arms:"hold",hold:fluteP(-60,-300,.5,-60)+tubaP(80,-150,.8)})}${notesM(580,140,1.2)}`),
+    mm5:()=>plainBg(`${dukeB({x:580,y:480,s:.85,mood:"happy"})}${muleB({x:260,y:470,s:.85,mood:"happy",arms:"out",hold:tubaP(140,-150,.7)+fluteP(-120,-140,.45,-30)})}`),
+    mm6:()=>plainBg(`${dukeB({x:400,y:490,s:.95,mood:"joy",hold:tubaP(90,-260,.75)+fluteP(-70,-170,.5,-40)})}${notesM(590,120,1.2)}`),
+    mm7:()=>plainBg(`${muleB({x:400,y:470,s:.95,mood:"sad",arms:"down"})}${[[220,170],[590,180],[250,320],[560,320]].map(([a,b])=>drop(a,b,1)).join("")}`),
+    mm8:()=>plainBg(`${muleB({x:400,y:470,s:.95,mood:"yell",arms:"up"})}${boom(620,140,.5)}${boom(180,140,.4)}`),
+    mm9:()=>plainBg(`${muleB({x:400,y:470,s:.95,mood:"joy",arms:"hold",hold:luteP(30,-130,.9,40)})}${notesM(580,150,1.2)}`),
+    mm10:()=>plainBg(`${dukeB({x:400,y:490,s:.95,mood:"worried",face:"#8EC9EE",hold:tubaP(-60,-260,.7)+fluteP(80,-150,.45,40)})}${drop(240,180,1)}${drop(570,170,1)}`)
+  });
+  Object.assign(P,{
+    muleMusicCover:()=>picC("#FFF8EE",`${g("translate(100 196) scale(.4)",muleB({x:0,y:0,mood:"joy",arms:"hold",hold:tubaP(80,-150,.8)}))}`)
+  });
+  /* ===== 2240 Speeding Seal ===== */
+  const sealC=(x,y,s=1,rot=0,mood="wow",hat=false)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,sealB(0,0,1).replace(/#9AA8B6/g,"#3FB3B8").replace(/#7C8A98/g,"#2C8F94")+`<circle cx="30" cy="-50" r="13" fill="#fff" stroke="${O}" stroke-width="3"/><circle cx="50" cy="-42" r="12" fill="#fff" stroke="${O}" stroke-width="3"/><circle cx="${mood==="joy"?30:34}" cy="-48" r="4" fill="${O}"/><circle cx="${mood==="joy"?50:53}" cy="-40" r="4" fill="${O}"/>`);
+  const jeepG=(x,y,s=1,rot=0,o={})=>{ const {leak=false,broke=false,seal=true}=o;
+    return g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`${seal?sealC(-10,-110,.9,0,"wow",true):""}${jeepP(0,0,1).replace(/#6B8E3A/g,"#7CC63A").replace(/#4E6E25/g,"#4E8A1E")}
+      ${leak?`<path d="M30 -10 q10 30 -6 50 q-16 20 4 40" stroke="${O}" stroke-width="8" fill="none" stroke-linecap="round"/><ellipse cx="30" cy="84" rx="60" ry="12" fill="#3A2E2A" opacity=".8"/>`:""}
+      ${broke?`${boom(80,-90,.4)}<g transform="translate(110 -140)"><path d="M0 0 l14 -8 l14 8 v16 l-14 8 l-14 -8z" fill="#9AA4AE" stroke="${O}" stroke-width="3"/><circle cx="14" cy="8" r="5" fill="#fff"/></g><rect x="90" y="-60" width="40" height="10" rx="3" fill="#9AA4AE" stroke="${O}" stroke-width="3" transform="rotate(-30 110 -55)"/>`:""}`); };
+  const streetS=(inner)=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><path d="M0 400 H800 V520 H0Z" fill="#C9C0AE"/><path d="M0 460 H800" stroke="#fff" stroke-width="8" stroke-dasharray="40 30"/>${inner}`);
+  const oilPool=(x,y,s=1)=>`<ellipse cx="${x}" cy="${y}" rx="${130*s}" ry="${26*s}" fill="#3A2E2A"/><ellipse cx="${x-30*s}" cy="${y-6*s}" rx="${40*s}" ry="${7*s}" fill="#7A6E68"/>`;
+  const broomS=(x,y,s=1,rot=0)=>g(`translate(${x} ${y}) rotate(${rot}) scale(${s})`,`<rect x="-6" y="-200" width="12" height="200" rx="5" fill="#E8592A" stroke="${O}" stroke-width="3"/>${[-40,-24,-8,8,24,40].map(a=>`<path d="M0 0 Q${a*.6} 30 ${a} 70" stroke="#C9A040" stroke-width="10" fill="none" stroke-linecap="round"/>`).join("")}`);
+  Object.assign(S,{
+    ss1:()=>plainBg(`${sealC(400,320,2.2,-10,"wow")}${motion(160,260,3,50,0)}`),
+    ss2:()=>plainBg(`${sealC(420,320,2,-15,"wow",true)}${speed(100,250,4,100)}`),
+    ss3:()=>streetS(`${jeepG(400,420,1.3)}${speed(80,320,3,90)}`),
+    ss4:()=>streetS(`${jeepG(400,420,1.3,-8)}${speed(80,320,3,90)}<g opacity=".9">${dust(160,420)}</g>`),
+    ss5:()=>streetS(`${jeepG(400,420,1.3,-12,{broke:true})}`),
+    ss6:()=>streetS(`${jeepG(400,410,1.3,-6,{leak:true})}${[[200,320],[600,330]].map(([a,b])=>drop(a,b,1)).join("")}`),
+    ss7:()=>streetS(`${oilPool(400,460,1.6)}${jeepG(400,400,1.2,0,{leak:true})}`),
+    ss8:()=>streetS(`${oilPool(330,460,1.3)}${jeepG(300,400,1,0,{seal:false})}${sealC(580,300,1.4,-30,"wow")}${motion(470,280,3,40,-20)}`),
+    ss9:()=>streetS(`${oilPool(330,450,1.2)}${sealC(470,320,1.4,-20,"wow")}${broomS(370,420,1,30)}`),
+    ss10:()=>streetS(`${jeepG(180,400,.7,0,{seal:false})}${broomS(620,300,.9,-60)}${sealC(420,330,1.5,10,"joy")}${motion(280,330,3,40,0)}`)
+  });
+  Object.assign(P,{
+    sealCover:()=>picC("#FFF8EE",`${jeepG(100,150,.36)}`)
+  });
+  /* ===== 2240 Snake Dance ===== */
+  const SNK=[["#7CC63A","#3F7A1A",null],["#D9473A","#7A1A14","#2B2530"],["#FFD43B","#B88400",null]];
+  const snakeW=(pts,ci,mood="wow",tongue=false)=>{ const [c,st,stripe]=SNK[ci], d="M"+pts.map(p=>p.join(" ")).join(" L"), h=pts[pts.length-1], p2=pts[pts.length-2], ang=Math.atan2(h[1]-p2[1],h[0]-p2[0])*180/Math.PI;
+    return `<path d="${d}" stroke="${st}" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${c}" stroke-width="22" fill="none" stroke-linecap="round" stroke-linejoin="round"/>${stripe?`<path d="${d}" stroke="${stripe}" stroke-width="22" fill="none" stroke-dasharray="10 16" stroke-linejoin="round"/>`:""}
+      ${g(`translate(${h[0]} ${h[1]}) rotate(${ang})`,`<ellipse cx="24" cy="0" rx="30" ry="20" fill="${c}" stroke="${st}" stroke-width="4"/>${tongue?`<path d="M52 4 l18 0 l6 -6 M70 4 l6 6" stroke="#E8333A" stroke-width="3" fill="none"/>`:""}`)}
+      ${g(`translate(${h[0]} ${h[1]-26})`,mood==="tired"?`<path d="M-14 0 q8 6 16 0 M6 0 q8 6 16 0" stroke="${O}" stroke-width="3" fill="none"/>`:`<circle cx="-6" cy="0" r="12" fill="#fff" stroke="${O}" stroke-width="3"/><circle cx="16" cy="0" r="12" fill="#fff" stroke="${O}" stroke-width="3"/><circle cx="-4" cy="2" r="4" fill="${O}"/><circle cx="18" cy="2" r="4" fill="${O}"/>`)}`; };
+  const wave3=(x0,y,amp=40,n=4,len=540)=>[...Array(n*4+1)].map((_,i)=>[x0+i*len/(n*4),y+Math.round(Math.sin(i*Math.PI/2)*amp)]);
+  const sandBg=(inner,c="#F2D49A")=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><rect x="60" y="40" width="680" height="440" rx="30" fill="${c}" opacity=".8"/>${[[150,120],[620,140],[300,400],[560,380]].map(([a,b])=>`<path d="M${a} ${b} l-6 -12 M${a} ${b} l0 -14 M${a} ${b} l6 -12" stroke="#7CA03A" stroke-width="3"/>`).join("")}${inner}`);
+  const spiral=(cx,cy,r)=>[...Array(25)].map((_,i)=>{const a=i*.45, rr=r*(1-i/30);return [Math.round(cx+rr*Math.cos(a)),Math.round(cy+rr*Math.sin(a))];});
+  const lakeUnder=(inner)=>scene(`<rect width="800" height="520" fill="#BFE6FF"/><path d="M0 70 q40 -16 80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0 t80 0" stroke="#2A7FA8" stroke-width="5" fill="none"/><rect y="420" width="800" height="100" fill="#F2D49A"/>${[[120,420],[680,420]].map(([a,b])=>`<path d="M${a} ${b} q-10 -40 0 -80 M${a+14} ${b} q10 -40 0 -70" stroke="#3F8F3A" stroke-width="6" fill="none"/>`).join("")}${inner}`);
+  const rockS=(x,y,s=1)=>g(`translate(${x} ${y}) scale(${s})`,`<path d="M-50 20 L-40 -20 L-10 -36 L30 -30 L52 0 L46 20Z" fill="#7FA8A8" stroke="${O}" stroke-width="4" stroke-linejoin="round"/>`);
+  Object.assign(S,{
+    sd1:()=>sandBg([0,1,2].map(i=>snakeW(wave3(120,130+i*120,30),i,"wow",i===1)).join("")),
+    sd2:()=>sandBg([0,1,2].map((ci,i)=>snakeW([...Array(13)].map((_,k)=>[220+i*180+Math.round(Math.sin(k*Math.PI/3)*30),80+k*28]),[2,1,0][i],"wow",i===1)).join("")),
+    sd3:()=>sandBg(`${[0,1,2].map(i=>snakeW(wave3(100,130+i*120,26,3,560),i,"wow",i===1)).join("")}${speed(80,100,3,40)}`),
+    sd4:()=>plainBg(`${snakeW(spiral(470,200,90),2,"wow")}${snakeW([[160,300],[220,220],[280,340],[340,240],[300,160],[230,110]],0,"wow",true)}${snakeW([[200,400],[300,360],[380,440],[480,380],[560,420]],1,"wow",true)}`),
+    sd5:()=>scene(`<rect width="800" height="520" fill="#FFF8EE"/><rect y="400" width="800" height="50" fill="#F2D49A"/><rect y="450" width="800" height="70" fill="#9BD3FF"/>${snakeW(spiral(250,260,80),1,"wow",true)}${snakeW(spiral(560,240,80),0,"wow")}${snakeW([[160,120],[220,80],[280,150],[340,90],[380,140]],2,"wow",true)}`),
+    sd6:()=>scene(`<rect width="800" height="520" fill="#FFF8EE"/>${g("translate(430 300)",`${[...Array(9)].map((_,i)=>{const a=-Math.PI+i*Math.PI/8;return `<path d="M0 60 Q${(60*Math.cos(a)).toFixed(0)} ${(60*Math.sin(a)).toFixed(0)} ${(160*Math.cos(a)).toFixed(0)} ${(200*Math.sin(a)).toFixed(0)}" stroke="#7FC8EE" stroke-width="24" fill="none" stroke-linecap="round"/>`;}).join("")}<ellipse cx="0" cy="110" rx="220" ry="40" fill="#9BD3FF" stroke="#2A7FA8" stroke-width="5"/>`)}${snakeW([[100,90],[160,110],[220,100]],2,"wow")}${snakeW([[90,170],[170,190],[260,230]],1,"wow")}${snakeW([[100,270],[200,300],[300,330]],0,"wow")}`),
+    sd7:()=>lakeUnder(`${snakeW([[120,350],[200,250],[260,330],[360,320],[420,380]],0,"wow")}${snakeW([[420,120],[380,200],[440,280],[400,340],[480,390]],1,"wow",true)}${snakeW([[300,80],[380,140],[520,90],[600,180],[560,260]],2,"wow")}${tigerFish(670,280,.9)}${rockS(320,430,.9)}${rockS(560,430,.8)}`),
+    sd8:()=>lakeUnder(`${rockS(320,420,1)}${rockS(560,420,1)}${boom(320,380,.35)}${boom(560,380,.35)}${snakeW([[200,140],[260,220],[330,180],[300,380]],0,"ouch")}${snakeW([[400,400],[480,330],[560,370],[620,250]],1,"ouch",true)}${snakeW([[420,200],[500,120],[600,110]],2,"ouch")}`),
+    sd9:()=>scene(`<rect width="800" height="520" fill="#F2D49A"/><ellipse cx="460" cy="340" rx="290" ry="110" fill="#9BD3FF" stroke="#2A7FA8" stroke-width="5"/>${snakeW([[300,380],[260,300],[190,250]],0,"worried")}${snakeW([[440,380],[420,260],[360,140]],1,"worried")}${snakeW([[560,380],[520,240],[460,190]],2,"worried")}`),
+    sd10:()=>sandBg(`${snakeW([[120,140],[260,90],[400,150],[540,110],[620,180]],2,"tired")}${snakeW([[120,260],[260,300],[340,240],[430,300],[560,290]],1,"tired",true)}${snakeW([[160,420],[240,340],[340,400],[480,380],[560,410]],0,"tired",true)}`)
+  });
+  Object.assign(P,{
+    snakeDanceCover:()=>picC("#F2D49A",g("translate(-40 -30) scale(.6)",snakeW(spiral(250,240,80),1,"wow",true)+snakeW([[180,120],[240,90],[300,150],[360,100]],2,"wow")))
+  });
   /*@@ART3 END@@*/
   const artFn = key => S[key] ? S[key]() : "";
   const CARDC=["#FFE3EC","#E3F3FF","#E6F7D8","#FFF4CC","#EDE6FF","#FFE8DC"];
-  artFn.pic = key => P[key] ? P[key]() : (key ? pic(CARDC[[...String(key)].reduce((a,ch)=>a+ch.charCodeAt(0),0)%CARDC.length],`${sparkle(100,100,2.2)}${sparkle(150,56,.7)}${sparkle(52,150,.5)}`) : "");
+  artFn.pic = key0 => { const key=(typeof window!=="undefined"&&window.picAlias&&window.picAlias(key0))||key0; return P[key] ? P[key]() : (key ? pic(CARDC[[...String(key)].reduce((a,ch)=>a+ch.charCodeAt(0),0)%CARDC.length],`${sparkle(100,100,2.2)}${sparkle(150,56,.7)}${sparkle(52,150,.5)}`) : ""); };
   return artFn;
 })();
 const PIC = ART.pic;
@@ -3172,7 +3591,7 @@ const BOOK_SETS = {
     series: "Now I'm Reading 1",
     books: [
       {
-        title: "Fox Hops", cover: "fox", sound: "short-o", vowel: "o", soundName: "\uc9e7\uc740 o \uc18c\ub9ac",
+        title: "Fox Hops", cover: "foxHopsCover", sound: "short-o", vowel: "o", soundName: "\uc9e7\uc740 o \uc18c\ub9ac",
         words: [
           {en:"fox", ko:"여우", p:true},
           {en:"hop", ko:"깡충깡충 뛰다", p:true},
@@ -3186,13 +3605,11 @@ const BOOK_SETS = {
           {en:"is", ko:"~에 있다, ~이다", p:true}
         ],
         blank: {before:"A", after:"plops.", answer:"cot", ko:"아기 침대가 툭 하고 떨어지다.", choices:["cot", "hop", "top"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"A fox.", ko:"여우 한 마리.", art:"fh1"},{en:"A fox hops.", ko:"여우가 깡충 뛰어요.", art:"fh2"},{en:"A fox hops on top.", ko:"여우가 꼭대기에서 깡충 뛰어요.", art:"fh3"},{en:"A fox hops on top of a cot.", ko:"여우가 간이침대 위에서 깡충 뛰어요.", art:"fh4"},{en:"A fox hops and hops.", ko:"여우가 깡충깡충 계속 뛰어요.", art:"fh5"},{en:"STOP, FOX, STOP!", ko:"멈춰, 여우야, 멈춰!", art:"fh6"},{en:"A cot plops.", ko:"간이침대가 툭 주저앉아요.", art:"fh7"},{en:"A fox flops.", ko:"여우가 털썩 넘어져요.", art:"fh8"},{en:"Plops and flops!", ko:"툭! 털썩!", art:"fh9"},{en:"A fox is not on top of the cot.", ko:"여우는 간이침대 위에 있지 않아요.", art:"fh10"}],
+        gloss: {"a": "한 개의", "hops": "깡충 뛰다", "of": "~의", "and": "그리고", "plops": "툭 떨어지다", "flops": "털썩 넘어지다", "the": "그"}
       },
       {
-        title: "Rat Naps", cover: "rat", sound: "short-a", vowel: "a", soundName: "\uc9e7\uc740 a \uc18c\ub9ac",
+        title: "Rat Naps", cover: "ratNapsCover", sound: "short-a", vowel: "a", soundName: "\uc9e7\uc740 a \uc18c\ub9ac",
         words: [
           {en:"hat", ko:"모자", p:true},
           {en:"sat", ko:"앉았다 (sit의 과거형)", p:true},
@@ -3206,10 +3623,8 @@ const BOOK_SETS = {
           {en:"by", ko:"~의 옆에", p:true}
         ],
         blank: {before:"A rat", after:".", answer:"naps", ko:"한 마리의 생쥐는 낮잠 잔다.", choices:["nabs", "naps", "maps"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"A hat.", ko:"모자 하나.", art:"rn1"},{en:"A tan hat.", ko:"황갈색 모자 하나.", art:"rn2"},{en:"A tan hat sat.", ko:"황갈색 모자가 앉았어요.", art:"rn3"},{en:"A tan hat sat on a rat.", ko:"황갈색 모자가 생쥐 위에 앉았어요.", art:"rn4"},{en:"A tan hat sat on a rat by a fan.", ko:"황갈색 모자가 선풍기 옆 생쥐 위에 앉았어요.", art:"rn5"},{en:"A rat naps.", ko:"생쥐가 낮잠을 자요.", art:"rn6"},{en:"A fan taps.", ko:"선풍기가 톡톡 두드려요.", art:"rn7"},{en:"RAP, TAP, TAP!", ko:"탁, 톡, 톡!", art:"rn8"},{en:"No nap!", ko:"낮잠은 끝!", art:"rn9"},{en:"A tan hat lands on a cat.", ko:"황갈색 모자가 고양이 위에 떨어져요.", art:"rn10"}],
+        gloss: {"a": "한 개의", "on": "~위에", "naps": "낮잠 자다", "taps": "톡톡 두드리다", "rap": "탁 (두드리는 소리)", "no": "안 돼, 없는", "lands": "떨어지다, 착륙하다"}, alias: {fan:"efan"}
       }
     ]
   },
@@ -3217,7 +3632,7 @@ const BOOK_SETS = {
     series: "Now I'm Reading 1",
     books: [
       {
-        title: "Pig Sits", cover: "pig", sound: "short-i", vowel: "i", soundName: "\uc9e7\uc740 i \uc18c\ub9ac",
+        title: "Pig Sits", cover: "pigSitsCover", sound: "short-i", vowel: "i", soundName: "\uc9e7\uc740 i \uc18c\ub9ac",
         words: [
           {en:"pig", ko:"돼지", p:true},
           {en:"big", ko:"큰", p:true},
@@ -3231,13 +3646,11 @@ const BOOK_SETS = {
           {en:"with", ko:"~와 같이", p:true}
         ],
         blank: {before:"A pin is on the", after:".", answer:"bin", ko:"핀은 쓰레기통 위에 있다.", choices:["bin", "ban", "pin"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"A bib.", ko:"턱받이 하나.", art:"ps1"},{en:"A big bib.", ko:"큰 턱받이 하나.", art:"ps2"},{en:"A big bib fits.", ko:"큰 턱받이가 딱 맞아요.", art:"ps3"},{en:"A big bib fits a pig.", ko:"큰 턱받이가 돼지에게 딱 맞아요.", art:"ps4"},{en:"A pig with a bib sits.", ko:"턱받이를 한 돼지가 앉아요.", art:"ps5"},{en:"A pig with a bib sits on a bin.", ko:"턱받이를 한 돼지가 통 위에 앉아요.", art:"ps6"},{en:"A pin is on the bin!", ko:"통 위에 핀이 있어요!", art:"ps7"},{en:"NO, PIG, NO!", ko:"안 돼, 돼지야, 안 돼!", art:"ps8"},{en:"A pig with a bib sits on a pin.", ko:"턱받이를 한 돼지가 핀 위에 앉아요.", art:"ps9"},{en:"A pig bit his lip!", ko:"돼지가 입술을 깨물었어요!", art:"ps10"}],
+        gloss: {"a": "한 개의", "fits": "딱 맞다", "sits": "앉다", "on": "~위에", "is": "~에 있다", "the": "그", "no": "안 돼", "his": "그의"}
       },
       {
-        title: "Bug on a Rug", cover: "bug", sound: "short-u", vowel: "u", soundName: "\uc9e7\uc740 u \uc18c\ub9ac",
+        title: "Bug on a Rug", cover: "bugRugCover", sound: "short-u", vowel: "u", soundName: "\uc9e7\uc740 u \uc18c\ub9ac",
         words: [
           {en:"bug", ko:"벌레", p:true},
           {en:"rug", ko:"깔개, 양탄자", p:true},
@@ -3251,10 +3664,8 @@ const BOOK_SETS = {
           {en:"the", ko:"그", p:false}
         ],
         blank: {before:"A bug hums", after:"a rug.", answer:"on", ko:"한 마리의 벌레는 깔개 위에서 흥얼거린다.", choices:["in", "up", "on"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"A bug.", ko:"벌레 한 마리.", art:"br1"},{en:"A bug and a rug.", ko:"벌레와 양탄자.", art:"br2"},{en:"A bug on a rug.", ko:"양탄자 위의 벌레.", art:"br3"},{en:"A bug hums.", ko:"벌레가 콧노래를 불러요.", art:"br4"},{en:"A bug hums on a rug.", ko:"벌레가 양탄자 위에서 콧노래를 불러요.", art:"br5"},{en:"Up, up, up!", ko:"위로, 위로, 위로!", art:"br6"},{en:"A bug on a rug is up.", ko:"양탄자 위의 벌레가 위로 올라가요.", art:"br7"},{en:"A bug tugs.", ko:"벌레가 잡아당겨요.", art:"br8"},{en:"A bug tugs and tugs the rug.", ko:"벌레가 양탄자를 당기고 또 당겨요.", art:"br9"},{en:"A bug is in the mud!", ko:"벌레가 진흙 속에 빠졌어요!", art:"br10"}],
+        gloss: {"a": "한 개의", "hums": "콧노래를 부르다", "is": "~이다, ~에 있다", "tugs": "잡아당기다"}
       }
     ]
   },
@@ -3262,7 +3673,7 @@ const BOOK_SETS = {
     series: "Now I'm Reading 1",
     books: [
       {
-        title: "A Bed for Pets", cover: "bed", sound: "short-e", vowel: "e", soundName: "\uc9e7\uc740 e \uc18c\ub9ac",
+        title: "A Bed for Pets", cover: "bedPetsCover", sound: "short-e", vowel: "e", soundName: "\uc9e7\uc740 e \uc18c\ub9ac",
         words: [
           {en:"bed", ko:"침대", p:true},
           {en:"get fed", ko:"밥을 먹는다", p:false},
@@ -3276,13 +3687,11 @@ const BOOK_SETS = {
           {en:"is", ko:"~이다 ~에 있다", p:true}
         ],
         blank: {before:"A red bed for pets is in the", after:".", answer:"den", ko:"애완동물들을 위한 빨간 침대는 서재에 있다.", choices:["ben", "den", "than"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"A bed.", ko:"침대 하나.", art:"bp1"},{en:"A red bed.", ko:"빨간 침대 하나.", art:"bp2"},{en:"A red bed for pets.", ko:"반려동물을 위한 빨간 침대.", art:"bp3"},{en:"A red bed for pet legs.", ko:"반려동물 다리를 위한 빨간 침대.", art:"bp4"},{en:"Yes! Yes! A red bed for pet legs.", ko:"좋아! 좋아! 반려동물 다리를 위한 빨간 침대.", art:"bp5"},{en:"A red bed for pets is in the den.", ko:"반려동물을 위한 빨간 침대가 서재에 있어요.", art:"bp6"},{en:"Pets get in bed!", ko:"반려동물들이 침대에 들어가요!", art:"bp7"},{en:"Pets get fed.", ko:"반려동물들이 밥을 먹어요.", art:"bp8"},{en:"Pets get fed on the red bed in the den.", ko:"반려동물들이 서재의 빨간 침대에서 밥을 먹어요.", art:"bp9"},{en:"The red pet bed is a mess.", ko:"빨간 반려동물 침대가 엉망이 됐어요.", art:"bp10"}],
+        gloss: {"a": "한 개의", "pets": "반려동물들", "legs": "다리들", "in": "~안에", "the": "그", "get": "~하게 되다", "fed": "먹이를 받은", "on": "~위에"}
       },
       {
-        title: "The Plant", cover: "plan", sound: "short-a", vowel: "a", soundName: "\uc9e7\uc740 a \uc18c\ub9ac",
+        title: "The Plant", cover: "plantCover", sound: "short-a", vowel: "a", soundName: "\uc9e7\uc740 a \uc18c\ub9ac",
         words: [
           {en:"plan", ko:"계획", p:true},
           {en:"ant", ko:"개미", p:true},
@@ -3296,10 +3705,8 @@ const BOOK_SETS = {
           {en:"trap", ko:"가두다", p:true}
         ],
         blank: {before:"The ants", after:"a ham.", answer:"grab", ko:"그 개미들은 햄을 움켜잡는다.", choices:["grand", "glad", "grab"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The plant.", ko:"식물.", art:"tp1"},{en:"The plant snaps.", ko:"식물이 덥석 물어요.", art:"tp2"},{en:"The plant snaps and traps ants.", ko:"식물이 덥석 물어서 개미들을 가둬요.", art:"tp3"},{en:"The ants have a plan.", ko:"개미들에게 계획이 있어요.", art:"tp4"},{en:"The ants grab a ham.", ko:"개미들이 햄을 잡아요.", art:"tp5"},{en:"The ants grab a clam.", ko:"개미들이 조개를 잡아요.", art:"tp6"},{en:"The ants grab the jam.", ko:"개미들이 잼을 잡아요.", art:"tp7"},{en:"The plant snaps and traps a ham, a clam, and the jam.", ko:"식물이 덥석 물어서 햄, 조개, 잼을 가둬요.", art:"tp8"},{en:"A grand plan!!", ko:"정말 멋진 계획이에요!!", art:"tp9"},{en:"The ants ran.", ko:"개미들이 달아났어요.", art:"tp10"}],
+        gloss: {"the": "그", "snaps": "덥석 물다", "and": "그리고", "traps": "가두다", "ants": "개미들", "have": "가지고 있다", "a": "한 개의", "grab": "움켜잡다"}
       }
     ]
   },
@@ -3307,7 +3714,7 @@ const BOOK_SETS = {
     series: "Now I'm Reading 1",
     books: [
       {
-        title: "Hop, Frog, Hop", cover: "hop", sound: "short-o", vowel: "o", soundName: "\uc9e7\uc740 o \uc18c\ub9ac",
+        title: "Hop, Frog, Hop", cover: "hopFrogCover", sound: "short-o", vowel: "o", soundName: "\uc9e7\uc740 o \uc18c\ub9ac",
         words: [
           {en:"hop", ko:"깡충깡충 뛰다", p:true},
           {en:"mop", ko:"대걸레", p:true},
@@ -3321,13 +3728,11 @@ const BOOK_SETS = {
           {en:"pot", ko:"냄비, 솥", p:true}
         ],
         blank: {before:"The sock hops on a", after:".", answer:"clock", ko:"그 양말은 시계 위로 깡충 뛴다.", choices:["click", "clock", "crack"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The sock.", ko:"양말.", art:"hf1"},{en:"The sock hops.", ko:"양말이 깡충 뛰어요.", art:"hf2"},{en:"The sock hops on a clock.", ko:"양말이 시계 위로 깡충 뛰어요.", art:"hf3"},{en:"The sock hops and flops on a block.", ko:"양말이 깡충 뛰어서 블록 위에 털썩 떨어져요.", art:"hf4"},{en:"The sock hops and plops on a mop.", ko:"양말이 깡충 뛰어서 대걸레 위에 툭 떨어져요.", art:"hf5"},{en:"The sock stops.", ko:"양말이 멈춰요.", art:"hf6"},{en:"A frog hops from the sock.", ko:"개구리가 양말에서 깡충 뛰어나와요.", art:"hf7"},{en:"The frog hops from the sock onto a hot pot.", ko:"개구리가 양말에서 뜨거운 냄비 위로 깡충 뛰어요.", art:"hf8"},{en:"HOP, FROG, HOP!!", ko:"뛰어, 개구리야, 뛰어!!", art:"hf9"},{en:"The frog hops from the pot onto the mop.", ko:"개구리가 냄비에서 대걸레 위로 깡충 뛰어요.", art:"hf10"}],
+        gloss: {"the": "그", "hops": "깡충 뛰다", "on": "~위에", "a": "한 개의", "and": "그리고", "flops": "털썩 떨어지다", "plops": "툭 떨어지다", "stops": "멈추다", "frog": "개구리", "from": "~에서", "onto": "~위로"}
       },
       {
-        title: "Drips and Spills", cover: "sip", sound: "short-i", vowel: "i", soundName: "\uc9e7\uc740 i \uc18c\ub9ac",
+        title: "Drips and Spills", cover: "dripsCover", sound: "short-i", vowel: "i", soundName: "\uc9e7\uc740 i \uc18c\ub9ac",
         words: [
           {en:"sip", ko:"홀짝이다", p:true},
           {en:"drip", ko:"뚝뚝 흐르다", p:true},
@@ -3341,10 +3746,8 @@ const BOOK_SETS = {
           {en:"crib", ko:"아기 침대", p:true}
         ],
         blank: {before:"The chick drips milk on his", after:".", answer:"wing", ko:"병아리는 그의 날개에 우유를 뚝뚝 흘린다.", choices:["wig", "ring", "wing"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The crib.", ko:"아기 침대.", art:"ds1"},{en:"The big crib.", ko:"큰 아기 침대.", art:"ds2"},{en:"The big crib for a chick.", ko:"병아리를 위한 큰 아기 침대.", art:"ds3"},{en:"The chick sips.", ko:"병아리가 홀짝 마셔요.", art:"ds4"},{en:"The chick sips milk.", ko:"병아리가 우유를 홀짝 마셔요.", art:"ds5"},{en:"The chick drips milk on his chin.", ko:"병아리가 턱에 우유를 뚝뚝 흘려요.", art:"ds6"},{en:"The chick drips milk on his wing.", ko:"병아리가 날개에 우유를 뚝뚝 흘려요.", art:"ds7"},{en:"The chick spills milk in the crib.", ko:"병아리가 아기 침대에 우유를 쏟아요.", art:"ds8"},{en:"The chick grins.", ko:"병아리가 활짝 웃어요.", art:"ds9"},{en:"The chick swims in the crib.", ko:"병아리가 아기 침대에서 수영해요.", art:"ds10"}],
+        gloss: {"the": "그", "big": "큰", "for": "~를 위한", "a": "한 마리의", "sips": "홀짝 마시다", "drips": "뚝뚝 흘리다", "on": "~에", "his": "그의", "spills": "쏟다", "in": "~안에", "grins": "활짝 웃다", "swims": "수영하다"}
       }
     ]
   },
@@ -3352,7 +3755,7 @@ const BOOK_SETS = {
     series: "Now I'm Reading 1",
     books: [
       {
-        title: "A Trunk for Buck", cover: "buck", sound: "short-u", vowel: "u", soundName: "\uc9e7\uc740 u \uc18c\ub9ac",
+        title: "A Trunk for Buck", cover: "trunkBuckCover", sound: "short-u", vowel: "u", soundName: "\uc9e7\uc740 u \uc18c\ub9ac",
         words: [
           {en:"buck", ko:"수사슴", p:true},
           {en:"yuck", ko:"웩!", p:true},
@@ -3366,13 +3769,11 @@ const BOOK_SETS = {
           {en:"crunch", ko:"바삭바삭", p:true}
         ],
         blank: {before:"The", after:"hunts for plums.", answer:"buck", ko:"그 수사슴을 자두를 찾는다.", choices:["rust", "yuck", "buck"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"A trunk.", ko:"큰 상자.", art:"tb1"},{en:"A trunk for a buck.", ko:"수사슴을 위한 큰 상자.", art:"tb2"},{en:"A trunk for a buck has rust.", ko:"수사슴의 상자에 녹이 슬었어요.", art:"tb3"},{en:"A trunk for a buck has dust.", ko:"수사슴의 상자에 먼지가 있어요.", art:"tb4"},{en:"Rust and dust . . . YUCK!", ko:"녹과 먼지 … 웩!", art:"tb5"},{en:"The buck scrubs the trunk.", ko:"수사슴이 상자를 문질러 닦아요.", art:"tb6"},{en:"The buck buffs the trunk.", ko:"수사슴이 상자에 광을 내요.", art:"tb7"},{en:"The buck hunts for plums.", ko:"수사슴이 자두를 찾아다녀요.", art:"tb8"},{en:"MUNCH, CRUNCH, MUNCH!", ko:"우적, 아삭, 우적!", art:"tb9"},{en:"The buck has lunch on the trunk.", ko:"수사슴이 상자 위에서 점심을 먹어요.", art:"tb10"}],
+        gloss: {"a": "한 개의", "for": "~를 위한", "has": "가지고 있다", "and": "그리고", "the": "그", "scrubs": "문질러 닦다", "buffs": "광을 내다", "hunts": "찾아다니다", "plums": "자두들", "on": "~위에"}
       },
       {
-        title: "Egg Legs", cover: "egg", sound: "short-e", vowel: "e", soundName: "\uc9e7\uc740 e \uc18c\ub9ac",
+        title: "Egg Legs", cover: "eggLegsCover", sound: "short-e", vowel: "e", soundName: "\uc9e7\uc740 e \uc18c\ub9ac",
         words: [
           {en:"egg", ko:"알", p:true},
           {en:"leg", ko:"다리", p:true},
@@ -3386,10 +3787,8 @@ const BOOK_SETS = {
           {en:"with", ko:"~와, ~를 가진", p:true}
         ],
         blank: {before:"The egg with legs", after:"from the nest.", answer:"fell", ko:"다리가 달린 계란은 둥지에서 떨어졌다.", choices:["fall", "fell", "pal"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The egg.", ko:"알.", art:"el1"},{en:"The egg with legs.", ko:"다리가 달린 알.", art:"el2"},{en:"The egg with legs in a nest.", ko:"둥지 안의 다리 달린 알.", art:"el3"},{en:"The egg with legs in a nest steps.", ko:"둥지 안의 다리 달린 알이 걸어요.", art:"el4"},{en:"NO STEPS!", ko:"걸으면 안 돼!", art:"el5"},{en:"The egg with legs fell from the nest.", ko:"다리 달린 알이 둥지에서 떨어졌어요.", art:"el6"},{en:"HELP, HELP!", ko:"도와줘, 도와줘!", art:"el7"},{en:"The egg with legs gets help from a hen.", ko:"다리 달린 알이 암탉에게 도움을 받아요.", art:"el8"},{en:"The egg with legs rests in the nest with the hen.", ko:"다리 달린 알이 암탉과 함께 둥지에서 쉬어요.", art:"el9"},{en:"PECK, PECK, PECK!", ko:"콕, 콕, 콕!", art:"el10"}],
+        gloss: {"the": "그", "with": "~이 달린, ~와 함께", "in": "~안에", "a": "한 마리의", "steps": "걷다", "no": "안 돼", "fell": "떨어졌다", "from": "~에서", "gets": "받다", "rests": "쉬다"}
       }
     ]
   },
@@ -3397,7 +3796,7 @@ const BOOK_SETS = {
     series: "Now I\'m Reading 2",
     books: [
       {
-        title: "Ape Date", cover: "ape", sound: "long-a", vowel: "a", soundName: "\uae34 a \uc18c\ub9ac",
+        title: "Ape Date", cover: "apeDateCover", sound: "long-a", vowel: "a", soundName: "\uae34 a \uc18c\ub9ac",
         words: [
           {en:"ape", ko:"유인원", p:true},
           {en:"late", ko:"늦은", p:true},
@@ -3411,13 +3810,11 @@ const BOOK_SETS = {
           {en:"gray", ko:"회색의", p:true}
         ],
         blank: {before:"The cake came off the", after:".", answer:"flames", ko:"그 케익은 불길 속에서 나왔다.", choices:["frames", "flames", "fames"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The ape.", ko:"원숭이.", art:"ad1"},{en:"The gray ape.", ko:"회색 원숭이.", art:"ad2"},{en:"The gray ape makes a cake.", ko:"회색 원숭이가 케이크를 만들어요.", art:"ad3"},{en:"The gray ape places the cake to bake on a tray.", ko:"회색 원숭이가 케이크를 굽기 위해 쟁반 위에 놓아요.", art:"ad4"},{en:"The gray ape is waiting for the cake to bake.", ko:"회색 원숭이가 케이크가 구워지기를 기다리고 있어요.", art:"ad5"},{en:"YAY! The cake came off the flames.", ko:"야호! 케이크가 불에서 나왔어요.", art:"ad6"},{en:"The gray ape is laying the cake on a plate.", ko:"회색 원숭이가 케이크를 접시 위에 놓고 있어요.", art:"ad7"},{en:"The gray ape is waiting for his date.", ko:"회색 원숭이가 데이트 상대를 기다리고 있어요.", art:"ad8"},{en:"The gray ape ate the cake.", ko:"회색 원숭이가 케이크를 먹었어요.", art:"ad9"},{en:"The date came too late.", ko:"데이트 상대가 너무 늦게 왔어요.", art:"ad10"}],
+        gloss: {"the": "그", "gray": "회색의", "makes": "만들다", "a": "한 개의", "cake": "케이크", "places": "놓다", "to": "~하기 위해", "on": "~위에", "is": "~이다", "waiting": "기다리는 중", "for": "~를", "yay": "야호", "came": "왔다", "off": "~에서 떨어져", "flames": "불꽃", "laying": "놓는 중", "his": "그의", "too": "너무"}
       },
       {
-        title: "Floating Goat", cover: "robe", sound: "long-o", vowel: "o", soundName: "\uae34 o \uc18c\ub9ac",
+        title: "Floating Goat", cover: "goatCover", sound: "long-o", vowel: "o", soundName: "\uae34 o \uc18c\ub9ac",
         words: [
           {en:"robe", ko:"가운", p:true},
           {en:"rope", ko:"밧줄", p:true},
@@ -3431,10 +3828,8 @@ const BOOK_SETS = {
           {en:"road", ko:"길", p:true}
         ],
         blank: {before:"The goat in a", after:"is floating home.", answer:"robe", ko:"가운을 입은 염소는 집으로 떠가고 있어요.", choices:["robe", "road", "rob"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The goat.", ko:"염소.", art:"fg1"},{en:"The goat in a robe.", ko:"가운을 입은 염소.", art:"fg2"},{en:"The goat in a robe is floating home.", ko:"가운을 입은 염소가 집으로 떠내려가고 있어요.", art:"fg3"},{en:"The goat in a robe is floating home on a boat.", ko:"가운을 입은 염소가 배를 타고 집으로 떠가고 있어요.", art:"fg4"},{en:"The goat in a robe is floating home on a boat with holes.", ko:"가운을 입은 염소가 구멍 난 배를 타고 집으로 떠가고 있어요.", art:"fg5"},{en:"OH, NO!", ko:"오, 안 돼!", art:"fg6"},{en:"This boat won't float.", ko:"이 배는 뜨지 않을 거예요.", art:"fg7"},{en:"The goat woke up.", ko:"염소가 잠에서 깼어요.", art:"fg8"},{en:"The goat holds onto a rope.", ko:"염소가 밧줄을 꼭 잡아요.", art:"fg9"},{en:"The soaking goat drove home on the road.", ko:"흠뻑 젖은 염소가 길을 따라 집으로 운전해 갔어요.", art:"fg10"}],
+        gloss: {"the": "그", "goat": "염소", "in": "~을 입은", "a": "한 개의", "is": "~이다", "floating": "떠가는 중", "on": "~위에", "with": "~이 있는", "holes": "구멍들", "oh": "오", "no": "안 돼", "this": "이", "won't": "~하지 않을 것이다", "float": "뜨다", "holds": "잡다", "onto": "~을", "soaking": "흠뻑 젖은", "drove": "운전했다"}
       }
     ]
   },
@@ -3442,7 +3837,7 @@ const BOOK_SETS = {
     series: "Now I\'m Reading 2",
     books: [
       {
-        title: "A Pike Glides", cover: "pike", sound: "long-i", vowel: "i", soundName: "\uae34 i \uc18c\ub9ac",
+        title: "A Pike Glides", cover: "pikeCover", sound: "long-i", vowel: "i", soundName: "\uae34 i \uc18c\ub9ac",
         words: [
           {en:"pike", ko:"강꼬치고기 (물고기 종류)", p:true},
           {en:"like", ko:"(1)좋아하다 (2) ~처럼", p:true},
@@ -3456,13 +3851,11 @@ const BOOK_SETS = {
           {en:"fly", ko:"날다", p:true}
         ],
         blank: {before:"The pike", after:".", answer:"glides", ko:"그 강꼬치고기는 미끄러지듯 움직인다.", choices:["grides", "glides", "guides"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The pike.", ko:"강꼬치고기.", art:"pg1"},{en:"The pike glides.", ko:"강꼬치고기가 미끄러지듯 헤엄쳐요.", art:"pg2"},{en:"The pike glides and likes to ride.", ko:"강꼬치고기가 미끄러지듯 헤엄치고 타는 것을 좋아해요.", art:"pg3"},{en:"The pike glides and likes to ride the tide.", ko:"강꼬치고기가 미끄러지듯 헤엄치고 물결 타는 것을 좋아해요.", art:"pg4"},{en:"The tide rises.", ko:"물결이 높아져요.", art:"pg5"},{en:"YIKES!", ko:"으악!", art:"pg6"},{en:"The pike is flying like a kite.", ko:"강꼬치고기가 연처럼 날아가고 있어요.", art:"pg7"},{en:"The pike swipes a vine.", ko:"강꼬치고기가 덩굴을 휙 잡아요.", art:"pg8"},{en:"The pike swipes a vine in time.", ko:"강꼬치고기가 제때 덩굴을 휙 잡아요.", art:"pg9"},{en:"The pike glides and glides.", ko:"강꼬치고기가 계속 미끄러지듯 헤엄쳐요.", art:"pg10"}],
+        gloss: {"the": "그", "glides": "미끄러지듯 움직이다", "and": "그리고", "likes": "좋아하다", "to": "~하는 것", "rises": "높아지다", "yikes": "으악", "is": "~이다", "flying": "날고 있는", "a": "한 개의", "swipes": "휙 잡다", "in": "~에", "time": "시간, 제때"}
       },
       {
-        title: "Mule Music", cover: "mule", sound: "long-u", vowel: "u", soundName: "\uae34 u \uc18c\ub9ac",
+        title: "Mule Music", cover: "muleMusicCover", sound: "long-u", vowel: "u", soundName: "\uae34 u \uc18c\ub9ac",
         words: [
           {en:"mule", ko:"노새", p:true},
           {en:"tune", ko:"연주하다", p:true},
@@ -3476,10 +3869,8 @@ const BOOK_SETS = {
           {en:"blue", ko:"우울한", p:true}
         ],
         blank: {before:"The rude", after:"is blue.", answer:"duke", ko:"그 무례한 공작님은 우울하다.", choices:["duke", "buke", "duck"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The mule.", ko:"노새.", art:"mm1"},{en:"The blue mule.", ko:"파란 노새.", art:"mm2"},{en:"The blue mule tunes a flute.", ko:"파란 노새가 플루트를 연주해요.", art:"mm3"},{en:"The blue mule tunes a flute and a tuba.", ko:"파란 노새가 플루트와 튜바를 연주해요.", art:"mm4"},{en:"The blue mule tunes a flute and a tuba for the duke.", ko:"파란 노새가 공작을 위해 플루트와 튜바를 연주해요.", art:"mm5"},{en:"The duke uses the flute and the tuba.", ko:"공작이 플루트와 튜바를 써요.", art:"mm6"},{en:"The blue mule has no music.", ko:"파란 노새에게 음악이 없어요.", art:"mm7"},{en:"RUDE DUKE!", ko:"무례한 공작!", art:"mm8"},{en:"The blue mule tunes a lute.", ko:"파란 노새가 류트를 연주해요.", art:"mm9"},{en:"The rude duke is blue!", ko:"무례한 공작이 우울해졌어요!", art:"mm10"}],
+        gloss: {"the": "그", "blue": "파란, 우울한", "tunes": "연주하다", "a": "한 개의", "and": "그리고", "for": "~를 위해", "uses": "사용하다", "has": "가지고 있다", "no": "없는", "is": "~이다"}
       }
     ]
   },
@@ -3487,7 +3878,7 @@ const BOOK_SETS = {
     series: "Now I\'m Reading 2",
     books: [
       {
-        title: "Speeding Seal", cover: "seal", sound: "long-e", vowel: "e", soundName: "\uae34 e \uc18c\ub9ac",
+        title: "Speeding Seal", cover: "sealCover", sound: "long-e", vowel: "e", soundName: "\uae34 e \uc18c\ub9ac",
         words: [
           {en:"seal", ko:"바다표범, 물개", p:true},
           {en:"leak", ko:"(액체가) 새다", p:true},
@@ -3501,13 +3892,11 @@ const BOOK_SETS = {
           {en:"green", ko:"초록색", p:true}
         ],
         blank: {before:"The jeep is", after:".", answer:"leaking", ko:"그 지프차는 새고 있다.", choices:["leeking", "leaping", "leaking"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The seal.", ko:"물개.", art:"ss1"},{en:"The seal is speeding.", ko:"물개가 쌩 달리고 있어요.", art:"ss2"},{en:"The seal is speeding in a jeep.", ko:"물개가 지프를 타고 쌩 달리고 있어요.", art:"ss3"},{en:"The seal is speeding in a green jeep.", ko:"물개가 초록 지프를 타고 쌩 달리고 있어요.", art:"ss4"},{en:"CREAK, CREAK!", ko:"끼익, 끼익!", art:"ss5"},{en:"The jeep is leaking.", ko:"지프에서 기름이 새고 있어요.", art:"ss6"},{en:"The jeep is leaking in the street.", ko:"지프가 길에서 기름이 새고 있어요.", art:"ss7"},{en:"The seal leaps off the green jeep.", ko:"물개가 초록 지프에서 뛰어내려요.", art:"ss8"},{en:"The seal is cleaning the street.", ko:"물개가 길을 청소하고 있어요.", art:"ss9"},{en:"The seal leaves on his feet.", ko:"물개가 걸어서 떠나요.", art:"ss10"}],
+        gloss: {"the": "그", "is": "~이다", "speeding": "쌩 달리는 중", "in": "~안에, ~에서", "a": "한 개의", "creak": "끼익 (소리)", "leaking": "새는 중", "leaps": "뛰다", "off": "~에서 떨어져", "cleaning": "청소하는 중", "leaves": "떠나다", "on his feet": "걸어서", "on": "~위에", "his": "그의", "feet": "발"}
       },
       {
-        title: "Snake Dance", cover: "snake", sound: "long-a", vowel: "a", soundName: "\uae34 a \uc18c\ub9ac",
+        title: "Snake Dance", cover: "snakeDanceCover", sound: "long-a", vowel: "a", soundName: "\uae34 a \uc18c\ub9ac",
         words: [
           {en:"snake", ko:"뱀", p:true},
           {en:"wade", ko:"(물을) 헤치며 걷다", p:true},
@@ -3521,10 +3910,8 @@ const BOOK_SETS = {
           {en:"sand", ko:"모래", p:true}
         ],
         blank: {before:"The crazy snakes", after:".", answer:"raced", ko:"그 정상이 아닌 뱀들은 경주를 했다.", choices:["rased", "raced", "laced"]},
-        story: [
-
-        ],
-        gloss: {the:"그", a:"한 개의", and:"그리고", on:"~위에", in:"~안에", to:"~에게, ~로", with:"~와 함께", his:"그의", is:"~이다"}
+        story: [{en:"The snakes.", ko:"뱀들.", art:"sd1"},{en:"The crazy snakes.", ko:"정신없는 뱀들.", art:"sd2"},{en:"The crazy snakes raced.", ko:"정신없는 뱀들이 경주했어요.", art:"sd3"},{en:"The crazy snakes raced and danced.", ko:"정신없는 뱀들이 경주하고 춤췄어요.", art:"sd4"},{en:"The crazy snakes raced to the lake and danced on the sand.", ko:"정신없는 뱀들이 호수로 달려가 모래 위에서 춤췄어요.", art:"sd5"},{en:"CRASH! SPLASH!", ko:"쾅! 첨벙!", art:"sd6"},{en:"The crazy snakes danced into the lake.", ko:"정신없는 뱀들이 춤추며 호수 속으로 들어갔어요.", art:"sd7"},{en:"The crazy snakes got scraped.", ko:"정신없는 뱀들이 긁혀서 다쳤어요.", art:"sd8"},{en:"The crazy snakes waded back to land.", ko:"정신없는 뱀들이 물을 헤치고 땅으로 돌아왔어요.", art:"sd9"},{en:"The crazy snakes fainted on the sand.", ko:"정신없는 뱀들이 모래 위에서 기절했어요.", art:"sd10"}],
+        gloss: {"the": "그", "snakes": "뱀들", "crazy": "정신없는", "and": "그리고", "danced": "춤췄다", "to": "~로", "on": "~위에", "crash": "쾅", "splash": "첨벙", "into": "~안으로", "got": "~하게 되었다", "scraped": "긁힌", "back": "다시, 뒤로", "fainted": "기절했다"}
       }
     ]
   },
@@ -3848,6 +4235,7 @@ const BOOK_SETS = {
 /* 체험판 : 2214만 */
 Object.keys(BOOK_SETS).forEach(k=>{ if(k!=="2214") delete BOOK_SETS[k]; });
 /* 🔤 글자별 소리 (글자씩 듣기, 소리 합치기). 한국어 음성으로 소리 내요. */
+window.picAlias=k=>{ try{ const b=book(); return b&&b.alias&&b.alias[k]; }catch(e){ return null; } };
 const LETTER_SOUNDS = {
   a:"애", b:"브", c:"크", d:"드", e:"에", f:"프", g:"그", h:"흐", i:"이", j:"쥬", k:"크", l:"르", m:"므",
   n:"느", o:"아", p:"프", q:"크", r:"르", s:"스", t:"트", u:"어", v:"브", w:"우", x:"크스", y:"이", z:"즈"
