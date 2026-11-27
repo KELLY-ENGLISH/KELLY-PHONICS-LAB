@@ -71,6 +71,15 @@ h2 .ic{width:36px;height:36px}
 .linkbtn .ic{width:24px;height:24px}
 .notice{display:flex;gap:12px;align-items:flex-start;background:#EAF4FF;border-radius:20px;padding:14px 18px;font-size:18px;line-height:1.5;margin:10px auto 16px;max-width:680px}
 .notice .ic{width:34px;height:34px}
+.homeNotice{position:relative;display:flex;align-items:center;gap:14px;max-width:680px;margin:4px auto 18px;padding:16px 22px 16px 18px;background:linear-gradient(135deg,#FF8A3D,#FF5E7E);color:#fff;border-radius:22px;box-shadow:0 7px 0 rgba(0,0,0,.14);animation:hnPop 1.6s ease-in-out infinite}
+.homeNotice .hnBadge{position:absolute;top:-12px;left:18px;background:#fff;color:#FF5E7E;font-weight:900;font-size:13px;border-radius:999px;padding:3px 12px;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.homeNotice .hnKK{width:62px;flex:none}
+.homeNotice .hnKK .avatar{box-shadow:0 3px 0 rgba(0,0,0,.12);border-radius:16px}
+.homeNotice .hnText{font-size:20px;font-weight:800;line-height:1.3}
+.homeNotice .hnText b{text-decoration:underline}
+@keyframes hnPop{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
+@media (max-width:640px){.homeNotice{padding:14px 16px 14px 14px;gap:10px;border-radius:18px}.homeNotice .hnKK{width:50px}.homeNotice .hnText{font-size:16px}.homeNotice .hnBadge{font-size:11px;padding:2px 10px;top:-10px;left:14px}}
+@media (max-width:360px){.homeNotice .hnText{font-size:14px}}
 .mascot-hi{width:120px;margin:0 auto}
 
 /* set hub */
@@ -4561,7 +4570,8 @@ function showHome(){
   try{ sessionStorage.removeItem(PLACE_KEY); }catch(e){}
   resetScreen();
   let typed="";
-  const el=$(`<section><h1>${ICON("shelf")} 오늘 읽을 책 번호는?</h1><p class="sub">책 뒤에 있는 번호를 눌러 주세요 (예: 2214)</p>
+  const el=$(`<section><div class="homeNotice"><span class="hnBadge">공지</span><div class="hnKK">${kkAvatar({},"mini")}</div><div class="hnText">아래에서 책을 고르고 체험해보세요! <b>파닉스 단계</b>입니다</div></div>
+    <h1>${ICON("shelf")} 오늘 읽을 책 번호는?</h1><p class="sub">책 뒤에 있는 번호를 눌러 주세요 (예: 2214)</p>
     <div class="search-box"><div class="display en" id="disp"><span class="ph">번호 입력</span></div><div class="keypad" id="pad"></div><div class="msg" id="msg"></div></div>
     <div class="shelf" id="shelf"></div>
     <button class="mykk" id="mykk"><div class="mykkav">${kkAvatar()}</div><div><b>나만의 켈리콩</b><span>책 ${booksDone()}권 완료 · 다음 선물까지 ${10-booksDone()%10}권</span><div class="rbar"><i style="width:${booksDone()%10*10}%"></i></div></div>${giftsLeft()>0?`<i class="newgift">${ICON("gift")} ${giftsLeft()}</i>`:""}</button></section>`);
