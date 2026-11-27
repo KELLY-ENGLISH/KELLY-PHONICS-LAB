@@ -838,6 +838,10 @@ body{background:#FFD61E!important}
 .kkbg span{opacity:.35}
 .booktab.on{border-color:#25346E!important;background:#fff!important}
 .sub{color:#3B3A2E}
+.trialBanner{margin:4px 2px 10px;padding:12px 16px;background:linear-gradient(135deg,#FF8A3D,#FF5E7E);color:#fff;font-size:17px;font-weight:800;text-align:center;border-radius:16px;box-shadow:0 5px 0 rgba(0,0,0,.15);animation:trialPop 1.4s ease-in-out infinite}
+.trialBanner b{text-decoration:underline}
+@keyframes trialPop{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@media (max-width:420px){.trialBanner{font-size:14px;padding:10px 12px;border-radius:14px}}
 </style>
 </head>
 <body>
@@ -5730,6 +5734,12 @@ showTeacherLogin=function(){ kkShow({img:"talk",say:"체험판에서는<br>선�
 (function(){ const b=document.getElementById("brand"); const fix=()=>{ if(b&&!/체험판/.test(b.textContent)) b.textContent="체험판 · "+b.textContent; };
   new MutationObserver(fix).observe(b,{childList:true,characterData:true,subtree:true}); fix();
   const lo=document.getElementById("logoutBtn"); if(lo) lo.style.display="none"; })();
+/* 체험판 : 책 선택 화면 위에 안내 배너 */
+(function(){ const _openSet=openSet; openSet=function(){ _openSet.apply(null,arguments);
+  const tabs=document.getElementById("tabs"); if(!tabs||document.getElementById("trialBanner")) return;
+  const banner=document.createElement("div"); banner.id="trialBanner"; banner.className="trialBanner";
+  banner.innerHTML="\uc544\ub798\uc5d0\uc11c \ucc45\uc744 \uace0\ub974\uace0 \uccb4\ud5d8\ud574\ubcf4\uc138\uc694! <b>\ud30c\ub2c9\uc2a4 \ub2e8\uacc4</b>\uc785\ub2c8\ub2e4";
+  tabs.parentNode.insertBefore(banner,tabs); }; })();
 (function start(){
   let sess=null; try{ sess=JSON.parse(localStorage.getItem(SESSION_KEY)); }catch(e){}
   // 로그인은 12시간 유지 (화면을 당겨 새로고침해도 풀리지 않아요)
